@@ -1,4 +1,4 @@
-This is for the backend project (AirBnB)
+# This is for the backend project (AirBnB)
 
 Database schema
 
