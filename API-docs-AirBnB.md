@@ -273,7 +273,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/:currentUser/spots'
+  * Route path: '/currentUser/spots'
   * Body: none
 
 * Successful Response
