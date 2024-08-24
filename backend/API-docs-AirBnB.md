@@ -50,7 +50,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: '/currentUser'
+  * Route path: '/current'
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -91,7 +91,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: '/users/currentUser/login'
+  * Route path: '/login'
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -273,7 +273,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/currentUser/spots'
+  * Route path: '/spots/current'
   * Body: none
 
 * Successful Response
@@ -620,7 +620,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/:currentUser/reviews'
+  * Route path: '/reviews/current'
   * Body: none
 
 * Successful Response
@@ -968,7 +968,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/currentUser/bookings'
+  * Route path: '/bookings/current'
   * Body: none
 
 * Successful Response
@@ -1307,7 +1307,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: '/:spotId/images/:imageId'
+  * Route path: '/spot-images/:imageId'
   * Body: none
 
 * Successful Response
