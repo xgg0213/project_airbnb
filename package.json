@@ -1,0 +1,25 @@
+{
+  "name": "assessment-for-sprint-13-api-documentation-airbnb-main",
+  "version": "1.0.0",
+  "description": "The project breaks down into 2 parts, using AirBnB information * Backend (Mod4) * Frontend (Mod5)",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm --prefix backend install backend",
+    "dev:backend": "npm install --prefix backend start",
+    "sequelize": "npm run --prefix backend sequelize",
+    "sequelize-cli": "npm run --prefix backend sequelize-cli",
+    "start": "npm start --prefix backend",
+    "build": "npm run --prefix backend build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xgg0213/airbnb_api_doc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xgg0213/airbnb_api_doc/issues"
+  },
+  "homepage": "https://github.com/xgg0213/airbnb_api_doc#readme"
+}
