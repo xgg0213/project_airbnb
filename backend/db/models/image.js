@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Image.belongsTo(
         models.Spot,
         {
+          as: 'SpotImages',
           foreignKey: "imageableId",
           constraints: false
         }
@@ -31,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     imageableId: {
       type: DataTypes.INTEGER,
     },
-    imageType: {
+    imageableType: {
       type: DataTypes.STRING,
     },
     url: {

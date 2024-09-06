@@ -22,20 +22,20 @@ module.exports = {
    await Image.bulkCreate([
     {
       imageableId:1,
-      imageType:"Review",
+      imageableType:"Review",
       url: "sample review url: review 1",
       preview: true
     },
     {
       imageableId:2,
-      imageType:"Review",
+      imageableType:"Review",
       url: "sample review url: review 2",
       preview: false
     },
     {
       imageableId:3,
-      imageType:"Spot",
-      url: "sample review url: spot 1",
+      imageableType:"Spot",
+      url: "sample review url: spot 3",
       preview: true
     }
 
@@ -54,19 +54,19 @@ module.exports = {
     return queryInterface.bulkDelete(options, [
       {
         imageableId:1,
-        imageType:"Review",
+        imageableType:"Review",
         url: "sample review url: review 1",
         preview: true
       },
       {
         imageableId:2,
-        imageType:"Review",
+        imageableType:"Review",
         url: "sample review url: review 2",
         preview: false
       },
       {
         imageableId:3,
-        imageType:"Spot",
+        imageableType:"Spot",
         url: "sample review url: spot 1",
         preview: true
       }

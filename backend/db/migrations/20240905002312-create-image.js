@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      imageType: {
+      imageableType: {
         type: Sequelize.STRING,
         allowNull: false
       },

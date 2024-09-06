@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Spot.belongsTo(
         models.User,
         {
+          as: 'Owner',
           foreignKey:"ownerId"
         }
       );
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       Spot.hasMany(
         models.Image,
         {
+          as: 'SpotImages',
           foreignKey: "imageableId",
           constraints: false,
           scope: {
@@ -40,37 +42,59 @@ module.exports = (sequelize, DataTypes) => {
   Spot.init({
     ownerId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     city: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     state: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     country: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     lat: {
       type: DataTypes.DECIMAL,
+      validate: {
+        min: -90,
+        max: 90,
+      }
     },
     lng: {
       type: DataTypes.DECIMAL,
+      validate: {
+        min: -180,
+        max: 180
+      }
     },
     name: {
       type: DataTypes.STRING,
+      validate: {
+        len: [50,50]
+      }
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
     },
     price: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.DECIMAL,
+      validate:{
+        isPositive(value) {
+          if (parseInt(value) <= 0) {
+            throw new Error('Price per day must be a positive number');
+          }
+        }
+      }
     },
-    // previewImage: {
-    //   type: DataTypes.STRING
-    // }
+
   }, {
     sequelize,
     modelName: 'Spot',

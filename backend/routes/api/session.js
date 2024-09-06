@@ -11,7 +11,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-// validate ogin
+// validate login
 const validateLogin = [
   check('credential')
     .exists({ checkFalsy: true })
