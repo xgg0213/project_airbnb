@@ -121,6 +121,13 @@ router.get(
             })
         }
 
+        // // spotId exists but already 10
+        // if (array.length>=10) {
+        //     return res.status(403).json({
+        //         "message": "Maximum number of images for this resource was reached"
+        //     })
+        // }
+
         // spot Id found
         const spots = await Spot.findAll({
            where: {id:spotId},
@@ -147,12 +154,12 @@ router.get(
                   'avgRating'  // Alias for the result
                 ],
                 [
-                  fn('COUNT', col('Reviews.id')), // Counting the # of Reviews
+                  fn('COUNT', col('Reviews.id')), // Counting the # of Reviews 
                   'numReviews'  // Alias for the result
                 ]
               ]
             },
-            group: ['Spot.id'] // is this necessary?
+            group: ['Spot.id', 'SpotImages.id', 'Owner.id'] 
         });
         return res.json(spots);
     }
