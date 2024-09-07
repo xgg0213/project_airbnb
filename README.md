@@ -979,7 +979,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/bookings/current'
+  * Route path: '/api/bookings/current'
   * Body: none
 
 * Successful Response
@@ -1024,7 +1024,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: '/spots/:spotId/bookings'
+  * Route path: '/api/spots/:spotId/bookings'
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
@@ -1092,7 +1092,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * Route path: '/spots/:spotId/bookings'
+  * Route path: '/api/spots/:spotId/bookings'
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1173,8 +1173,8 @@ Update and return an existing booking.
 * Require Authentication: true
 * Require proper authorization: Booking must belong to the current user
 * Request
-  * Method: PUT/PATCH
-  * Route path: '/bookings/:bookingId'
+  * Method: PUT
+  * Route path: '/api/bookings/:bookingId'
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1269,7 +1269,7 @@ Delete an existing booking.
   Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: '/bookings/:bookingId'
+  * Route path: '/api/bookings/:bookingId'
   * Body: none
 
 * Successful Response
@@ -1318,7 +1318,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: '/spot-images/:imageId'
+  * Route path: '/api/spot-images/:imageId'
   * Body: none
 
 * Successful Response
@@ -1353,7 +1353,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: '/review-images/:imageId'
+  * Route path: '/api/review-images/:imageId'
   * Body: none
 
 * Successful Response
@@ -1387,7 +1387,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: '/spots?page=1?size=5?minLat=10?maxLat=20?minLng=5?maxLng=25?minPrice=100?maxPrice=500'
+  * Route path: '/api/spots'
   * Query Parameters
     * page: integer, minimum: 1, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
