@@ -39,19 +39,36 @@ module.exports = (sequelize, DataTypes) => {
   Review.init({
     userId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     spotId: {
       type: DataTypes.INTEGER,
+      allowNull: false
     },
     review: {
       type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     stars: {
-      type: DataTypes.DECIMAL
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+      validate: {
+        min: 1,
+        max: 5
+      }
     }
   }, {
     sequelize,
     modelName: 'Review',
+    indexes: [
+      {
+        unique: true,
+        fields: ['spotId', 'userId']
+      }
+    ]
   });
   return Review;
 };

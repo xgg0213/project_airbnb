@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       Image.belongsTo(
         models.Review,
         {
+          as: 'ReviewImages',
           foreignKey: "imageableId",
           constraints: false
         }
@@ -31,12 +32,15 @@ module.exports = (sequelize, DataTypes) => {
   Image.init({
     imageableId: {
       type: DataTypes.INTEGER,
+      allowNull: false
     },
     imageableType: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     url: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     preview: {
       type: DataTypes.BOOLEAN

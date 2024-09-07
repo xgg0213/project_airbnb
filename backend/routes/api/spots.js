@@ -55,9 +55,11 @@ router.get(
               ]
             ]
           },
-          group: ['Spot.id']  // Grouping by Spot.id to get avgRating for each spot
+          group: ['Spot.id', 'SpotImages.id']  // Grouping by Spot.id to get avgRating for each spot
       });
-      return res.json(spots);
+      return res.status(200).json({
+        Spots:spots
+      });
     }
 );
 
@@ -94,7 +96,9 @@ router.get(
             },
             group: ['Spot.id']  // Grouping by Spot.id to get avgRating for each spot
         });
-        return res.json(spots);
+        return res.status(200).json({
+          Spots: spots
+        });
     }
 )
 
@@ -120,13 +124,6 @@ router.get(
                 "message": "Spot couldn't be found"
             })
         }
-
-        // // spotId exists but already 10
-        // if (array.length>=10) {
-        //     return res.status(403).json({
-        //         "message": "Maximum number of images for this resource was reached"
-        //     })
-        // }
 
         // spot Id found
         const spots = await Spot.findAll({
@@ -161,7 +158,7 @@ router.get(
             },
             group: ['Spot.id', 'SpotImages.id', 'Owner.id'] 
         });
-        return res.json(spots);
+        return res.status(200).json(spots);
     }
 );
 
@@ -172,20 +169,39 @@ router.post(
     async(req, res) => {
         const ownerId = req.user.id;
         const {address, city, state, country, lat, lng, name, description, price} = req.body;
-        const newSpot = await Spot.create({
-            ownerId,
-            address,
-            city, 
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        })
+        try {
+          const newSpot = await Spot.create({
+              ownerId,
+              address,
+              city, 
+              state,
+              country,
+              lat,
+              lng,
+              name,
+              description,
+              price
+          })
 
-        return res.json(newSpot);
+          return res.status(201).json(newSpot);
+        }catch(e) {
+          if (e.name === 'SequelizeValidationError') {
+            return res.status(400).json({
+                "message": "Bad Request", 
+                "errors": {
+                  "address": "Street address is required",
+                  "city": "City is required",
+                  "state": "State is required",
+                  "country": "Country is required",
+                  "lat": "Latitude must be within -90 and 90",
+                  "lng": "Longitude must be within -180 and 180",
+                  "name": "Name must be less than 50 characters",
+                  "description": "Description is required",
+                  "price": "Price per day must be a positive number"
+                }
+            })
+          }
+        }
     }
 );
 
@@ -223,14 +239,14 @@ router.post(
             preview
         })
 
-        return res.json({
+        return res.status(201).json({
             "id": newImage.imageableId,
             "url": url,
             "preview": preview
         })
 
     }
-)
+);
 
 // Edit a Spot
 router.put(
@@ -258,25 +274,43 @@ router.put(
         }
 
         // spotId found
-        const {address, city, state, country, lat, lng, name, description, price} = req.body;
-        const updatedSpot = await Spot.findOne({
-            where: {id: spotId}
-        });
+        try {
+          const {address, city, state, country, lat, lng, name, description, price} = req.body;
+          const updatedSpot = await Spot.findOne({
+              where: {id: spotId}
+          });
 
-        await updatedSpot.update({
-            address: address?address:updatedSpot.address,
-            city: city?city:updatedSpot.city,
-            state: state?state:updatedSpot.state,
-            country: country?country:updatedSpot.country,
-            lat: lat?lat:updatedSpot.lat,
-            lng: lng?lng:updatedSpot.lng,
-            name: name?name:updatedSpot.name,
-            description: description?description:updatedSpot.description,
-            price: price?price:updatedSpot.price,
-        });
+          await updatedSpot.update({
+              address: address?address:updatedSpot.address,
+              city: city?city:updatedSpot.city,
+              state: state?state:updatedSpot.state,
+              country: country?country:updatedSpot.country,
+              lat: lat?lat:updatedSpot.lat,
+              lng: lng?lng:updatedSpot.lng,
+              name: name?name:updatedSpot.name,
+              description: description?description:updatedSpot.description,
+              price: price?price:updatedSpot.price,
+          });
 
-        return res.json(updatedSpot)
-
+          return res.status(200).json(updatedSpot)
+      } catch(e) {
+        if (e.name === 'SequelizeValidationError') {
+          return res.status(400).json({
+              "message": "Bad Request", 
+              "errors": {
+                "address": "Street address is required",
+                "city": "City is required",
+                "state": "State is required",
+                "country": "Country is required",
+                "lat": "Latitude must be within -90 and 90",
+                "lng": "Longitude must be within -180 and 180",
+                "name": "Name must be less than 50 characters",
+                "description": "Description is required",
+                "price": "Price per day must be a positive number"
+              }
+          })
+        }
+      }
     }
 )
 
@@ -312,7 +346,116 @@ router.delete(
             "message": "Successfully deleted"
         })
     }
-)
+);
+
+/////////////////////////////////////////////////
+// Reviews related
+
+// Get all Reviews by a Spot's id
+router.get(
+  '/:spotId/reviews',
+  async(req, res) => {
+      const spotId = req.params.spotId;
+
+      // spotId not found
+      const ids = await Spot.findAll({
+          attributes: ['id']
+      });
+      const array = [];
+
+      ids.forEach(el => {
+          array.push(Number(el.id))
+      })
+
+      if (!array.includes(Number(spotId))) {
+          res.status(404);
+          return res.json({
+              "message": "Spot couldn't be found"
+          })
+      }
+
+      // spot Id found
+      const reviews = await Review.findAll({
+         where: {spotId:spotId},
+         include: [
+          {
+            model: User,
+            attributes: ['id', 'firstName', 'lastName']
+          },
+          {
+            model: Image,
+            as: 'ReviewImages',
+            attributes: ['id', 'url']
+          },
+        ],
+          group: ['Review.id', 'User.id', 'ReviewImages.id'] 
+      });
+      return res.status(200).json({
+        Reviews: reviews
+      });
+  }
+);
+
+// Create a Review for a Spot based on the Spot's id
+router.post(
+  '/:spotId/reviews',
+  async(req, res) => {
+      const spotId = Number(req.params.spotId);
+      const userId = req.user.id;
+
+      // spotId not found
+      const ids = await Spot.findAll({
+          attributes: ['id']
+      });
+      const array = [];
+
+      ids.forEach(el => {
+          array.push(Number(el.id))
+      })
+
+      if (!array.includes(Number(spotId))) {
+          res.status(404);
+          return res.json({
+              "message": "Spot couldn't be found"
+          })
+      }
+
+      // review already exists for the spot from the current user
+      const checkReview = await Review.findAll({
+        where: {userId, spotId}
+      });
+
+      if (checkReview.length!==0) {
+        return res.status(500).json({
+          "message": "User already has a review for this spot"
+        })
+      };
+
+      // spotId found
+      try {
+        const {review, stars} = req.body;
+        const newReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars
+        })
+
+        return res.status(201).json(newReview);
+      }catch(e) {
+        if (e.name === 'SequelizeValidationError') {
+          return res.status(400).json({
+              "message": "Bad Request", 
+              "errors": {
+                  "review": "Review text is required",
+                  "stars": "Stars must be an integer from 1 to 5",
+              }
+          })
+      }
+      }
+
+  }
+);
 
 module.exports = router;
 
