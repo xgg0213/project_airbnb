@@ -31,7 +31,58 @@ const validateLogin = [
 router.get(
     '/',
     async (req, res) => {
+
+      const {page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+      const where = {};
+      const pagination = {}
+
+      const pageN = parseInt(page, 10);
+      const sizeN = parseInt(size, 10);
+      const minLatN = parseFloat(minLat);
+      const maxLatN = parseFloat(maxLat);
+      const minLngN = parseFloat(minLng);
+      const maxLngN = parseFloat(maxLng);
+      const minPriceN = parseFloat(minPrice);
+      const maxPriceN = parseFloat(maxPrice);
+
+
+      // invalid req.query params]
+      if (pageN<1 || sizeN<1 || sizeN>20 || maxLatN>90 ||minLatN<-90 ||maxLngN>180 ||minLngN<-180 ||minPriceN<0 || maxPriceN<0) {
+        return res.status(400).json({
+          "message": "Bad Request", 
+          "errors": {
+            "page": "Page must be greater than or equal to 1",
+            "size": "Size must be between 1 and 20",
+            "maxLat": "Maximum latitude is invalid",
+            "minLat": "Minimum latitude is invalid",
+            "minLng": "Maximum longitude is invalid",
+            "maxLng": "Minimum longitude is invalid",
+            "minPrice": "Minimum price must be greater than or equal to 0",
+            "maxPrice": "Maximum price must be greater than or equal to 0"
+          }
+        })
+      }
+
+      // all valid params
+      pagination.limit = sizeN;
+      pagination.offset = sizeN * (pageN-1);
+      
+
+
       const spots = await Spot.findAll({
+        // limit: pagination.limit,
+        // offset: pagination.offset,
+        // where: {
+        //   lat: {
+        //     [Op.between]: [minLat, maxLat]
+        //   },
+        //   lng: {
+        //     [Op.between]: [minLng, maxLng]
+        //   },
+        //   price: {
+        //     [Op.between]: [minPrice, maxPrice]
+        //   }
+        // },
         include: [
           {
             model: Review,
@@ -43,22 +94,25 @@ router.get(
             attributes: []
           }
         ],
-          attributes: {
-            include: [
-              [
-                fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
-                'avgRating'  // Alias for the result
-              ],
-              [
-                col('SpotImages.url'),
-                "previewImage"
-              ]
+        attributes: {
+          include: [
+            [
+              fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
+              'avgRating'  // Alias for the result
+            ],
+            [
+              col('SpotImages.url'),
+              "previewImage"
             ]
-          },
-          group: ['Spot.id', 'SpotImages.id']  // Grouping by Spot.id to get avgRating for each spot
+          ]
+        },
+        group: ['Spot.id', 'SpotImages.id'],  // Grouping by Spot.id to get avgRating for each spot
+        // ...pagination
       });
       return res.status(200).json({
-        Spots:spots
+        Spots:spots,
+        Page: pageN,
+        Size: sizeN
       });
     }
 );

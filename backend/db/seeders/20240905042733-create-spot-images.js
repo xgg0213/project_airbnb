@@ -37,7 +37,7 @@ module.exports = {
     },
     {
       spotId: 2,
-      url: "sample spot url: spot 2 true",
+      url: "sample spot url: spot 2 false",
       preview: false
     },
     {
@@ -81,7 +81,7 @@ module.exports = {
       },
       {
         spotId: 2,
-        url: "sample spot url: spot 2 true",
+        url: "sample spot url: spot 2 false",
         preview: false
       },
       {
