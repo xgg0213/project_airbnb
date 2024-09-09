@@ -1,15 +1,15 @@
-// below is the database schema code for the first draft
-// commented out to avoid error messages
-
-// table users {
+// table Users {
 //     id integer pk
 //     firstName varchar
 //     lastName varchar
 //     email varchar
 //     userName varchar
+//     hashedPassword varchar
+//     createdAt datetime
+//     updatedAt datetime
 //   }
   
-//   table spots {
+//   table Spots {
 //     id integer pk
 //     ownerId integer
 //     address varchar
@@ -26,7 +26,7 @@
 //     previewImage varchar
 //   }
   
-//   table reviews {
+//   table Reviews {
 //     id integer pk
 //     userId integer
 //     spotId integer
@@ -36,14 +36,7 @@
 //     updatedAt datetime
 //   }
   
-//   table images {
-//     id integer pk
-//     imageableId integer
-//     imageType varchar
-//     url varchar
-//   }
-  
-//   table bookings {
+//   table Bookings {
 //     id integer pk
 //     spotId integer
 //     userId integer
@@ -53,16 +46,33 @@
 //     updatedAt datetime
 //   }
   
-//   Ref: "users"."id" - "reviews"."userId"
+//   table SpotImages {
+//     id integer pk
+//     spotId integer
+//     url varchar
+//     preview boolean
+//     createdAt datetime
+//     updatedAt datetime
+//   }
   
-//   Ref: "users"."id" - "spots"."ownerId"
+//   table ReviewImages {
+//     id integer pk
+//     reviewId integer
+//     url varchar
+//     createdAt datetime
+//     updatedAt datetime
+//   }
   
-//   Ref: "users"."id" < "bookings"."userId"
+//   Ref: "Users"."id" < "Reviews"."userId"
   
-//   Ref: "bookings"."spotId" > "spots"."id"
+//   Ref: "Users"."id" - "Spots"."ownerId"
   
-//   Ref: "spots"."id" < "reviews"."spotId"
+//   Ref: "Users"."id" < "Bookings"."userId"
   
-//   Ref: "images"."imageableId" > "spots"."id"
+//   Ref: "Bookings"."spotId" > "Spots"."id"
   
-//   Ref: "images"."imageableId" > "reviews"."id"
+//   Ref: "Spots"."id" < "Reviews"."spotId"
+  
+//   Ref: "ReviewImages"."reviewId" < "Reviews"."id"
+  
+//   Ref: "SpotImages"."spotId" > "Spots"."id"

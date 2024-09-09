@@ -2,20 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Images', {
+    await queryInterface.createTable('SpotImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      imageableId: {
+      spotId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      imageableType: {
-        type: Sequelize.STRING,
-        allowNull: false
+        references: {
+          model: 'Spots',
+          key: 'id'
+        }
       },
       url: {
         type: Sequelize.STRING,
@@ -23,6 +23,7 @@ module.exports = {
       },
       preview: {
         type: Sequelize.BOOLEAN,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Images');
+    await queryInterface.dropTable('SpotImages');
   }
 };

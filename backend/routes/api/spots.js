@@ -501,27 +501,28 @@ router.post(
       // NEED TO ADD ERROR 403: CONFLICT DATES
       
       if (ownerId !== Number(current) ) {
-        try {
-          const {startDate, endDate} = req.body;
-          const newBooking = await Booking.create({
-              spotId: spotId,
-              userId: current,
-              startDate,
-              endDate,
-          })
+        const {startDate, endDate} = req.body;
 
-          return res.status(201).json(newBooking);
-        } catch(e) {
-          if (e.name === 'SequelizeValidationError') {
-            return res.status(400).json({
-                "message": "Bad Request", 
-                "errors": {
-                  "startDate": "startDate cannot be in the past",
-                  "endDate": "endDate cannot be on or before startDate"
-                }
-            })
-          }
+        // startDate in the past or endDate > startDate
+        if (startDate < new Date() || startDate > endDate) {
+          return res.status(400).json({
+            "message": "Bad Request", 
+            "errors": {
+              "startDate": "startDate cannot be in the past",
+              "endDate": "endDate cannot be on or before startDate"
+            }
+          })
         }
+          
+        const newBooking = await Booking.create({
+            spotId: spotId,
+            userId: current,
+            startDate,
+            endDate,
+        })
+
+        return res.status(201).json(newBooking);
+
       }
       
 

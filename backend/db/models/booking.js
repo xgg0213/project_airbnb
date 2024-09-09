@@ -22,13 +22,14 @@ module.exports = (sequelize, DataTypes) => {
         {
           foreignKey: "spotId"
         }
-      )
+      );
+      
     }
   }
   Booking.init({
     spotId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -37,13 +38,6 @@ module.exports = (sequelize, DataTypes) => {
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate: {
-        isNotPast(value) {
-          if (new Date(value) < new Date()) {
-            throw new Error('startDate cannot be in the past')
-          }
-        }
-      }
     },
     endDate: {
       type: DataTypes.DATE,

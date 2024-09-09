@@ -39,10 +39,10 @@ module.exports = {
         endDate:'2024-03-03'
       },
       {
-        spotId:2,
-        userId:3,
-        startDate:'2024-02-01',
-        endDate:'2024-02-03'
+        spotId:1,
+        userId:5,
+        startDate:'2024-02-10',
+        endDate:'2024-02-13'
       },
       {
         spotId:3,
@@ -83,10 +83,10 @@ module.exports = {
         endDate:'2024-03-03'
       },
       {
-        spotId:2,
+        spotId:1,
         userId:5,
-        startDate:'2024-02-01',
-        endDate:'2024-02-03'
+        startDate:'2024-02-10',
+        endDate:'2024-02-13'
       },
       {
         spotId:3,

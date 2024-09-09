@@ -2,35 +2,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Bookings', {
+    await queryInterface.createTable('ReviewImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      spotId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Spots',
-          key: 'id'
-        }
-      },
-      userId: {
+      reviewId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'Reviews',
           key: 'id'
         }
       },
-      startDate: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      endDate: {
-        type: Sequelize.DATE,
+      url: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {
@@ -46,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Bookings');
+    await queryInterface.dropTable('ReviewImages');
   }
 };
