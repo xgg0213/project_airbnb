@@ -35,6 +35,12 @@ module.exports = (sequelize, DataTypes) => {
             imageableType: 'Spot'
           }
         }
+      );
+      Spot.hasMany(
+        models.Booking,
+        {
+          foreignKey: "spotId"
+        }
       )
 
     }

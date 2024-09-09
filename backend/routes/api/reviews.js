@@ -67,17 +67,11 @@ router.post(
         const userId = req.user.id;
 
         // reviewId not found
-        const ids = await Review.findAll({
-            where: {userId},
-            attributes: ['id']
+        const updatedReview = await Review.findOne({
+            where: {userId:userId, id:reviewId},
         });
-        const array = [];
 
-        ids.forEach(el => {
-            array.push(Number(el.id))
-        })
-
-        if (!array.includes(Number(reviewId))) {
+        if (!updatedReview) {
             res.status(404);
             return res.json({
                 "message": "Review couldn't be found"
@@ -125,17 +119,12 @@ router.put(
         const userId = req.user.id;
 
         // reviewId not found
-        const ids = await Review.findAll({
-            where: {userId},
-            attributes: ['id']
-        });
-        const array = [];
+        const updatedReview = await Review.findOne({
+            where: {id: reviewId}
+            });
 
-        ids.forEach(el => {
-            array.push(Number(el.id))
-        })
 
-        if (!array.includes(Number(reviewId))) {
+        if (!updatedReview) {
             res.status(404);
             return res.json({
                 "message": "Review couldn't be found"
@@ -145,9 +134,6 @@ router.put(
         // reviewId found
         try {
             const {review, stars} = req.body;
-            const updatedReview = await Review.findOne({
-            where: {id: reviewId}
-            });
 
             await updatedReview.update({
                 review: review?review:updatedReview.review,
@@ -175,34 +161,30 @@ router.delete(
     '/:reviewId',
     async(req, res) => {
         const reviewId = Number(req.params.reviewId);
-        
+        const userId = req.user.id;
+
         // reviewId not found
-        const ids = await Review.findAll({
-            attributes: ['id']
+        const updatedReview = await Review.findOne({
+            where: {userId:userId, id: reviewId}
         });
-        const array = [];
 
-        ids.forEach(el => {
-            array.push(Number(el.id))
-        })
-
-        if (!array.includes(Number(reviewId))) {
+        if (!updatedReview) {
             res.status(404);
             return res.json({
                 "message": "Review couldn't be found"
             })
-        }
+        };
 
-        // spotId found
+        // ReviewId found
         await Review.destroy({
             where: {id:reviewId}
-        });
+        }); 
 
         return res.status(200).json({
             "message": "Successfully deleted"
         })
     }
-)
+);
 
 module.exports = router;
 
