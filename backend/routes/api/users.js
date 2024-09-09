@@ -79,19 +79,19 @@ router.post(
         user: safeUser
       });
       } catch(e) {
-        // if (e.name === 'SequelizeValidationError' || e.name==='SequelizeConstraintError') {
+        if (e.name === 'SequelizeValidationError' || e.name==='SequelizeConstraintError' || e.message === 'Bad Request') {
       //   if (e.title === 'Bad Request') {
-      //     return res.status(400).json({
-      //         "message": "Bad Request", 
-      //         "errors": {
-      //           "email": "Invalid email",
-      //           "username": "Username is required",
-      //           "firstName": "First Name is required",
-      //           "lastName": "Last Name is required"
-      //       }
-      //     })
-      // }
-        return res.json(e)
+          return res.status(400).json({
+              "message": "Bad Request", 
+              "errors": {
+                "email": "Invalid email",
+                "username": "Username is required",
+                "firstName": "First Name is required",
+                "lastName": "Last Name is required"
+            }
+          })
+      }
+        // return res.json(e)
       }
       
     }

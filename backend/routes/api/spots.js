@@ -7,7 +7,7 @@ const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, Spot, Review, Image, Booking } = require('../../db/models');
+const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -38,7 +38,7 @@ router.get(
             attributes: []  // We don't need the full review data, just the average
           },
           {
-            model: Image,
+            model: SpotImage,
             as: 'SpotImages',  // The alias defined in the association
             attributes: []
           }
@@ -77,7 +77,7 @@ router.get(
               attributes: []  // We don't need the full review data, just the average
             },
             {
-              model: Image,
+              model: SpotImage,
               as: 'SpotImages',  // The alias defined in the association
               attributes: []
             }
@@ -116,7 +116,7 @@ router.get(
              attributes: []  // We don't need the full review data, just the average
            },
            {
-             model: Image,
+             model: SpotImage,
              as: 'SpotImages',
              attributes: ['id', 'url', 'preview']
            },
@@ -207,7 +207,7 @@ router.post(
 
         // spotId not found
         const updatedSpot = await Spot.findOne({
-            where: {ownerId: userId, spotId:spotId},
+            where: {ownerId: userId, id:spotId},
         });
 
         if (!updatedSpot) {
@@ -219,15 +219,14 @@ router.post(
 
         // spotId found
         const {url, preview} = req.body;
-        const newImage = await Image.create({
-            imageableId: spotId,
-            imageableType: 'Spot',
+        const newImage = await SpotImage.create({
+            spotId: spotId,
             url,
             preview
         })
 
         return res.status(201).json({
-            "id": newImage.imageableId,
+            "id": newImage.id,
             "url": url,
             "preview": preview
         })
@@ -353,7 +352,7 @@ router.get(
             attributes: ['id', 'firstName', 'lastName']
           },
           {
-            model: Image,
+            model: ReviewImage,
             as: 'ReviewImages',
             attributes: ['id', 'url']
           },

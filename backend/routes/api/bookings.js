@@ -7,7 +7,7 @@ const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, Spot, Review, Image, Booking } = require('../../db/models');
+const { User, Spot, Review, ReviewImage, SpotImage, Booking } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -72,17 +72,30 @@ router.put(
             })
         };
 
+        // booking is in the past
+        if (updatedBooking.endDate < new Date()) {
+            return res.status(403).json({
+                "message": "Past bookings can't be modified"
+            })
+        };
+
 
         // bookingId found 
-        try {
+        // try {
             const {startDate, endDate} = req.body;
 
-            // booking is in the past
-            if (updatedBooking.endDate < new Date()) {
-                return res.status(403).json({
-                    "message": "Past bookings can't be modified"
+            
+
+            // start & end dates invalid
+            if (startDate < new Date() || startDate > endDate) {
+                return res.status(400).json({
+                    "message": "Bad Request", 
+                    "errors": {
+                        "startDate": "startDate cannot be in the past",
+                        "endDate": "endDate cannot be on or before startDate"
+                    }
                 })
-            };
+            }      
 
             // NEED TO ADD ERROR 403: NEW START/END DATES CONFLICT WITH EXISTING
 
@@ -92,26 +105,27 @@ router.put(
             });
 
             return res.status(200).json(updatedBooking)
-        } catch(e) {
-            if (e.name === 'SequelizeValidationError') {
-                return res.status(400).json({
-                    "message": "Bad Request", 
-                    "errors": {
-                        "startDate": "startDate cannot be in the past",
-                        "endDate": "endDate cannot be on or before startDate"
-                    }
-                })
-            }
-        }
+        // }
+        // catch(e) {
+        //     if (e.name === 'SequelizeValidationError') {
+        //         return res.status(400).json({
+        //             "message": "Bad Request", 
+        //             "errors": {
+        //                 "startDate": "startDate cannot be in the past",
+        //                 "endDate": "endDate cannot be on or before startDate"
+        //             }
+        //         })
+        //     }
+        // }
     
     }
-)
+);
 
 // Delete a booking
 router.delete(
     '/:bookingId',
     async (req, res) => {
-        const bookingId = Number(req.params.bookingId);
+        const bookingId = req.params.bookingId;
         const userId = req.user.id;
 
         // bookingId not found

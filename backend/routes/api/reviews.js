@@ -7,7 +7,7 @@ const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, Spot, Review, Image } = require('../../db/models');
+const { User, Spot, Review, ReviewImage } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -44,7 +44,7 @@ router.get(
               }
             },
             {
-              model: Image,
+              model: ReviewImage,
               as: 'ReviewImages',  // The alias defined in the association
               attributes: ['id', 'url']
             }
@@ -79,17 +79,12 @@ router.post(
         }
 
         // reviewId exists but already 10 images
-        const images = await Image.findAll({
-            where :{imageableId: reviewId, imageableType: 'Review'},
+        const images = await ReviewImage.findAll({
+            where :{reviewId: reviewId},
             attributes: ['id']
         })
 
-        const imageArray = []
-        images.forEach(el => {
-            imageArray.push(el.id)
-        });
-
-        if (imageArray.length>=10) {
+        if (images.length>=10) {
             return res.status(403).json({
                 "message": "Maximum number of images for this resource was reached"
             })
@@ -97,9 +92,8 @@ router.post(
 
         // reviewId found
         const {url} = req.body;
-        const newImage = await Image.create({
-            imageableId: reviewId,
-            imageableType: 'Review',
+        const newImage = await ReviewImage.create({
+            reviewId: reviewId,
             url
         })
 
