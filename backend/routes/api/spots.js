@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { Sequelize, fn, col } = require('sequelize');
-// const sequelize = require('../../config/database.js');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
@@ -66,27 +65,41 @@ router.get(
       // all valid params
       pagination.limit = sizeN;
       pagination.offset = sizeN * (pageN-1);
-      
+
+      // create where filters
+      if (minLat || maxLat) {
+        where.lat = {
+          ...(minLat && { [Op.gte]: minLatN }),
+          ...(maxLat && { [Op.lte]: maxLatN })
+        };
+      }
+
+      if (minLng || maxLng) {
+        where.lng = {
+          ...(minLng && { [Op.gte]: minLngN }),
+          ...(maxLng && { [Op.lte]: maxLngN })
+        };
+      }
+
+      if (minPrice || maxPrice) {
+        where.price = {
+          ...(minPrice && { [Op.gte]: minPriceN }),
+          ...(maxPrice && { [Op.lte]: maxPriceN })
+        };
+      }
 
 
       const spots = await Spot.findAll({
-        // limit: pagination.limit,
-        // offset: pagination.offset,
-        // where: {
-        //   lat: {
-        //     [Op.between]: [minLat, maxLat]
-        //   },
-        //   lng: {
-        //     [Op.between]: [minLng, maxLng]
-        //   },
-        //   price: {
-        //     [Op.between]: [minPrice, maxPrice]
-        //   }
-        // },
+        where,
         include: [
           {
             model: Review,
-            attributes: []  // We don't need the full review data, just the average
+            attributes: [
+              [
+                Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), // Aggregating the stars from Review
+                'avgRating'  // Alias for the result
+              ]
+            ], // We don't need the full review data, just the average
           },
           {
             model: SpotImage,
@@ -94,20 +107,22 @@ router.get(
             attributes: []
           }
         ],
-        attributes: {
-          include: [
-            [
-              fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
-              'avgRating'  // Alias for the result
-            ],
-            [
-              col('SpotImages.url'),
-              "previewImage"
-            ]
-          ]
-        },
-        group: ['Spot.id', 'SpotImages.id'],  // Grouping by Spot.id to get avgRating for each spot
-        // ...pagination
+        // attributes: {
+        //   include: [
+        //     [
+        //       Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), // Aggregating the stars from Review
+        //       'avgRating'  // Alias for the result
+        //     ],
+        //     [
+        //       Sequelize.col('SpotImages.url'),
+        //       "previewImage"
+        //     ]
+        //   ]
+        // },
+        // group: ['Spot.id', 'SpotImages.id'],  // Grouping by Spot.id to get avgRating for each spot
+
+        group: ['Spots.id'],
+        ...pagination
       });
       return res.status(200).json({
         Spots:spots,
@@ -116,6 +131,20 @@ router.get(
       });
     }
 );
+
+        // attributes: {
+        //   include: [
+        //     [
+        //       Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), // Aggregating the stars from Review
+        //       'avgRating'  // Alias for the result
+        //     ],
+        //     [
+        //       Sequelize.col('SpotImages.url'),
+        //       "previewImage"
+        //     ]
+        //   ]
+        // },
+        // group: ['Spot.id', 'SpotImages.id'],  // Grouping by Spot.id to get avgRating for each spot
 
 // get spots for current user
 router.get(
@@ -550,8 +579,6 @@ router.post(
 
       // find owner of the spot
       let ownerId = Number(spot.ownerId)
-
-      // NEED TO ADD ERROR 403: CONFLICT DATES
       
       if (ownerId !== Number(current) ) {
         const {startDate, endDate} = req.body;
@@ -566,7 +593,33 @@ router.post(
             }
           })
         }
+
+        // startDate/endDate conflicts with existing bookings
+        const bookingDates = await Booking.findAll({
+          where: {
+              spotId: spotId,
+              startDate: {
+                  [Op.gte]: new Date()
+              }
+          },
+          attributes: ['spotId', 'startDate', 'endDate']
+        });
+
+        bookingDates.forEch(el => {
+            if ((startDate>=el.startDate && startDate < el.endDate) || 
+            (startDate < el.startDate && endDate>el.startDate)) {
+                return res.status(403).json({
+                    "message": "Sorry, this spot is already booked for the specified dates",
+                    "errors": {
+                      "startDate": "Start date conflicts with an existing booking",
+                      "endDate": "End date conflicts with an existing booking"
+                    }
+                })
+            }
+
+        })
           
+        // all requirements passed
         const newBooking = await Booking.create({
             spotId: spotId,
             userId: current,

@@ -82,29 +82,53 @@ router.put(
 
         // bookingId found 
         // try {
-            const {startDate, endDate} = req.body;
+        const {startDate, endDate} = req.body;
 
-            
+        
 
-            // start & end dates invalid
-            if (startDate < new Date() || startDate > endDate) {
-                return res.status(400).json({
-                    "message": "Bad Request", 
+        // start & end dates invalid
+        if (startDate < new Date() || startDate > endDate) {
+            return res.status(400).json({
+                "message": "Bad Request", 
+                "errors": {
+                    "startDate": "startDate cannot be in the past",
+                    "endDate": "endDate cannot be on or before startDate"
+                }
+            })
+        }      
+
+        // startDate/endDate conflicts with existing bookings
+        const bookingDates = await Booking.findAll({
+            where: {
+                spotId: updatedBooking.spotId,
+                startDate: {
+                    [Op.gte]: new Date()
+                }
+            },
+            attributes: ['spotId', 'startDate', 'endDate']
+        });
+
+        bookingDates.forEch(el => {
+            if ((startDate>=el.startDate && startDate < el.endDate) || 
+            (startDate < el.startDate && endDate>el.startDate)) {
+                return res.status(403).json({
+                    "message": "Sorry, this spot is already booked for the specified dates",
                     "errors": {
-                        "startDate": "startDate cannot be in the past",
-                        "endDate": "endDate cannot be on or before startDate"
+                      "startDate": "Start date conflicts with an existing booking",
+                      "endDate": "End date conflicts with an existing booking"
                     }
                 })
-            }      
+            }
 
-            // NEED TO ADD ERROR 403: NEW START/END DATES CONFLICT WITH EXISTING
+        })
 
-            await updatedBooking.update({
-                startDate: startDate?startDate:updatedBooking.startDate,
-                endDate: endDate?endDate:updatedBooking.endDate,
-            });
 
-            return res.status(200).json(updatedBooking)
+        await updatedBooking.update({
+            startDate: startDate?startDate:updatedBooking.startDate,
+            endDate: endDate?endDate:updatedBooking.endDate,
+        });
+
+        return res.status(200).json(updatedBooking)
         // }
         // catch(e) {
         //     if (e.name === 'SequelizeValidationError') {
