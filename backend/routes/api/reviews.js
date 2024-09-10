@@ -1,4 +1,4 @@
-// backend/routes/api/spots.js
+// backend/routes/api/reviews.js
 const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
@@ -30,8 +30,15 @@ const validateLogin = [
 // Get all Reviews of the Current User
 router.get(
     '/current',
-    // validateLogin, // do I need this here?
     async(req, res) => {
+        // no logged in user
+        if (!req.user) {
+            return res.status(401).json({
+              "message": "Authentication required"
+            })
+        };
+        
+        // with logged in user
         const current = req.user.id;
 
         const reviews = await Review.findAll({
@@ -63,12 +70,18 @@ router.get(
 router.post(
     '/:reviewId/images',
     async(req, res) => {
-        const reviewId = Number(req.params.reviewId);
-        const userId = req.user.id;
+        const reviewId = req.params.reviewId;
+
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({
-            where: {userId:userId, id:reviewId},
+            where: {id:reviewId},
         });
 
         if (!updatedReview) {
@@ -78,7 +91,15 @@ router.post(
             })
         }
 
-        // reviewId exists but already 10 images
+        // no matching reviewId
+        const userId = req.user.id; 
+        if (Number(updatedReview.userId) !== Number(userId)) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            }) 
+        };
+
+        // reviewId exists && matching but already 10 images
         const images = await ReviewImage.findAll({
             where :{reviewId: reviewId},
             attributes: ['id']
@@ -90,7 +111,7 @@ router.post(
             })
         }
 
-        // reviewId found
+        // reviewId found && meeting all requirements
         const {url} = req.body;
         const newImage = await ReviewImage.create({
             reviewId: reviewId,
@@ -109,14 +130,19 @@ router.post(
 router.put(
     '/:reviewId',
     async (req, res) => {
-        const reviewId = Number(req.params.reviewId);
-        const userId = req.user.id;
+        const reviewId = req.params.reviewId;
+
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({
-            where: {id: reviewId}
-            });
-
+            where: {id:reviewId},
+        });
 
         if (!updatedReview) {
             res.status(404);
@@ -125,7 +151,15 @@ router.put(
             })
         }
 
-        // reviewId found
+        // no matching reviewId
+        const userId = req.user.id; 
+        if (Number(updatedReview.userId) !== Number(userId)) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            }) 
+        };
+
+        // reviewId found && meeting all requirements
         try {
             const {review, stars} = req.body;
 
@@ -154,12 +188,18 @@ router.put(
 router.delete(
     '/:reviewId',
     async(req, res) => {
-        const reviewId = Number(req.params.reviewId);
-        const userId = req.user.id;
+        const reviewId = req.params.reviewId;
+
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({
-            where: {userId:userId, id: reviewId}
+            where: {id:reviewId},
         });
 
         if (!updatedReview) {
@@ -167,9 +207,17 @@ router.delete(
             return res.json({
                 "message": "Review couldn't be found"
             })
+        }
+
+        // no matching reviewId
+        const userId = req.user.id; 
+        if (Number(updatedReview.userId) !== Number(userId)) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            }) 
         };
 
-        // ReviewId found
+        // reviewId found && meeting all requirements
         await Review.destroy({
             where: {id:reviewId}
         }); 

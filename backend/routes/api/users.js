@@ -40,6 +40,19 @@ router.post(
       const { email, password, username, firstName, lastName } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
 
+      // body validation error - no email/firstName/lastName
+      if (!email || !firstName || !lastName || !username) {
+        return res.status(400).json({
+          "message": "Bad Request", 
+          "errors": {
+            "email": "Invalid email",
+            "username": "Username is required",
+            "firstName": "First Name is required",
+            "lastName": "Last Name is required"
+          }
+        })
+      };
+
       // user already exists
       const checkUser = await User.findAll({
         where: {
@@ -60,27 +73,24 @@ router.post(
         })
       };
 
-      // body validation error
      
       try {
-      const user = await User.create({ email, username, firstName, lastName, hashedPassword });
-
-      const safeUser = {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-      };
-  
-      await setTokenCookie(res, safeUser);
-  
-      return res.status(201).json({
-        user: safeUser
-      });
+        const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+        const safeUser = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          username: user.username,
+        };
+    
+        await setTokenCookie(res, safeUser);
+    
+        return res.status(201).json({
+          user: safeUser
+        });
       } catch(e) {
-        if (e.name === 'SequelizeValidationError' || e.name==='SequelizeConstraintError' || e.message === 'Bad Request') {
-      //   if (e.title === 'Bad Request') {
+        // if (e.name === 'SequelizeValidationError' || e.name==='SequelizeConstraintError') {
           return res.status(400).json({
               "message": "Bad Request", 
               "errors": {
@@ -90,8 +100,7 @@ router.post(
                 "lastName": "Last Name is required"
             }
           })
-      }
-        // return res.json(e)
+        //}
       }
       
     }

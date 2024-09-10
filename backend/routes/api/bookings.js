@@ -1,4 +1,4 @@
-// backend/routes/api/spots.js
+// backend/routes/api/bookings.js
 const express = require('express');
 const { Op, NOW } = require('sequelize');
 const bcrypt = require('bcryptjs');
@@ -32,6 +32,14 @@ router.get(
     '/current',
     // validateLogin, // do I need this here?
     async(req, res) => {
+        // no logged in user
+        if (!req.user) {
+            return res.status(401).json({
+              "message": "Authentication required"
+            })
+        };
+
+        // with logged in user
         const current = req.user.id;
 
         const bookings = await Booking.findAll({
@@ -56,35 +64,37 @@ router.get(
 router.put(
     '/:bookingId',
     async (req, res) => {
-        const bookingId = Number(req.params.bookingId);
-        const userId = req.user.id;
+        const bookingId = req.params.bookingId;
+
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
 
         // bookingId not found
         const updatedBooking = await Booking.findOne({
-            where: {userId:userId, id:bookingId}
+            where: {id:bookingId},
         });
 
-        
         if (!updatedBooking) {
             res.status(404);
             return res.json({
                 "message": "Booking couldn't be found"
             })
-        };
+        }
 
-        // booking is in the past
-        if (updatedBooking.endDate < new Date()) {
+        // not matching bookingId
+        const userId = req.user.id; 
+        if (Number(updatedBooking.userId) !== Number(userId)) {
             return res.status(403).json({
-                "message": "Past bookings can't be modified"
-            })
+            "message": "Forbidden"
+            }) 
         };
-
 
         // bookingId found 
-        // try {
         const {startDate, endDate} = req.body;
-
-        
 
         // start & end dates invalid
         if (startDate < new Date() || startDate > endDate) {
@@ -122,25 +132,12 @@ router.put(
 
         })
 
-
         await updatedBooking.update({
             startDate: startDate?startDate:updatedBooking.startDate,
             endDate: endDate?endDate:updatedBooking.endDate,
         });
 
         return res.status(200).json(updatedBooking)
-        // }
-        // catch(e) {
-        //     if (e.name === 'SequelizeValidationError') {
-        //         return res.status(400).json({
-        //             "message": "Bad Request", 
-        //             "errors": {
-        //                 "startDate": "startDate cannot be in the past",
-        //                 "endDate": "endDate cannot be on or before startDate"
-        //             }
-        //         })
-        //     }
-        // }
     
     }
 );
@@ -150,11 +147,17 @@ router.delete(
     '/:bookingId',
     async (req, res) => {
         const bookingId = req.params.bookingId;
-        const userId = req.user.id;
+
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
 
         // bookingId not found
         const updatedBooking = await Booking.findOne({
-            where: {userId:userId, id: bookingId}
+            where: {id:bookingId},
         });
 
         if (!updatedBooking) {
@@ -162,7 +165,20 @@ router.delete(
             return res.json({
                 "message": "Booking couldn't be found"
             })
+        }
+
+        // does not belong to the logged in user && logged in user does not own the spot
+        const userId = req.user.id; 
+        const spotId = updatedBooking.spotId;
+        const spot = await Spot.findOne({where: {id:spotId}});
+
+        if (Number(updatedBooking.userId) !== Number(userId) && Number(spot.ownerId) !== Number(userId) ) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            }) 
         };
+
+
         // bookingId found but it's a future booking
         if (updatedBooking.startDate < new Date()) {
             return res.status(403).json({

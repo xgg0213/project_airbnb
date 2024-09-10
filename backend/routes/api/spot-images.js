@@ -19,29 +19,38 @@ router.delete(
     '/:imageId',
     async(req, res) => {
         const imageId = req.params.imageId;
-        const userId = req.user.id;
 
-        // imageId not found
+        // no logged in user
+        if (!req.user) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            })
+        };
+
         const updatedImage = await SpotImage.findOne({
-            where: {id: imageId}
-        });
-        const updatedSpots = await Spot.findAll({
-            where: {ownerId: userId}
+            where: {id:imageId},
         });
 
-        let check = false;
-        updatedSpots.forEach(el => {
-            if(el.id === updatedImage.spotId) check = true;
-        })
-
-        if (!updatedImage || check === false) {
+        // image not found
+        if (!updatedImage) {
             res.status(404);
             return res.json({
                 "message": "Spot Image couldn't be found"
             })
+        }
+
+        // image found but review does not belong to the logged in user
+        const spotId = updatedImage.spotId;
+        const updatedSpot = await Review.findOne({where: {id:spotId}})
+        const userId = req.user.id; 
+        
+        if (Number(updatedSpot.userId) !== Number(userId)) {
+            return res.status(403).json({
+            "message": "Forbidden"
+            }) 
         };
 
-        // imageId found
+        // imageId found && matching
         await SpotImage.destroy({
             where: {id:imageId}
         }); 
