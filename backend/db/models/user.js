@@ -6,6 +6,27 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      User.hasMany(
+        models.Spot,
+        {
+          as: 'Owner',
+          foreignKey: "ownerId",
+          onDelete: "CASCADE"
+        }
+      );
+      User.hasMany(
+        models.Review,
+        {
+          foreignKey: "userId",
+          // onDelete: "CASCADE"
+        }
+      );
+      User.hasMany(
+        models.Booking,
+        {
+          foreignKey: "userId"
+        }
+      )
     }
   }
 
@@ -15,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
         validate: {
           len: [4, 30],
           isNotEmail(value) {
@@ -28,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
         validate: {
           len: [4, 30],
           isNotEmail(value) {

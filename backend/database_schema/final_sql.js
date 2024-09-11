@@ -50,6 +50,7 @@
 //     id integer pk
 //     spotId integer
 //     url varchar
+//     preview boolean
 //     createdAt datetime
 //     updatedAt datetime
 //   }

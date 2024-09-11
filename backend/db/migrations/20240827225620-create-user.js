@@ -17,12 +17,12 @@ module.exports = {
       firstName: {
         type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true
+        // unique: true
       },
       lastName: {
         type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true
+        // unique: true
       },
       username: {
         type: Sequelize.STRING(30),

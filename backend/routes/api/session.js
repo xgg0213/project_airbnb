@@ -11,7 +11,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-// validate ogin
+// validate login
 const validateLogin = [
   check('credential')
     .exists({ checkFalsy: true })
@@ -39,27 +39,44 @@ router.post(
             }
         });
 
-        if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
+        // can I do it this way?
+        if (!user) {
+            return res.status(400).json({
+                "message": "Bad Request", 
+                "errors": {
+                  "credential": "Email or username is required",
+                  "password": "Password is required"
+                }
+            })
+        };
+
+        // if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
+        if (!bcrypt.compareSync(password, user.hashedPassword.toString())) {
             const err = new Error('Login failed');
             err.status = 401;
             err.title = 'Login failed';
             err.errors = { credential: 'The provided credentials were invalid.' };
-            return next(err);
-        }
+            err.message = 'Invalid credentials'
+            // return next(err);
+            return res.status(401).json({
+              'message': err.message
+            })
+        };
 
         const safeUser = {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            username: user.username,
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
         };
 
         await setTokenCookie(res, safeUser);
 
-        return res.json({
+        return res.status(200).json({
             user: safeUser
         });
+       
     }
 );
 
@@ -83,10 +100,10 @@ router.get(
           email: user.email,
           username: user.username,
         };
-        return res.json({
+        return res.status(200).json({
           user: safeUser
         });
-      } else return res.json({ user: null });
+      } else return res.status(200).json({ user: null });
     }
 );
 
