@@ -96,15 +96,16 @@ router.get(
             model: Review,
             
             attributes: [], // We don't need the full review data, just the average
-            //required: true,
-            subQuery: false
+            // required: false,
+            // subQuery: false,
+            // duplicating: false,
           },
           {
             model: SpotImage,
             as: 'SpotImages',  // The alias defined in the association
-            // separate: true,
             attributes: [],
-            subQuery: false
+            // subQuery: false
+            // separate: true,
           }
         ],
         attributes: {
@@ -120,7 +121,8 @@ router.get(
           ]
         },
         group: ['Spot.id', 'SpotImages.id'],  // Grouping by Spot.id to get avgRating for each spot
-        ...pagination
+        ...pagination,
+        subQuery: false
       });
 
       return res.status(200).json({
@@ -138,6 +140,13 @@ router.get(
     '/current',
     // validateLogin, // do I need this here?
     async(req, res) => {
+        // no logged in user
+        if (!req.user) {
+          return res.status(401).json({
+            "message": "Authentication required"
+          })
+        }
+
         const current = req.user.id;
         const spots = await Spot.findAll({
            where: {ownerId:current},
@@ -491,7 +500,7 @@ router.post(
       const spotId = Number(req.params.spotId);
 
       // no logged in user
-      if (!req.use) {
+      if (!req.user) {
         return res.status(401).json({
           "message": "Authentication required"
         })
@@ -622,7 +631,7 @@ router.post(
 
       // no logged in user
       if (!req.use) {
-        return res.status(401).json({
+        return res.status(403).json({
           "message": "Forbidden"
         })
       }
