@@ -62,6 +62,13 @@ router.put(
     async (req, res) => {
         const bookingId = req.params.bookingId;
 
+        // bookingId is not an integer
+        if (!Number(bookingId)) {
+            return res.status(404).json({
+                "message": "Booking couldn't be found"
+            })
+        }
+
         // bookingId not found
         const updatedBooking = await Booking.findOne({
             where: {id:bookingId},
