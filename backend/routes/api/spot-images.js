@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie, restoreUser,requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
@@ -17,15 +17,9 @@ const router = express.Router();
 // Delete a spot image
 router.delete(
     '/:imageId',
+    requireAuth,
     async(req, res) => {
         const imageId = req.params.imageId;
-
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
-            })
-        };
 
         const updatedImage = await SpotImage.findOne({
             where: {id:imageId},

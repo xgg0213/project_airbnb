@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.DECIMAL
       },
       name: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(49),
         allowNull: false
       },
       description: {
@@ -51,9 +51,6 @@ module.exports = {
         type: Sequelize.DECIMAL,
         allowNull: false
       },
-      // previewImage: {
-      //   type: Sequelize.STRING
-      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

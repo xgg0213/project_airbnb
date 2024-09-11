@@ -16,11 +16,11 @@ const validateSignup = [
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email.'),
   check('username')
     .exists({ checkFalsy: true })
-    .isLength({ min: 4 })
-    .withMessage('Please provide a username with at least 4 characters.'),
+    .isLength({ min: 4, max: 30 })
+    .withMessage('Username is required'),
   check('username')
     .not()
     .isEmail()
@@ -29,6 +29,12 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
+  check('firstName')
+    .exists({ checkFalsy: true })
+    .withMessage('First Name is required'),
+  check('lastName')
+    .exists({ checkFalsy: true })
+    .withMessage('Last Name is required'),
   handleValidationErrors
 ];
 
@@ -39,7 +45,7 @@ router.post(
     async (req, res) => {
       const { email, password, username, firstName, lastName } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
-
+      console.log('test')
       // body validation error - no email/firstName/lastName
       if (!email || !firstName || !lastName || !username) {
         return res.status(400).json({
@@ -74,34 +80,20 @@ router.post(
       };
 
      
-      try {
-        const user = await User.create({ email, username, firstName, lastName, hashedPassword });
-        const safeUser = {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          username: user.username,
-        };
-    
-        await setTokenCookie(res, safeUser);
-    
-        return res.status(201).json({
-          user: safeUser
-        });
-      } catch(e) {
-        // if (e.name === 'SequelizeValidationError' || e.name==='SequelizeConstraintError') {
-          return res.status(400).json({
-              "message": "Bad Request", 
-              "errors": {
-                "email": "Invalid email",
-                "username": "Username is required",
-                "firstName": "First Name is required",
-                "lastName": "Last Name is required"
-            }
-          })
-        //}
-      }
+      const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+      const safeUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        username: user.username,
+      };
+  
+      await setTokenCookie(res, safeUser);
+  
+      return res.status(201).json({
+        user: safeUser
+      });
       
     }
 );

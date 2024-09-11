@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 const { Sequelize, fn, col } = require('sequelize');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
@@ -14,17 +14,53 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-// validate login
-const validateLogin = [
-    check('credential')
+// validate spot
+const validateSpot = [
+    check('address')
       .exists({ checkFalsy: true })
-      .notEmpty()
-      .withMessage('Please provide a valid email or username.'),
-    check('password')
+      .withMessage('Street address is required'),
+    check('city')
       .exists({ checkFalsy: true })
-      .withMessage('Please provide a password.'),
+      .withMessage('City is required'),
+    check('state')
+      .exists({ checkFalsy: true })
+      .withMessage('State is required'),
+    check('country')
+      .exists({ checkFalsy: true })
+      .withMessage('Country is required'),
+    check('lat')
+      .exists({ checkFalsy: true })
+      .isFloat({min: -90, max: 90})
+      .withMessage('Latitude must be within -90 and 90'),
+    check('lng')
+      .exists({ checkFalsy: true })
+      .isFloat({min: -180, max: 180})
+      .withMessage('Longitude must be within -180 and 180'),
+    check('name')
+      .exists({checkFalsy: true})
+      .isLength({max:49})
+      .withMessage('Name must be less than 50 characters'),
+    check('description')
+      .exists({checkFalsy: true})
+      .withMessage('Description is required'),
+    check('price')
+      .exists({checkFalsy: true})
+      .isFloat({min:0})
+      .withMessage('Price per day must be a positive number'),
     handleValidationErrors
   ];
+
+// validate a review
+const validateReview = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .withMessage('Review text is required'),
+  check('stars')
+    .exists({ checkFalsy: true })
+    .isInt({min:1, max:5 })
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
 
 // Get all spots: no login required
 router.get(
@@ -138,16 +174,20 @@ router.get(
 // get spots for current user
 router.get(
     '/current',
-    // validateLogin, // do I need this here?
+    requireAuth,
     async(req, res) => {
         // no logged in user
-        if (!req.user) {
-          return res.status(401).json({
-            "message": "Authentication required"
-          })
-        }
+        // if (!req.user) {
+        //   return res.status(401).json({
+        //     "message": "Authentication required"
+        //   })
+        // }
+
+        // use requireAuth;
+        
 
         const current = req.user.id;
+        console.log()
         const spots = await Spot.findAll({
            where: {ownerId:current},
            include: [
@@ -237,66 +277,36 @@ router.get(
 // Create a Spot
 router.post(
     '/',
-    // validateLogin,
+    requireAuth,
+    validateSpot,
     async(req, res) => {
-        
-        // no logged in user
-        if (!req.user) {
-          return res.status(401).json({
-            "message": "Authentication required"
-          })
-        };
 
         const ownerId = req.user.id;
         const {address, city, state, country, lat, lng, name, description, price} = req.body;
-        try {
-          const newSpot = await Spot.create({
-              ownerId,
-              address,
-              city, 
-              state,
-              country,
-              lat,
-              lng,
-              name,
-              description,
-              price
-          })
 
-          return res.status(201).json(newSpot);
-        }catch(e) {
-          if (e.name === 'SequelizeValidationError') {
-            return res.status(400).json({
-                "message": "Bad Request", 
-                "errors": {
-                  "address": "Street address is required",
-                  "city": "City is required",
-                  "state": "State is required",
-                  "country": "Country is required",
-                  "lat": "Latitude must be within -90 and 90",
-                  "lng": "Longitude must be within -180 and 180",
-                  "name": "Name must be less than 50 characters",
-                  "description": "Description is required",
-                  "price": "Price per day must be a positive number"
-                }
-            })
-          }
-        }
+        const newSpot = await Spot.create({
+            ownerId,
+            address,
+            city, 
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        })
+
+        return res.status(201).json(newSpot);
     }
 );
 
 // Add an Image to a Spot based on the Spot's id
 router.post(
     '/:spotId/images',
+    requireAuth,
     async(req, res) => {
         const spotId = req.params.spotId;
-
-        // no logged in user
-        if (!req.user) {
-          return res.status(403).json({
-            "message": "Forbidden"
-          })
-        };
 
         // spotId not found
         const updatedSpot = await Spot.findOne({
@@ -338,15 +348,10 @@ router.post(
 // Edit a Spot
 router.put(
     '/:spotId',
+    requireAuth,
+    validateSpot,
     async (req, res) => {
       const spotId = req.params.spotId;
-
-      // no logged in user
-      if (!req.user) {
-        return res.status(403).json({
-          "message": "Forbidden"
-        })
-      };
 
       // spotId not found
       const updatedSpot = await Spot.findOne({
@@ -368,56 +373,31 @@ router.put(
         }) 
       };
 
-      // spotId found && matching
-      try {
-        const {address, city, state, country, lat, lng, name, description, price} = req.body;
+    // spotId found && matching
+      const {address, city, state, country, lat, lng, name, description, price} = req.body;
 
-        await updatedSpot.update({
-            address: address?address:updatedSpot.address,
-            city: city?city:updatedSpot.city,
-            state: state?state:updatedSpot.state,
-            country: country?country:updatedSpot.country,
-            lat: lat?lat:updatedSpot.lat,
-            lng: lng?lng:updatedSpot.lng,
-            name: name?name:updatedSpot.name,
-            description: description?description:updatedSpot.description,
-            price: price?price:updatedSpot.price,
-        });
+      await updatedSpot.update({
+          address: address?address:updatedSpot.address,
+          city: city?city:updatedSpot.city,
+          state: state?state:updatedSpot.state,
+          country: country?country:updatedSpot.country,
+          lat: lat?lat:updatedSpot.lat,
+          lng: lng?lng:updatedSpot.lng,
+          name: name?name:updatedSpot.name,
+          description: description?description:updatedSpot.description,
+          price: price?price:updatedSpot.price,
+      });
 
-        return res.status(200).json(updatedSpot)
-      } catch(e) {
-        if (e.name === 'SequelizeValidationError') {
-          return res.status(400).json({
-              "message": "Bad Request", 
-              "errors": {
-                "address": "Street address is required",
-                "city": "City is required",
-                "state": "State is required",
-                "country": "Country is required",
-                "lat": "Latitude must be within -90 and 90",
-                "lng": "Longitude must be within -180 and 180",
-                "name": "Name must be less than 50 characters",
-                "description": "Description is required",
-                "price": "Price per day must be a positive number"
-              }
-          })
-        }
-      }
+      return res.status(200).json(updatedSpot)
     }
 )
 
 // Delete a Spot
 router.delete(
     '/:spotId',
+    requireAuth,
     async(req, res) => {
       const spotId = req.params.spotId;
-
-      // no logged in user
-      if (!req.user) {
-        return res.status(403).json({
-          "message": "Forbidden"
-        })
-      };
 
       // spotId not found
       const updatedSpot = await Spot.findOne({
@@ -496,15 +476,10 @@ router.get(
 // Create a Review for a Spot based on the Spot's id
 router.post(
   '/:spotId/reviews',
+  requireAuth,
+  validateReview,
   async(req, res) => {
       const spotId = Number(req.params.spotId);
-
-      // no logged in user
-      if (!req.user) {
-        return res.status(401).json({
-          "message": "Authentication required"
-        })
-      }
 
       // with logged in user
       const userId = req.user.id;
@@ -533,27 +508,15 @@ router.post(
       };
 
       // spotId found
-      try {
-        const {review, stars} = req.body;
-        const newReview = await Review.create({
-            userId,
-            spotId,
-            review,
-            stars
-        })
+      const {review, stars} = req.body;
+      const newReview = await Review.create({
+          userId,
+          spotId,
+          review,
+          stars
+      })
 
-        return res.status(201).json(newReview);
-      }catch(e) {
-        if (e.name === 'SequelizeValidationError') {
-          return res.status(400).json({
-              "message": "Bad Request", 
-              "errors": {
-                  "review": "Review text is required",
-                  "stars": "Stars must be an integer from 1 to 5",
-              }
-          })
-      }
-      }
+      return res.status(201).json(newReview);
 
   }
 );
@@ -564,15 +527,9 @@ router.post(
 // Get all bookings by a Spot's id
 router.get(
   '/:spotId/bookings',
+  requireAuth,
   async(req, res) => {
       const spotId = req.params.spotId;
-
-      // no logged in user
-      if (!req.use) {
-        return res.status(401).json({
-          "message": "Authentication required"
-        })
-      }
 
       // with logged in user
       const userId = req.user.id;
@@ -626,15 +583,9 @@ router.get(
 // Create a Booking from a Spot based on the Spot's id
 router.post(
   '/:spotId/bookings',
+  requireAuth,
   async(req, res) => {
       const spotId = req.params.spotId;
-
-      // no logged in user
-      if (!req.use) {
-        return res.status(403).json({
-          "message": "Forbidden"
-        })
-      }
 
       const current = req.user.id;
 

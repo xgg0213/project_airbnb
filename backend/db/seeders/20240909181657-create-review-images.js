@@ -32,7 +32,6 @@ module.exports = {
       {
         reviewId: 3,
         url: "sample review url: review 3",
-        preview: true
       },
       {
         reviewId: 4,
@@ -69,7 +68,6 @@ module.exports = {
       {
         reviewId: 3,
         url: "sample review url: review 3",
-        preview: true
       },
       {
         reviewId: 4,

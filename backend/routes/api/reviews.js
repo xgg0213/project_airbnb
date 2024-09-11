@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
@@ -27,16 +27,23 @@ const validateLogin = [
     handleValidationErrors
   ];
 
+// validate a review
+const validateReview = [
+    check('review')
+      .exists({ checkFalsy: true })
+      .withMessage('Review text is required'),
+    check('stars')
+      .exists({ checkFalsy: true })
+      .isInt({min:1, max:5 })
+      .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+  ];
+
 // Get all Reviews of the Current User
 router.get(
     '/current',
+    requireAuth,
     async(req, res) => {
-        // no logged in user
-        if (!req.user) {
-            return res.status(401).json({
-              "message": "Authentication required"
-            })
-        };
         
         // with logged in user
         const current = req.user.id;
@@ -69,15 +76,9 @@ router.get(
 // Add an Image to a Review based on the Review's id
 router.post(
     '/:reviewId/images',
+    requireAuth,
     async(req, res) => {
         const reviewId = req.params.reviewId;
-
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
-            })
-        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({
@@ -129,15 +130,10 @@ router.post(
 // Edit a review
 router.put(
     '/:reviewId',
+    requireAuth,
+    validateReview,
     async (req, res) => {
         const reviewId = req.params.reviewId;
-
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
-            })
-        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({
@@ -160,26 +156,15 @@ router.put(
         };
 
         // reviewId found && meeting all requirements
-        try {
-            const {review, stars} = req.body;
 
-            await updatedReview.update({
-                review: review?review:updatedReview.review,
-                stars: stars?stars:updatedReview.stars,
-            });
+        const {review, stars} = req.body;
 
-            return res.status(200).json(updatedReview)
-        } catch(e) {
-            if (e.name === 'SequelizeValidationError') {
-                return res.status(400).json({
-                    "message": "Bad Request", 
-                    "errors": {
-                        "review": "Review text is required",
-                        "stars": "Stars must be an integer from 1 to 5",
-                    }
-                })
-            }
-        }
+        await updatedReview.update({
+            review: review?review:updatedReview.review,
+            stars: stars?stars:updatedReview.stars,
+        });
+
+        return res.status(200).json(updatedReview)
 
     }
 )
@@ -187,15 +172,9 @@ router.put(
 // Delete a Review
 router.delete(
     '/:reviewId',
+    requireAuth,
     async(req, res) => {
         const reviewId = req.params.reviewId;
-
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
-            })
-        };
 
         // reviewId not found
         const updatedReview = await Review.findOne({

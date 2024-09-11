@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const { Sequelize, fn, col } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie, restoreUser,requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage, Booking } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
@@ -25,19 +25,14 @@ const validateLogin = [
       .exists({ checkFalsy: true })
       .withMessage('Please provide a password.'),
     handleValidationErrors
-  ];
+];
+
 
 // Get all of the Current User's Bookings
 router.get(
     '/current',
-    // validateLogin, // do I need this here?
+    requireAuth,
     async(req, res) => {
-        // no logged in user
-        if (!req.user) {
-            return res.status(401).json({
-              "message": "Authentication required"
-            })
-        };
 
         // with logged in user
         const current = req.user.id;
@@ -63,15 +58,9 @@ router.get(
 // Edit a booking
 router.put(
     '/:bookingId',
+    requireAuth,
     async (req, res) => {
         const bookingId = req.params.bookingId;
-
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
-            })
-        };
 
         // bookingId not found
         const updatedBooking = await Booking.findOne({
@@ -97,7 +86,7 @@ router.put(
         const {startDate, endDate} = req.body;
 
         // start & end dates invalid
-        if (startDate < new Date() || startDate > endDate) {
+        if (new Date(startDate) < new Date() || new Date(startDate) > new Date(endDate)) {
             return res.status(400).json({
                 "message": "Bad Request", 
                 "errors": {
@@ -105,22 +94,24 @@ router.put(
                     "endDate": "endDate cannot be on or before startDate"
                 }
             })
-        }      
+        }     
+    
 
         // startDate/endDate conflicts with existing bookings
         const bookingDates = await Booking.findAll({
             where: {
                 spotId: updatedBooking.spotId,
-                startDate: {
-                    [Op.gte]: new Date()
-                }
+                // startDate: {
+                //     [Op.gte]: new Date()
+                // }
             },
             attributes: ['spotId', 'startDate', 'endDate']
         });
 
-        bookingDates.forEch(el => {
-            if ((startDate>=el.startDate && startDate < el.endDate) || 
-            (startDate < el.startDate && endDate>el.startDate)) {
+
+        bookingDates.forEach(el => {
+            if ((new Date(startDate) >= new Date(el.startDate) && new Date(startDate) < new Date(el.endDate)) || 
+            (new Date(startDate) < new Date(el.startDate) && new Date(endDate) > new Date(el.startDate))) {
                 return res.status(403).json({
                     "message": "Sorry, this spot is already booked for the specified dates",
                     "errors": {
@@ -145,20 +136,20 @@ router.put(
 // Delete a booking
 router.delete(
     '/:bookingId',
+    requireAuth,
     async (req, res) => {
         const bookingId = req.params.bookingId;
 
-        // no logged in user
-        if (!req.user) {
-            return res.status(403).json({
-            "message": "Forbidden"
+        // bookingId is not an integer
+        if (!Number(bookingId)) {
+            return res.status(404).json({
+                "message": "Booking couldn't be found"
             })
-        };
+        }
+        
 
         // bookingId not found
-        const updatedBooking = await Booking.findOne({
-            where: {id:bookingId},
-        });
+        const updatedBooking = await Booking.findByPk(bookingId);
 
         if (!updatedBooking) {
             res.status(404);
