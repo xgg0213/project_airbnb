@@ -68,18 +68,18 @@ router.get(
               ],
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
-                include: [
-                  [
-                    literal(`(
-                    SELECT url 
-                    FROM "SpotImages" AS "SpotImages"
-                    WHERE "SpotImages"."spotId" = "Spot"."id"
-                    AND "SpotImages"."preview" = true
-                    LIMIT 1
-                    )`),
-                    'previewImage'  // Alias to be used for the resulting image URL
-                  ]  // Include previewImage as an attribute
-                ]
+                // include: [
+                //   [
+                //     literal(`(
+                //     SELECT url 
+                //     FROM "SpotImages" AS "SpotImages"
+                //     WHERE "SpotImages"."spotId" = "Spot"."id"
+                //     AND "SpotImages"."preview" = true
+                //     LIMIT 1
+                //     )`),
+                //     'previewImage'  // Alias to be used for the resulting image URL
+                //   ]  // Include previewImage as an attribute
+                // ]
               },
             //   attributes: {
             //     include: [
@@ -98,7 +98,7 @@ router.get(
 
         const formattedReviews = reviews.map(review => {
             const reviewData = review.toJSON();
-            reviewData.Spot.previewImage1 = reviewData.Spot.SpotImages ? reviewData.Spot.SpotImages[0].url : null;  // Add previewImage
+            reviewData.Spot.previewImage = reviewData.Spot.SpotImages ? reviewData.Spot.SpotImages[0].url : null;  // Add previewImage
             delete reviewData.Spot.SpotImages;  // Remove SpotImages array
             return reviewData;
           });
