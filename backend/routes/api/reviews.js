@@ -81,6 +81,7 @@ router.get(
                 //   ]  // Include previewImage as an attribute
                 // ]
               },
+              group: ['Spot.id', 'SpotImages.id']
             //   attributes: {
             //     include: [
             //         [Sequelize.col('SpotImages.url'), 'previewImage']
