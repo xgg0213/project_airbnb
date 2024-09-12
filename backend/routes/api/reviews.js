@@ -56,12 +56,31 @@ router.get(
               attributes: ['id', 'firstName', 'lastName']
             },
             {
+              model: Spot,
+              attributes: {
+                exclude: ['createdAt', 'updatedAt']
+              },
+              include: [
+                {
+                  model: spotImage,
+                  attributes: []
+                }
+              ],
+              attributes: {
+                include: [
+                    Sequelize.col('SpotImages.url'),
+                    "previewImage"
+                ]
+              },
+              group: ['Spot.id', 'SpotImages.id']
+            },
+            {
               model: ReviewImage,
               as: 'ReviewImages',  // The alias defined in the association
               attributes: ['id', 'url']
             }
           ],
-          group: ['Review.id', 'User.id', 'ReviewImages.id']  
+          group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id']  
         });
         return res.status(200).json({
             Reviews: reviews
