@@ -130,9 +130,7 @@ router.get(
         include: [
           { 
             model: Review,
-            
             attributes: [], // We don't need the full review data, just the average
-            // required: false,
             // subQuery: false,
             // duplicating: false,
           },
@@ -140,6 +138,8 @@ router.get(
             model: SpotImage,
             as: 'SpotImages',  // The alias defined in the association
             attributes: [],
+            where: {preview: true},
+            required: false
             // subQuery: false
             // separate: true,
           }
@@ -147,7 +147,8 @@ router.get(
         attributes: {
           include: [
             [
-              Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), // Aggregating the stars from Review
+              fn('ROUND', fn('AVG', col('Reviews.stars')), 1),
+              //Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), // Aggregating the stars from Review
               'avgRating'  // Alias for the result
             ],
             [

@@ -3,11 +3,11 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-const { Sequelize, fn, col } = require('sequelize');
+const { Sequelize, fn, col, literal } = require('sequelize');
 // const sequelize = require('../../config/database.js');
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
-const { User, Spot, Review, ReviewImage } = require('../../db/models');
+const { User, Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -58,21 +58,32 @@ router.get(
             {
               model: Spot,
               attributes: {
-                exclude: ['createdAt', 'updatedAt']
+                exclude: ['createdAt', 'updatedAt'],
+                include: [
+                  [
+                    literal(`(
+                    SELECT url 
+                    FROM "SpotImages" AS "SpotImages"
+                    WHERE "SpotImages"."spotId" = "Spot"."id"
+                    AND "SpotImages"."preview" = true
+                    LIMIT 1
+                    )`),
+                    'previewImage'  // Alias to be used for the resulting image URL
+                  ]  // Include previewImage as an attribute
+                ]
               },
               include: [
                 {
-                  model: spotImage,
+                  model: SpotImage,
+                  as: 'SpotImages',
                   attributes: []
                 }
               ],
-              attributes: {
-                include: [
-                    Sequelize.col('SpotImages.url'),
-                    "previewImage"
-                ]
-              },
-              group: ['Spot.id', 'SpotImages.id']
+            //   attributes: {
+            //     include: [
+            //         [Sequelize.col('SpotImages.url'), 'previewImage']
+            //     ]
+            //   }
             },
             {
               model: ReviewImage,
