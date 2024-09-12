@@ -576,8 +576,18 @@ router.get(
           ],
           group: ['Booking.id', 'User.id'] 
         });
+
+        // reordering the output
+        const formattedBookings = bookingsOwner.map(booking => {
+          const { User, ...bookingData } = booking.toJSON();  // Destructure the object to separate User and booking data
+          return {
+            User,             // Add User details first
+            ...bookingData    // Spread the rest of the booking details afterward
+          };
+        });
+        
         return res.status(200).json({
-          Bookings: bookingsOwner
+          bookings: formattedBookings
         });
       }
   }
@@ -638,7 +648,7 @@ router.post(
         attributes: ['spotId', 'startDate', 'endDate']
       });
 
-      bookingDates.forEch(el => {
+      bookingDates.forEach(el => {
           if ((startDate>=el.startDate && startDate < el.endDate) || 
           (startDate < el.startDate && endDate>el.startDate)) {
               return res.status(403).json({
