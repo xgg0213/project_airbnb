@@ -19,9 +19,10 @@ module.exports = {
       ['userId', 'spotId'],
       {
         unique: true,
-        name: 'unique_userId_spotId'
+        name: 'unique_userId_spotId',
+        ...options
       }
-    , options)
+    , )
   },
 
   async down (queryInterface, Sequelize) {
@@ -31,7 +32,7 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    options.tableName = "Reviews";
-    await queryInterface.removeIndex('Reviews', 'unique_userId_spotId')
+    // options.tableName = "Reviews";
+    await queryInterface.removeIndex('Reviews', 'unique_userId_spotId', options)
   }
 };
