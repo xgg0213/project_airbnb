@@ -52,10 +52,8 @@ router.get(
            where: {userId:current},
            include: [
             {
-              model: Spot,
-              attributes: {
-                exclude: ['createdAt', 'updatedAt']
-              }
+              model: User,
+              attributes: ['id', 'firstName', 'lastName']
             },
             {
               model: ReviewImage,
