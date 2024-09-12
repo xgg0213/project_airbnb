@@ -198,7 +198,8 @@ router.get(
             {
               model: SpotImage,
               as: 'SpotImages',  // The alias defined in the association
-              attributes: []
+              attributes: [],
+              where: {preview: true}
             }
           ],
             attributes: {
@@ -213,7 +214,7 @@ router.get(
                 ]
               ]
             },
-            group: ['Spot.id', 'SpotImages.url']  // Grouping by Spot.id to get avgRating for each spot
+            group: ['Spot.id']  // Grouping by Spot.id to get avgRating for each spot
         });
         return res.status(200).json({
           Spots: spots
