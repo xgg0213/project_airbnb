@@ -61,7 +61,9 @@ router.get(
                 {
                   model: SpotImage,
                   as: 'SpotImages',
-                  attributes: []
+                  attributes: ['url'],
+                  where: {preview:true},
+                  required:false
                 }
               ],
               attributes: {
@@ -93,8 +95,15 @@ router.get(
           ],
           group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id']  
         });
+
+        const formattedReviews = reviews.map(review => {
+            const reviewData = review.toJSON();
+            reviewData.Spot.previewImage1 = reviewData.Spot.SpotImages ? reviewData.Spot.SpotImages[0].url : null;  // Add previewImage
+            delete reviewData.Spot.SpotImages;  // Remove SpotImages array
+            return reviewData;
+          });
         return res.status(200).json({
-            Reviews: reviews
+            Reviews: formattedReviews//reviews
         });
     }
 );
