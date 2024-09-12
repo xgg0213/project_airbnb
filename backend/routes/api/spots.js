@@ -62,14 +62,19 @@ const validateReview = [
   handleValidationErrors
 ];
 
+
 // Get all spots: no login required
 router.get(
     '/',
     async (req, res) => {
 
-      const {page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+      let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
       const where = {};
-      const pagination = {}
+      const pagination = {};
+      
+      if (!page) page=1;
+      if (!size) size=20;
+      
 
       const pageN = parseInt(page, 10);
       const sizeN = parseInt(size, 10);

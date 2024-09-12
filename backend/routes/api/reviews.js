@@ -40,6 +40,72 @@ const validateReview = [
   ];
 
 // Get all Reviews of the Current User
+// router.get(
+//     '/current',
+//     requireAuth,
+//     async(req, res) => {
+        
+//         // with logged in user
+//         const current = req.user.id;
+
+//         const reviews = await Review.findAll({
+//            where: {userId:current},
+//            include: [
+//             {
+//               model: User,
+//               attributes: ['id', 'firstName', 'lastName']
+//             },
+//             {
+//               model: Spot,
+//               include: [
+//                 {
+//                   model: SpotImage,
+//                   as: 'SpotImages',
+//                   attributes: ['url'],
+//                   where: {preview:true},
+//                   required:false
+//                 },
+                
+//               ],
+//               group: ['Spot.id'],
+//               attributes: {
+//                 exclude: ['createdAt', 'updatedAt'],
+//                 // include: [
+//                 //   [
+//                 //     literal(`(
+//                 //     SELECT url 
+//                 //     FROM "SpotImages" AS "SpotImages"
+//                 //     WHERE "SpotImages"."spotId" = "Spot"."id"
+//                 //     AND "SpotImages"."preview" = true
+//                 //     LIMIT 1
+//                 //     )`),
+//                 //     'previewImage'  // Alias to be used for the resulting image URL
+//                 //   ]  // Include previewImage as an attribute
+//                 // ]
+//               },
+//             },
+//             {
+//               model: ReviewImage,
+//               as: 'ReviewImages',  // The alias defined in the association
+//               attributes: ['id', 'url']
+//             }
+//           ],
+//           group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id'],
+//         });
+
+//         const formattedReviews = reviews.map(review => {
+//             const reviewData = review.toJSON();
+//             reviewData.Spot.previewImage = reviewData.Spot.SpotImages ? reviewData.Spot.SpotImages[0].url : null;  // Add previewImage
+//             delete reviewData.Spot.SpotImages;  // Remove SpotImages array
+//             return reviewData;
+//           });
+//         return res.status(200).json({
+//             Reviews: formattedReviews//reviews
+//         });
+//     }
+// );
+
+
 router.get(
     '/current',
     requireAuth,
@@ -64,25 +130,13 @@ router.get(
                   attributes: ['url'],
                   where: {preview:true},
                   required:false
-                },
-                
+                },            
               ],
-              group: ['Spot.id'],
+              
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
-                // include: [
-                //   [
-                //     literal(`(
-                //     SELECT url 
-                //     FROM "SpotImages" AS "SpotImages"
-                //     WHERE "SpotImages"."spotId" = "Spot"."id"
-                //     AND "SpotImages"."preview" = true
-                //     LIMIT 1
-                //     )`),
-                //     'previewImage'  // Alias to be used for the resulting image URL
-                //   ]  // Include previewImage as an attribute
-                // ]
               },
+              group: ['Spot.id'],
             },
             {
               model: ReviewImage,
