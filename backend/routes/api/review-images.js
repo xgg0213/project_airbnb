@@ -21,6 +21,13 @@ router.delete(
     async(req, res) => {
         const imageId = req.params.imageId;
 
+        // imageId is not an integer
+        if (!Number(imageId)) {
+            return res.status(404).json({
+                "message": "Review Image couldn't be found"
+            })
+        }
+
         const updatedImage = await ReviewImage.findOne({
             where: {id:imageId},
         });

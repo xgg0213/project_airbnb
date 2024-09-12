@@ -627,7 +627,7 @@ router.post(
       const {startDate, endDate} = req.body;
 
       // startDate in the past or endDate > startDate
-      if (startDate < new Date() || startDate > endDate) {
+      if (new Date(startDate) < new Date() || new Date(startDate) > new Date(endDate)) {
         return res.status(400).json({
           "message": "Bad Request", 
           "errors": {
@@ -641,16 +641,16 @@ router.post(
       const bookingDates = await Booking.findAll({
         where: {
             spotId: spotId,
-            startDate: {
-                [Op.gte]: new Date()
-            }
+            // startDate: {
+            //     [Op.gte]: new Date()
+            // }
         },
         attributes: ['spotId', 'startDate', 'endDate']
       });
 
       bookingDates.forEach(el => {
-          if ((startDate>=el.startDate && startDate < el.endDate) || 
-          (startDate < el.startDate && endDate>el.startDate)) {
+          if ((new Date(startDate)>=new Date(el.startDate) && new Date(startDate) < new Date(el.endDate)) || 
+          (new Date(startDate) < new Date(el.startDate) && new Date(startDate) > new Date(endDate))) {
               return res.status(403).json({
                   "message": "Sorry, this spot is already booked for the specified dates",
                   "errors": {

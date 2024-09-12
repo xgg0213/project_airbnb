@@ -21,6 +21,13 @@ router.delete(
     async(req, res) => {
         const imageId = req.params.imageId;
 
+        // imageId is not an integer
+        if (!Number(imageId)) {
+            return res.status(404).json({
+                "message": "Spot Image couldn't be found"
+            })
+        }
+
         const updatedImage = await SpotImage.findOne({
             where: {id:imageId},
         });
@@ -33,12 +40,12 @@ router.delete(
             })
         }
 
-        // image found but review does not belong to the logged in user
+        // image found but spot does not belong to the logged in user
         const spotId = updatedImage.spotId;
-        const updatedSpot = await Review.findOne({where: {id:spotId}})
+        const updatedSpot = await Spot.findOne({where: {id:spotId}})
         const userId = req.user.id; 
         
-        if (Number(updatedSpot.userId) !== Number(userId)) {
+        if (Number(updatedSpot.ownerId) !== Number(userId)) {
             return res.status(403).json({
             "message": "Forbidden"
             }) 
