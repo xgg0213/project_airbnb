@@ -1,6 +1,7 @@
 'use strict';
 
 let options = {};
+options.tableName = 'Reviews';
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
@@ -15,12 +16,11 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.addIndex(
-      'Reviews',
+      options,
       ['userId', 'spotId'],
       {
         unique: true,
         name: 'unique_userId_spotId',
-        ...options
       }
     , )
   },
@@ -33,6 +33,9 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     // options.tableName = "Reviews";
-    await queryInterface.removeIndex('Reviews', 'unique_userId_spotId', options)
+    await queryInterface.removeIndex(
+      options, 
+      'unique_userId_spotId'
+    )
   }
 };
