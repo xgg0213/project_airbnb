@@ -61,7 +61,7 @@ router.get(
               attributes: ['id', 'url']
             }
           ],
-          group: ['Review.id', 'Spot.id', 'ReviewImages.id']  
+          group: ['Review.id', 'User.id', 'ReviewImages.id']  
         });
         return res.status(200).json({
             Reviews: reviews
