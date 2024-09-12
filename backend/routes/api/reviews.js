@@ -110,7 +110,6 @@ router.get(
     '/current',
     requireAuth,
     async(req, res) => {
-        
         // with logged in user
         const current = req.user.id;
 

@@ -2,6 +2,7 @@
 const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 
 const { Sequelize, fn, col } = require('sequelize');
 
@@ -9,7 +10,7 @@ const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth')
 const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 // const { Spot } = require('../../db/models');
 
-const { check } = require('express-validator');
+const { check, query } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
@@ -62,19 +63,58 @@ const validateReview = [
   handleValidationErrors
 ];
 
+// validate params
+const validateParams = [
+  query('page')
+    .optional()
+    .isFloat({min:1})
+    .withMessage('Page must be greater than or equal to 1'),
+  query('size')
+    .optional()
+    .isFloat({min:1, max:20})
+    .withMessage('Size must be between 1 and 20'),
+  query('minLat')
+    .optional()
+    // .isDecimal()
+    .isFloat({ min: -90, max: 90 })
+    .withMessage('Minimum latitude is invalid'),
+  query('maxLat')
+    .optional()
+    .isDecimal()
+    .isFloat({min: -90, max: 90})
+    .withMessage('Maximum latitude is invalid'),
+  query('minLng')
+    .optional()
+    // .isDecimal()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage('Minimum longitude is invalid'),
+  query('maxLng')
+    .optional()
+    .isDecimal()
+    .isFloat({min: -180, max: 180})
+    .withMessage('Maximum longitude is invalid'),
+  query('minPrice')
+    .optional()
+    // .isDecimal()
+    .isFloat({ min: 0 })
+    .withMessage('Minimum price must be greater than or equal to 0'),
+  query('maxPrice')
+    .optional()
+    .isDecimal()
+    .isFloat({min: 0})
+    .withMessage('Maximum price must be greater than or equal to 0'),
+  handleValidationErrors
+];
 
 // Get all spots: no login required
 router.get(
     '/',
+    validateParams,
     async (req, res) => {
 
-      let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+      let {page=1, size=20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
       const where = {};
       const pagination = {};
-      
-      if (!page) page=1;
-      if (!size) size=20;
-      
 
       const pageN = parseInt(page, 10);
       const sizeN = parseInt(size, 10);
@@ -84,24 +124,6 @@ router.get(
       const maxLngN = parseFloat(maxLng);
       const minPriceN = parseFloat(minPrice);
       const maxPriceN = parseFloat(maxPrice);
-
-
-      // invalid req.query params]
-      if (pageN<1 || sizeN<1 || sizeN>20 || maxLatN>90 ||minLatN<-90 ||maxLngN>180 ||minLngN<-180 ||minPriceN<0 || maxPriceN<0) {
-        return res.status(400).json({
-          "message": "Bad Request", 
-          "errors": {
-            "page": "Page must be greater than or equal to 1",
-            "size": "Size must be between 1 and 20",
-            "maxLat": "Maximum latitude is invalid",
-            "minLat": "Minimum latitude is invalid",
-            "minLng": "Maximum longitude is invalid",
-            "maxLng": "Minimum longitude is invalid",
-            "minPrice": "Minimum price must be greater than or equal to 0",
-            "maxPrice": "Maximum price must be greater than or equal to 0"
-          }
-        })
-      }
 
       // all valid params
       pagination.limit = sizeN;
@@ -128,7 +150,6 @@ router.get(
           ...(maxPrice && { [Op.lte]: maxPriceN })
         };
       }
-
 
       const spots = await Spot.findAll({
         where,
