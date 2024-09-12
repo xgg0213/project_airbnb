@@ -187,7 +187,7 @@ router.get(
         
 
         const current = req.user.id;
-        console.log()
+
         const spots = await Spot.findAll({
            where: {ownerId:current},
            include: [
@@ -199,7 +199,8 @@ router.get(
               model: SpotImage,
               as: 'SpotImages',  // The alias defined in the association
               attributes: [],
-              where: {preview: true}
+              where: {preview: true},
+              required: false
             }
           ],
             attributes: {
