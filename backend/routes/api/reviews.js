@@ -57,6 +57,13 @@ router.get(
             },
             {
               model: Spot,
+              include: [
+                {
+                  model: SpotImage,
+                  as: 'SpotImages',
+                  attributes: []
+                }
+              ],
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
                 include: [
@@ -72,13 +79,6 @@ router.get(
                   ]  // Include previewImage as an attribute
                 ]
               },
-              include: [
-                {
-                  model: SpotImage,
-                  as: 'SpotImages',
-                  attributes: []
-                }
-              ],
             //   attributes: {
             //     include: [
             //         [Sequelize.col('SpotImages.url'), 'previewImage']
