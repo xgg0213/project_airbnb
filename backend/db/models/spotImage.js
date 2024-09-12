@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         {
           as: 'SpotImages',
           foreignKey: "spotId",
+          onDelete: 'CASCADE',
         }
       );
     }
