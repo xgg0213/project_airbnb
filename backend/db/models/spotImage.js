@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
           as: 'SpotImages',
           foreignKey: "spotId",
           onDelete: 'CASCADE',
+          hooks: true
         }
       );
     }
