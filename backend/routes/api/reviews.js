@@ -67,7 +67,7 @@ router.get(
                 },
                 
               ],
-              group: ['Spot.id', 'SpotImages.id'],
+              group: ['Spot.id'],
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
                 // include: [
@@ -83,11 +83,6 @@ router.get(
                 //   ]  // Include previewImage as an attribute
                 // ]
               },
-            //   attributes: {
-            //     include: [
-            //         [Sequelize.col('SpotImages.url'), 'previewImage']
-            //     ]
-            //   }
             },
             {
               model: ReviewImage,
@@ -96,7 +91,6 @@ router.get(
             }
           ],
           group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id'],
-          subQuery: false 
         });
 
         const formattedReviews = reviews.map(review => {
