@@ -64,8 +64,10 @@ router.get(
                   attributes: ['url'],
                   where: {preview:true},
                   required:false
-                }
+                },
+                
               ],
+              group: ['Spot.id', 'SpotImages.id'],
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
                 // include: [
@@ -81,7 +83,6 @@ router.get(
                 //   ]  // Include previewImage as an attribute
                 // ]
               },
-              group: ['Spot.id', 'SpotImages.id']
             //   attributes: {
             //     include: [
             //         [Sequelize.col('SpotImages.url'), 'previewImage']
