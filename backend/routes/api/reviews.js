@@ -63,7 +63,7 @@ router.get(
               attributes: ['id', 'url']
             }
           ],
-          group: ['Review.id']  // Grouping by Spot.id to get avgRating for each spot
+          group: ['Review.id', 'Spot.id', 'ReviewImages.id']  
         });
         return res.status(200).json({
             Reviews: reviews

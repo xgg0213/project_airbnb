@@ -47,7 +47,7 @@ router.get(
               }
             },
           ],
-          group: ['Booking.id']  // Grouping by Spot.id to get avgRating for each spot
+          group: ['Booking.id', 'Spot.id']  // Grouping by Spot.id to get avgRating for each spot
         });
         return res.status(200).json({
             Bookings: bookings

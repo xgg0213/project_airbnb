@@ -206,7 +206,7 @@ router.get(
             attributes: {
               include: [
                 [
-                  fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
+                  fn('ROUND', fn('AVG', col('Reviews.stars')), 1), // Aggregating the stars from Review
                   'avgRating'  // Alias for the result
                 ],
                 [
