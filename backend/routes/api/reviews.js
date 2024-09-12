@@ -142,7 +142,7 @@ router.get(
               attributes: ['id', 'url']
             }
           ],
-          group: ['Review.id', 'User.id', 'Spot.id', 'SpotImages.id', 'ReviewImages.id'],
+          group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
         });
 
         const formattedReviews = reviews.map(review => {
