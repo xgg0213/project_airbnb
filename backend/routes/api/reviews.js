@@ -67,21 +67,20 @@ const validateReview = [
 //                 },
                 
 //               ],
-//               group: ['Spot.id'],
 //               attributes: {
 //                 exclude: ['createdAt', 'updatedAt'],
-//                 // include: [
-//                 //   [
-//                 //     literal(`(
-//                 //     SELECT url 
-//                 //     FROM "SpotImages" AS "SpotImages"
-//                 //     WHERE "SpotImages"."spotId" = "Spot"."id"
-//                 //     AND "SpotImages"."preview" = true
-//                 //     LIMIT 1
-//                 //     )`),
-//                 //     'previewImage'  // Alias to be used for the resulting image URL
-//                 //   ]  // Include previewImage as an attribute
-//                 // ]
+//                 include: [
+//                   [
+//                     literal(`(
+//                     SELECT url 
+//                     FROM "SpotImages" AS "SpotImages"
+//                     WHERE "SpotImages"."spotId" = "Spot"."id"
+//                     AND "SpotImages"."preview" = true
+//                     GROUP BY "SpotImages"."id"
+//                     LIMIT 1
+//                     )`), 'previewImage'  // Alias to be used for the resulting image URL
+//                   ]  // Include previewImage as an attribute
+//                 ]
 //               },
 //             },
 //             {
@@ -90,8 +89,16 @@ const validateReview = [
 //               attributes: ['id', 'url']
 //             }
 //           ],
-//           group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id'],
-//         });
+//         //   group: ['Review.id', 'User.id', 'Spot.id','ReviewImages.id'],
+//             group: [
+//                 'Review.id',
+//                 'User.id',
+//                 'Spot.id',
+//                 'Spot->SpotImages.id',
+//                 //Sequelize.literal(process.env.NODE_ENV === 'production' ? 'SpotImages.id' : ''), // Group by 'SpotImages.id' in PostgreSQL
+//                 'ReviewImages.id'
+//             ]
+//             });
 
 //         const formattedReviews = reviews.map(review => {
 //             const reviewData = review.toJSON();
@@ -142,7 +149,15 @@ router.get(
               attributes: ['id', 'url']
             }
           ],
-          group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
+          // group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
+            group: [
+                'Review.id',
+                'User.id',
+                'Spot.id',
+                'Spot->SpotImages.id',
+                //Sequelize.literal(process.env.NODE_ENV === 'production' ? 'SpotImages.id' : ''), // Group by 'SpotImages.id' in PostgreSQL
+                'ReviewImages.id'
+            ]
         });
 
         const formattedReviews = reviews.map(review => {
