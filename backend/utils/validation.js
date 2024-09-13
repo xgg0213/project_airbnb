@@ -46,8 +46,9 @@ const handleValidationIds = (req, _res, next) => {
 // id not a number
 const validateIdNaN = (req, res, next) => {
   const id = req.params.bookingId || req.params.spotId || req.params.reviewId || req.params.imageId
+  const numericId = Number(id);
   
-  if (!isNaN(id)) return next();
+  if (!isNaN(numericId)) return next();
 
   const err = new Error("couldn't be found");
   err.title = "couldn't be found";

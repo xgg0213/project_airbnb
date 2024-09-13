@@ -63,7 +63,7 @@ router.get(
               }
             },
           ],
-          group: ['Booking.id', 'Spot.id']  // Grouping by Spot.id to get avgRating for each spot
+          group: ['Booking.id', 'Spot.id']  
         });
 
         // get previewImages

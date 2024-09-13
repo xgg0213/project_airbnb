@@ -272,6 +272,7 @@ router.get(
 // Get details of a Spot from an id
 router.get(
     '/:spotId',
+    validateIdNaN,
     validateSpotId,
     async(req, res) => {
         const spotId = req.params.spotId;
@@ -299,10 +300,10 @@ router.get(
                 [
                     fn('COUNT', col('Reviews.id')), // Counting the # of Reviews 
                     'numReviews'  // Alias for the result
-                  ],
+                ],
                 [
-                 fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
-                 'avgRating'  // Alias for the result
+                    fn('ROUND', fn('AVG', col('Reviews.stars')), 1), // Aggregating the stars from Review
+                    'avgRating'  // Alias for the result
                 ],
              ]
            },
@@ -346,6 +347,7 @@ router.post(
 router.post(
     '/:spotId/images',
     requireAuth,
+    validateIdNaN,
     validateSpotId,
     validateAuthSpot,
     async(req, res) => {
@@ -372,6 +374,7 @@ router.post(
 router.put(
     '/:spotId',
     requireAuth,
+    validateIdNaN,
     validateSpotId,
     validateAuthSpot,
     validateSpot,
@@ -406,6 +409,7 @@ router.put(
 router.delete(
     '/:spotId',
     requireAuth,
+    validateIdNaN,
     validateSpotId,
     validateAuthSpot,
     async(req, res) => {
@@ -428,6 +432,7 @@ router.delete(
 // Get all Reviews by a Spot's id
 router.get(
   '/:spotId/reviews',
+  validateIdNaN,
   validateSpotId,
   async(req, res) => {
       const spotId = req.params.spotId;
@@ -458,6 +463,7 @@ router.get(
 router.post(
   '/:spotId/reviews',
   requireAuth,
+  validateIdNaN,
   validateSpotId,
   validateReviewExists,
   validateReview,
