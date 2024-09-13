@@ -119,8 +119,6 @@ router.get(
     async(req, res) => {
         // with logged in user
         const current = req.user.id;
-        const isProduction = process.env.NODE_ENV === 'production';
-        
         
         const reviews = await Review.findAll({
            where: {userId:current},
@@ -131,15 +129,16 @@ router.get(
             },
             {
               model: Spot,
-              include: [
-                {
-                  model: SpotImage,
-                  as: 'SpotImages',
-                  attributes: ['url'],
-                  where: {preview:true},
-                  required:false
-                },            
-              ],
+            //  adding below works for POSTMAN(SQLite but not postgresql)
+            //   include: [
+            //     {
+            //       model: SpotImage,
+            //       as: 'SpotImages',
+            //       attributes: ['url'],
+            //       where: {preview:true},
+            //       required:false
+            //     },            
+            //   ],
               
               attributes: {
                 exclude: ['createdAt', 'updatedAt'],
@@ -151,21 +150,20 @@ router.get(
               attributes: ['id', 'url']
             }
           ],
-          // group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
-            group: [
-                'Review.id',
-                'User.id',
-                'Spot.id',
-                ...(isProduction ? ['SpotImages.id', 'ReviewImages.id'] : ['ReviewImages.id'])
-            ]
+          group: ['Review.id', 'User.id', 'Spot.id', 'ReviewImages.id'],
         });
 
-        const formattedReviews = reviews.map(review => {
-            const reviewData = review.toJSON();
-            reviewData.Spot.previewImage = reviewData.Spot.SpotImages ? reviewData.Spot.SpotImages[0].url : null;  // Add previewImage
-            delete reviewData.Spot.SpotImages;  // Remove SpotImages array
-            return reviewData;
-          });
+        // get previewImages
+        const formattedReviews = await Promise.all(
+            reviews.map(async (review) => {
+                const reviewData = review.toJSON();
+                const spotImage = await SpotImage.findOne({ where: { spotId: reviewData.spotId, preview:true}});
+                // return spotImage;  // This will now return the resolved spotImage
+                reviewData.Spot.previewImage = spotImage.url ? spotImage.url : null;  // Add previewImage
+                return reviewData;
+            })
+        );
+
         return res.status(200).json({
             Reviews: formattedReviews//reviews
         });
