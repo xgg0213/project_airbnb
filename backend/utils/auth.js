@@ -155,7 +155,7 @@ const validateAuthSpotImage = async (req, res, next) => {
     const spotImage = await SpotImage.findByPk(+req.params.imageId);
     const spot = await Spot.findByPk(spotImage.spotId);
 
-    if (Number(current) !== Number(spot.ownerId)) return next();
+    if (Number(current) === Number(spot.ownerId)) return next();
 
     const err = new Error('Forbidden');
     err.title = 'Forbidden';
@@ -171,7 +171,7 @@ const validateAuthReviewImage = async (req, res, next) => {
     const reviewImage = await ReviewImage.findByPk(+req.params.imageId);
     const review = await Review.findByPk(reviewImage.reviewId);
 
-    if (Number(current) !== Number(review.userId)) return next();
+    if (Number(current) === Number(review.userId)) return next();
 
     const err = new Error('Forbidden');
     err.title = 'Forbidden';

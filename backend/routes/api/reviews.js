@@ -10,21 +10,12 @@ const { setTokenCookie, restoreUser, requireAuth, validateAuthReview } = require
 const { User, Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors,validateBookingId,validateSpotId,validateReviewId,validateSpotImageId,validateReviewImageId, validateReviewImageN } = require('../../utils/validation');
+const { handleValidationErrors,validateBookingId,validateSpotId,validateReviewId,validateSpotImageId,
+    validateReviewImageId, validateReviewImageN, validateIdNaN } = require('../../utils/validation');
 
 const router = express.Router();
 
-// validate login
-const validateLogin = [
-    check('credential')
-      .exists({ checkFalsy: true })
-      .notEmpty()
-      .withMessage('Please provide a valid email or username.'),
-    check('password')
-      .exists({ checkFalsy: true })
-      .withMessage('Please provide a password.'),
-    handleValidationErrors
-  ];
+
 
 // validate a review
 const validateReview = [
@@ -102,6 +93,7 @@ router.get(
 router.post(
     '/:reviewId/images',
     requireAuth,
+    validateIdNaN,
     validateReviewId,
     validateAuthReview,
     validateReviewImageN,
@@ -127,9 +119,10 @@ router.post(
 router.put(
     '/:reviewId',
     requireAuth,
+    validateIdNaN,
+    validateReviewId,
     validateAuthReview,
     validateReview,
-    validateReviewId,
     async (req, res) => {
         const reviewId = req.params.reviewId;
 
@@ -155,6 +148,7 @@ router.put(
 router.delete(
     '/:reviewId',
     requireAuth,
+    validateIdNaN,
     validateReviewId,
     validateAuthReview,
     async(req, res) => {

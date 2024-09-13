@@ -8,10 +8,10 @@ const { Sequelize, fn, col } = require('sequelize');
 
 const { setTokenCookie, restoreUser, requireAuth, validateAuthSpot, validateAuthNotSpot } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
-const { handleValidationErrors,validateBookingId,validateSpotId,validateReviewId,validateSpotImageId,validateReviewImageId, validateReviewExists, validateBookingConflicts } = require('../../utils/validation');
+const { handleValidationErrors,validateBookingId,validateSpotId,validateReviewId,validateSpotImageId,
+    validateReviewImageId, validateReviewExists, validateBookingConflicts, validateIdNaN } = require('../../utils/validation');
 
 const { check, query } = require('express-validator');
-// const { handleValidationErrors, validateSpotId } = require('../../utils/validation');
 
 const router = express.Router();
 
@@ -296,14 +296,14 @@ router.get(
          ],
            attributes: {
              include: [
-               [
+                [
+                    fn('COUNT', col('Reviews.id')), // Counting the # of Reviews 
+                    'numReviews'  // Alias for the result
+                  ],
+                [
                  fn('AVG', col('Reviews.stars')), // Aggregating the stars from Review
                  'avgRating'  // Alias for the result
-               ],
-               [
-                 fn('COUNT', col('Reviews.id')), // Counting the # of Reviews 
-                 'numReviews'  // Alias for the result
-               ]
+                ],
              ]
            },
            group: ['Spot.id', 'SpotImages.id', 'Owner.id'] 
@@ -346,8 +346,8 @@ router.post(
 router.post(
     '/:spotId/images',
     requireAuth,
-    validateAuthSpot,
     validateSpotId,
+    validateAuthSpot,
     async(req, res) => {
         const spotId = req.params.spotId;
         
@@ -372,8 +372,8 @@ router.post(
 router.put(
     '/:spotId',
     requireAuth,
-    validateAuthSpot,
     validateSpotId,
+    validateAuthSpot,
     validateSpot,
     async (req, res) => {
       const spotId = req.params.spotId;
@@ -408,7 +408,6 @@ router.delete(
     requireAuth,
     validateSpotId,
     validateAuthSpot,
-    
     async(req, res) => {
       const spotId = req.params.spotId;
 
@@ -489,42 +488,40 @@ router.post(
 router.get(
   '/:spotId/bookings',
   requireAuth,
+  validateIdNaN,
   validateSpotId,
   async(req, res) => {
       const spotId = req.params.spotId;
-
-      // spotId not found
+      const current = req.user.id;
       const spot = await Spot.findOne({
           where: {id:spotId}
       });
+      const ownerId = Number(spot.ownerId);
 
-      const current = req.user.id;
+      const bookingsUser = await Booking.findAll({
+        where: {spotId},
+        attributes: ['spotId', 'startDate', 'endDate'],
+      });
 
-      // find owner of the spot
-      const ownerId = Number(spot.ownerId)
+      const bookingsOwner = await Booking.findAll({
+        where: {spotId:spotId},
+        include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName']
+        },
+        ],
+        group: ['Booking.id', 'User.id'] 
+      });
       
       // spot Id found & current user is not the owner
       if (ownerId !== Number(current)) {
-        const bookingsUser = await Booking.findAll({
-          where: {spotId:spotId, userId:current},
-          attributes: ['spotId', 'startDate', 'endDate'],
-        });
         return res.status(200).json({
           Bookings: bookingsUser
         });
       } else {
         
         // spot Id found & current user is the owner
-        const bookingsOwner = await Booking.findAll({
-          where: {spotId:spotId},
-          include: [
-          {
-            model: User,
-            attributes: ['id', 'firstName', 'lastName']
-          },
-          ],
-          group: ['Booking.id', 'User.id'] 
-        });
 
         // reordering the output
         const formattedBookings = bookingsOwner.map(booking => {
@@ -546,35 +543,15 @@ router.get(
 router.post(
   '/:spotId/bookings',
   requireAuth,
-  validateAuthNotSpot,
+  validateIdNaN,
   validateSpotId,
+  validateAuthNotSpot,
   validateDates,
   validateBookingConflicts,
   async(req, res) => {
       const spotId = req.params.spotId;
-
       const current = req.user.id;
-
-      // spotId not found
-      const spot = await Spot.findOne({
-          where: {id:spotId}
-      });
-
-      // find owner of the spot
-      let ownerId = Number(spot.ownerId);
-      
       const {startDate, endDate} = req.body;
-
-    //   // startDate in the past or endDate > startDate
-    //   if (new Date(startDate) < new Date() || new Date(startDate) > new Date(endDate)) {
-    //     return res.status(400).json({
-    //       "message": "Bad Request", 
-    //       "errors": {
-    //         "startDate": "startDate cannot be in the past",
-    //         "endDate": "endDate cannot be on or before startDate"
-    //       }
-    //     })
-    //   }
      
       // all requirements passed
       const newBooking = await Booking.create({

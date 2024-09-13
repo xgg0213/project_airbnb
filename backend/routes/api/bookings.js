@@ -8,7 +8,8 @@ const { Sequelize, fn, col } = require('sequelize');
 
 const { setTokenCookie, restoreUser,requireAuth, validateAuthBooking, validateAuthDBooking } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage, Booking } = require('../../db/models');
-const { handleValidationErrors,validateBookingId, validateSpotId, validateReviewId,validateSpotImageId,validateReviewImageId, validateBookingStartDate, validateBookingConflicts } = require('../../utils/validation');
+const { handleValidationErrors,validateBookingId, validateSpotId, validateReviewId,validateSpotImageId,
+    validateReviewImageId, validateBookingStartDate, validateBookingConflicts, validateIdNaN, validateBookingEndDate} = require('../../utils/validation');
 
 const { check } = require('express-validator');
 
@@ -70,7 +71,6 @@ router.get(
             bookings.map(async (booking) => {
                 const bookingData = booking.toJSON();
                 const spotImage = await SpotImage.findOne({ where: { spotId: bookingData.spotId, preview:true}});
-                // return spotImage;  // This will now return the resolved spotImage
                 bookingData.Spot.previewImage = spotImage ? spotImage.url : null;  // Add previewImage
                 return bookingData;
             })
@@ -86,8 +86,10 @@ router.get(
 router.put(
     '/:bookingId',
     requireAuth,
+    validateIdNaN,
     validateBookingId,
     validateAuthBooking,
+    validateBookingEndDate,
     validateDates,
     validateBookingConflicts,
     async (req, res) => {
@@ -95,7 +97,7 @@ router.put(
 
         // bookingId found 
         const {startDate, endDate} = req.body;
-
+        const updatedBooking = await Booking.findByPk(bookingId);
 
         await updatedBooking.update({
             startDate: startDate?startDate:updatedBooking.startDate,
@@ -111,6 +113,7 @@ router.put(
 router.delete(
     '/:bookingId',
     requireAuth,
+    validateIdNaN,
     validateBookingId,
     validateAuthDBooking,
     validateBookingStartDate,

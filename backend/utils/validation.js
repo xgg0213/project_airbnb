@@ -24,16 +24,51 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+const handleValidationIds = (req, _res, next) => {
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) { 
+    const errors = {};
+    validationErrors
+      .array()
+      .forEach(error => errors[error.path] = error.msg);
+
+    const err = Error("couldn't be found");
+    err.errors = errors;
+    err.status = 404;
+    err.title = "couldn't be found";
+    next(err);
+  }
+  next();
+};
+
+
+// id not a number
+const validateIdNaN = (req, res, next) => {
+  const id = req.params.bookingId || req.params.spotId || req.params.reviewId || req.params.imageId
+  
+  if (!isNaN(id)) return next();
+
+  const err = new Error("couldn't be found");
+  err.title = "couldn't be found";
+  err.status = 404;
+  if (req.params.bookingId) err.message = "Booking couldn't be found";
+  if (req.params.reviewId) err.message = "Review couldn't be found";
+  if (req.params.spotId) err.message = "Spot couldn't be found";
+  if (req.originalUrl.includes('spot-images')) err.message = "Spot Image couldn't be found";
+  if (req.originalUrl.includes('review-images')) err.message = "Review Image couldn't be found"
+  
+  return next(err);
+};
+
 // bookingId not found
 const validateBookingId = async(req, res, next) => {
   const bookingId = req.params.bookingId;
-
-  // bookingId not found
   const updatedBooking = await Booking.findOne({
       where: {id:+req.params.bookingId},
   });
 
-  if (!isNaN(bookingId) && updatedBooking) return next();
+  if (updatedBooking) return next();
 
   const err = new Error("Booking couldn't be found");
     err.title = "couldn't be found";
@@ -45,13 +80,11 @@ const validateBookingId = async(req, res, next) => {
 // spotId not found
 const validateSpotId = async(req, res, next) => {
   const spotId = req.params.spotId;
-
-  // spotId not found
   const updatedSpot = await Spot.findOne({
       where: {id:+req.params.spotId},
   });
 
-  if (Number(spotId) && updatedSpot) return next();
+  if (updatedSpot) return next();
 
   const err = new Error("Spot couldn't be found");
     err.title = "couldn't be found";
@@ -63,12 +96,8 @@ const validateSpotId = async(req, res, next) => {
 // reviewId not found
 const validateReviewId = async(req, res, next) => {
   const reviewId = req.params.reviewId;
-
-  const updatedReview = await Review.findOne({
-      where: {id:+req.params.reviewId},
-  });
-
-  if (Number(reviewId) && updatedReview) return next();
+  const updatedReview = await Review.findOne({where: {id:reviewId}});
+  if (updatedReview) return next();
 
   const err = new Error("Review couldn't be found");
     err.title = "couldn't be found";
@@ -80,13 +109,11 @@ const validateReviewId = async(req, res, next) => {
 // spotImageId not found
 const validateSpotImageId = async(req, res, next) => {
   const imageId = req.params.imageId;
-
-  // reviewId not found
   const updatedSpotImage = await SpotImage.findOne({
       where: {id:+req.params.imageId},
   });
 
-  if (Number(imageId) && updatedSpotImage) return next();
+  if (updatedSpotImage) return next();
 
   const err = new Error("Spot Image couldn't be found");
     err.title = "couldn't be found";
@@ -95,16 +122,15 @@ const validateSpotImageId = async(req, res, next) => {
     return next(err);
 };
 
-// spotImageId not found
+// reviewImageId not found
 const validateReviewImageId = async(req, res, next) => {
   const imageId = req.params.imageId;
 
-  // reviewId not found
   const updatedReviewImage = await ReviewImage.findOne({
       where: {id:+req.params.imageId},
   });
 
-  if (Number(imageId) && updatedReviewImage) return next();
+  if (updatedReviewImage) return next();
 
   const err = new Error("Review Image couldn't be found");
   err.title = "couldn't be found";
@@ -113,6 +139,7 @@ const validateReviewImageId = async(req, res, next) => {
   return next(err);
 };
 
+////////////////////////////////////////////////////////////
 // validate review exists
 const validateReviewExists = async(req, res, next) => {
   const spotId = req.params.spotId;
@@ -168,6 +195,7 @@ const validateReviewImageN = async(req, res, next) => {
 
 };
 
+/////////////////////////////////////////////////////////////////////////////
 // validate booking start date
 const validateBookingStartDate = async(req, res, next) => {
   const bookingId = req.params.bookingId;
@@ -187,13 +215,45 @@ const validateBookingStartDate = async(req, res, next) => {
   
 };
 
+// validate booking end date
+const validateBookingEndDate = async(req, res, next) => {
+  const bookingId = req.params.bookingId;
+
+  const booking = await Booking.findOne({
+    where: {id:+req.params.bookingId},
+  });
+  const today = new Date().setHours(0, 0, 0, 0);
+  const endDate = new Date(booking.endDate).setHours(0, 0, 0, 0);
+
+  if (endDate >= today) return next();
+  
+  const err = new Error("Past bookings can't be modified");
+  err.title = "Past bookings can't be modified";
+  err.errors = { "message": "Past bookings can't be modified" };
+  err.status = 403;
+  return next(err);
+  
+};
+
 // validate if startDate & endDate conflicts with existing booking
 const validateBookingConflicts = async(req, res, next) => {
-  const spotId = req.params.spotId;
-  const existingBookings = await Booking.findAll({
-    where: { spotId },
-    attributes: ['startDate', 'endDate'],
-  });
+  const {startDate, endDate} = req.body;
+  let existingBookings;
+
+  if (req.params.spotId) {
+    const spotId = req.params.spotId;
+    existingBookings = await Booking.findAll({
+      where: { spotId },
+      attributes: ['startDate', 'endDate'],
+    });
+  } else {
+    const bookingId = req.params.bookingId;
+    const booking = await Booking.findByPk(bookingId);
+    existingBookings = await Booking.findAll({
+      where: {spotId:booking.spotId},
+      attributes: ['startDate', 'endDate']
+    })
+  }
   
   const hasConflict = existingBookings.some((booking) => {
     const existingStart = new Date(booking.startDate);
@@ -214,7 +274,7 @@ const validateBookingConflicts = async(req, res, next) => {
   err.title = "Booking conflicts with existing";
   err.message = 'Sorry, this spot is already booked for the specified dates';
   err.errors = { startDate: 'Start date conflicts with an existing booking',
-               endDate: 'End date conflicts with an existing booking', };
+                 endDate: 'End date conflicts with an existing booking', };
   err.status = 403;
   return next(err);
 
@@ -232,5 +292,7 @@ module.exports = {
   validateUserExists,
   validateReviewImageN,
   validateBookingStartDate,
-  validateBookingConflicts
+  validateBookingConflicts,
+  validateIdNaN,
+  validateBookingEndDate
 };

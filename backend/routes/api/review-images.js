@@ -9,7 +9,7 @@ const { setTokenCookie, restoreUser,requireAuth, validateAuthReviewImage } = req
 const { User, Review, ReviewImage, SpotImage } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateReviewImageId } = require('../../utils/validation');
+const { handleValidationErrors, validateReviewImageId, validateIdNaN } = require('../../utils/validation');
 
 const router = express.Router();
 
@@ -17,8 +17,9 @@ const router = express.Router();
 router.delete(
     '/:imageId',
     requireAuth,
-    validateAuthReviewImage,
+    validateIdNaN,
     validateReviewImageId,
+    validateAuthReviewImage,
     async(req, res) => {
         const imageId = req.params.imageId;
 
