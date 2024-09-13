@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
+const { User, Spot, Review, Booking, SpotImage, ReviewImage } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -68,7 +68,117 @@ const requireAuth = function (req, _res, next) {
     err.title = 'Authentication required';
     err.errors = { message: 'Authentication required' };
     err.status = 401;
-    return next(err);
+    return next(err.errors);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// if there is current user, but spotId does not belong
+const validateAuthSpot = async (req, res, next) => {
+    const spotId = req.params.spotId;
+    const current = req.user.id
+    const spot = await Spot.findByPk(+req.params.spotId);
+
+    if (Number(current) === Number(spot.ownerId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but spotId does belong - cannot make a booking
+const validateAuthNotSpot = async (req, res, next) => {
+    const spotId = req.params.spotId;
+    const current = req.user.id
+    const spot = await Spot.findByPk(+req.params.spotId);
+
+    if (Number(current) !== Number(spot.ownerId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but reviewId does not belong
+const validateAuthReview = async (req, res, next) => {
+    const reviewId = req.params.reviewId;
+    const current = req.user.id
+    const review = await Review.findByPk(+req.params.reviewId);
+
+    if (Number(current) === Number(review.userId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but bookingId does not belong
+const validateAuthBooking = async (req, res, next) => {
+    const bookingId = req.params.bookingId;
+    const current = req.user.id
+    const booking = await Booking.findByPk(+req.params.bookingId);
+
+    if (Number(current) === Number(booking.userId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but they neither has the booking or owns the spot
+const validateAuthDBooking = async (req, res, next) => {
+    const bookingId = req.params.bookingId;
+    const current = req.user.id
+    const booking = await Booking.findByPk(+req.params.bookingId);
+    const spot = await Spot.findOne({where: {id:booking.spotId}})
+
+    if (Number(current) === Number(booking.userId) || Number(current) === Number(spot.ownerId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but spotId does not belong - only has spot-image ID in params
+const validateAuthSpotImage = async (req, res, next) => {
+    const imageId = req.params.imageId;
+    const current = req.user.id
+    const spotImage = await SpotImage.findByPk(+req.params.imageId);
+    const spot = await Spot.findByPk(spotImage.spotId);
+
+    if (Number(current) !== Number(spot.ownerId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+// if there is current user, but reviewId does not belong - only has review-image ID in params
+const validateAuthReviewImage = async (req, res, next) => {
+    const imageId = req.params.imageId;
+    const current = req.user.id
+    const reviewImage = await ReviewImage.findByPk(+req.params.imageId);
+    const review = await Review.findByPk(reviewImage.reviewId);
+
+    if (Number(current) !== Number(review.userId)) return next();
+
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Forbidden' };
+    err.status = 403;
+    return next(err.errors);
+};
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, validateAuthSpot, validateAuthNotSpot
+    ,validateAuthReview, validateAuthBooking, validateAuthDBooking, validateAuthSpotImage, validateAuthReviewImage
+};
