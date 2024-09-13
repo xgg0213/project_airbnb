@@ -119,7 +119,9 @@ router.get(
     async(req, res) => {
         // with logged in user
         const current = req.user.id;
-
+        const isProduction = process.env.NODE_ENV === 'production';
+        
+        
         const reviews = await Review.findAll({
            where: {userId:current},
            include: [
@@ -154,9 +156,7 @@ router.get(
                 'Review.id',
                 'User.id',
                 'Spot.id',
-                'Spot->SpotImages.id',
-                //Sequelize.literal(process.env.NODE_ENV === 'production' ? 'SpotImages.id' : ''), // Group by 'SpotImages.id' in PostgreSQL
-                'ReviewImages.id'
+                ...(isProduction ? ['SpotImages.id', 'ReviewImages.id'] : ['ReviewImages.id'])
             ]
         });
 
