@@ -68,7 +68,7 @@ const requireAuth = function (req, _res, next) {
     err.title = 'Authentication required';
     err.errors = { message: 'Authentication required' };
     err.status = 401;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but spotId does not belong
@@ -83,7 +83,7 @@ const validateAuthSpot = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but spotId does belong - cannot make a booking
@@ -98,7 +98,7 @@ const validateAuthNotSpot = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but reviewId does not belong
@@ -113,7 +113,7 @@ const validateAuthReview = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but bookingId does not belong
@@ -128,23 +128,24 @@ const validateAuthBooking = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but they neither has the booking or owns the spot
 const validateAuthDBooking = async (req, res, next) => {
     const bookingId = req.params.bookingId;
     const current = req.user.id
+    
     const booking = await Booking.findByPk(+req.params.bookingId);
     const spot = await Spot.findOne({where: {id:booking.spotId}})
-
-    if (Number(current) === Number(booking.userId) || Number(current) === Number(spot.ownerId)) return next();
+    
+    if ((booking && Number(current) === Number(booking.userId)) || (spot && Number(current) === Number(spot.ownerId))) return next();
 
     const err = new Error('Forbidden');
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but spotId does not belong - only has spot-image ID in params
@@ -160,7 +161,7 @@ const validateAuthSpotImage = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 // if there is current user, but reviewId does not belong - only has review-image ID in params
@@ -176,7 +177,7 @@ const validateAuthReviewImage = async (req, res, next) => {
     err.title = 'Forbidden';
     err.errors = { message: 'Forbidden' };
     err.status = 403;
-    return next(err.errors);
+    return next(err);
 };
 
 module.exports = { setTokenCookie, restoreUser, requireAuth, validateAuthSpot, validateAuthNotSpot

@@ -73,7 +73,11 @@ app.use((err, _req, _res, next) => {
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
-  if (err.status===401) {
+  if (err.status===401 || (err.status===403 && err.title === 'Forbidden') 
+      || (err.status===403 && err.title === 'Maximum review images number reached')
+      || (err.status===403 && err.title === 'Booking started')
+      || (err.status===404 && err.title === "couldn't be found") 
+      || (err.status===500 && err.title === "review exists")) {
     res.json({
       message: err.message
     })
