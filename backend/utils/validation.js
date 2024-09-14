@@ -47,7 +47,7 @@ const handleValidationIds = (req, _res, next) => {
 const validateIdNaN = (req, res, next) => {
   const id = req.params.bookingId || req.params.spotId || req.params.reviewId || req.params.imageId
   const numericId = Number(id);
-  
+
   if (!isNaN(numericId)) return next();
 
   const err = new Error("couldn't be found");
@@ -236,25 +236,14 @@ const validateBookingEndDate = async(req, res, next) => {
   
 };
 
-// validate if startDate & endDate conflicts with existing booking
+// create a new booking: validate if startDate & endDate conflicts with existing booking
 const validateBookingConflicts = async(req, res, next) => {
   const {startDate, endDate} = req.body;
-  let existingBookings;
-
-  if (req.params.spotId) {
-    const spotId = req.params.spotId;
-    existingBookings = await Booking.findAll({
-      where: { spotId },
-      attributes: ['startDate', 'endDate'],
-    });
-  } else {
-    const bookingId = req.params.bookingId;
-    const booking = await Booking.findByPk(bookingId);
-    existingBookings = await Booking.findAll({
-      where: {spotId:booking.spotId},
-      attributes: ['startDate', 'endDate']
-    })
-  }
+  const spotId = req.params.spotId;
+  const existingBookings = await Booking.findAll({
+    where: { spotId },
+    attributes: ['startDate', 'endDate'],
+  })
   
   const hasConflict = existingBookings.some((booking) => {
     const existingStart = new Date(booking.startDate);
@@ -278,7 +267,45 @@ const validateBookingConflicts = async(req, res, next) => {
                  endDate: 'End date conflicts with an existing booking', };
   err.status = 403;
   return next(err);
+};
 
+// create a new booking: validate if startDate & endDate conflicts with existing booking
+const validateBookingConflictsUpdate = async(req, res, next) => {
+  const {startDate, endDate} = req.body;
+  const bookingId = Number(req.params.bookingId);
+  const booking = await Booking.findByPk(bookingId);
+  const existingBookings = await Booking.findAll({
+    where: {
+      spotId:booking.spotId,
+      id: {
+        [Op.ne]: bookingId
+      }
+    },
+    attributes: ['startDate', 'endDate']
+  })
+  
+  const hasConflict = existingBookings.some((booking) => {
+    const existingStart = new Date(booking.startDate);
+    const existingEnd = new Date(booking.endDate);
+    const newStart = new Date(startDate);
+    const newEnd = new Date(endDate);
+  
+    return (
+      (newStart >= existingStart && newStart < existingEnd) || // new start date overlaps an existing booking
+      (newEnd > existingStart && newEnd <= existingEnd) || // new end date overlaps an existing booking
+      (newStart <= existingStart && newEnd >= existingEnd) // new booking fully contains an existing booking
+    );
+  });
+  
+  if (!hasConflict) return next();
+
+  const err = new Error("Booking conflicts with existing");
+  err.title = "Booking conflicts with existing";
+  err.message = 'Sorry, this spot is already booked for the specified dates';
+  err.errors = { startDate: 'Start date conflicts with an existing booking',
+                 endDate: 'End date conflicts with an existing booking', };
+  err.status = 403;
+  return next(err);
 }
 
 
@@ -295,5 +322,6 @@ module.exports = {
   validateBookingStartDate,
   validateBookingConflicts,
   validateIdNaN,
-  validateBookingEndDate
+  validateBookingEndDate,
+  validateBookingConflictsUpdate
 };

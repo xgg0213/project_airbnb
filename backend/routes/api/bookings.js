@@ -9,7 +9,7 @@ const { Sequelize, fn, col } = require('sequelize');
 const { setTokenCookie, restoreUser,requireAuth, validateAuthBooking, validateAuthDBooking } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage, Booking } = require('../../db/models');
 const { handleValidationErrors,validateBookingId, validateSpotId, validateReviewId,validateSpotImageId,
-    validateReviewImageId, validateBookingStartDate, validateBookingConflicts, validateIdNaN, validateBookingEndDate} = require('../../utils/validation');
+    validateReviewImageId, validateBookingStartDate, validateBookingConflicts, validateBookingConflictsUpdate, validateIdNaN, validateBookingEndDate} = require('../../utils/validation');
 
 const { check } = require('express-validator');
 
@@ -91,7 +91,7 @@ router.put(
     validateAuthBooking,
     validateBookingEndDate,
     validateDates,
-    validateBookingConflicts,
+    validateBookingConflictsUpdate,
     async (req, res) => {
         const bookingId = req.params.bookingId;
 
