@@ -58,7 +58,7 @@ router.get(
             //   ],
               
               attributes: {
-                exclude: ['createdAt', 'updatedAt'],
+                exclude: ['description','createdAt', 'updatedAt'],
               },
             },
             {
@@ -75,7 +75,7 @@ router.get(
             reviews.map(async (review) => {
                 const reviewData = review.toJSON();
                 const spotImage = await SpotImage.findOne({ where: { spotId: reviewData.spotId, preview:true}});
-                // return spotImage;  // This will now return the resolved spotImage
+
                 reviewData.Spot.previewImage = spotImage ? spotImage.url : null;  // Add previewImage
                 return reviewData;
             })
