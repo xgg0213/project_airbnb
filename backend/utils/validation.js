@@ -252,8 +252,8 @@ const validateBookingConflicts = async(req, res, next) => {
     const newEnd = new Date(endDate);
   
     return (
-      (newStart >= existingStart && newStart < existingEnd) || // new start date overlaps an existing booking
-      (newEnd > existingStart && newEnd <= existingEnd) || // new end date overlaps an existing booking
+      (newStart >= existingStart && newStart <= existingEnd) || // new start date overlaps an existing booking
+      (newEnd >= existingStart && newEnd <= existingEnd) || // new end date overlaps an existing booking
       (newStart <= existingStart && newEnd >= existingEnd) // new booking fully contains an existing booking
     );
   });
@@ -291,8 +291,8 @@ const validateBookingConflictsUpdate = async(req, res, next) => {
     const newEnd = new Date(endDate);
   
     return (
-      (newStart >= existingStart && newStart < existingEnd) || // new start date overlaps an existing booking
-      (newEnd > existingStart && newEnd <= existingEnd) || // new end date overlaps an existing booking
+      (newStart >= existingStart && newStart <= existingEnd) || // new start date overlaps an existing booking
+      (newEnd >= existingStart && newEnd <= existingEnd) || // new end date overlaps an existing booking
       (newStart <= existingStart && newEnd >= existingEnd) // new booking fully contains an existing booking
     );
   });
