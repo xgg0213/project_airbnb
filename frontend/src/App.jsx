@@ -11,6 +11,8 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 // import LoginFormPage from './components/LoginFormPage';
 // import SignupFormPage from './components/SignupFormModal';
 import Navigation from './components/Navigation';
+import SpotsPage from './components/SpotsPage';
+import SpotDetail from './components/SpotDetails';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -39,14 +41,14 @@ const router = createBrowserRouter([
         path: '/',
         element: <h1>Welcome!</h1>
       },
-      // {
-      //   path: '/login',
-      //   element: <LoginFormPage />
-      // },
-      // {
-      //   path: "/signup",
-      //   element: <SignupFormPage />
-      // }
+      {
+        path: '/spots',
+        element: <SpotsPage />
+      },
+      {
+        path: "/spots/:spotId",
+        element: <SpotDetail />
+      }
     ]
   }
 ]);
