@@ -3,16 +3,16 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
-    max-width: 300px;
+    max-width: 500px;
     font-size: 16px;
-    float: right;
+    /* float: center; */
     text-align: left;
   }
   
   .callout-box h3 {
     font-size: 18px;
     margin-bottom: 10px;
-  }
+  } 
   
   .callout-box p {
     margin: 5px 0;
@@ -35,4 +35,31 @@
   
   .reserve-button:hover {
     background-color: #ff787c;
+  }
+
+  /* Review Summary */
+.review-summary {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  
+  .review-summary .star-icon {
+    color: #ffa500; /* Gold for star */
+    margin-right: 10px;
+  }
+  
+  /* Reviews Section */
+  .reviews-section {
+    margin-top: 40px;
+  }
+
+  /* Centered Dot Styling */
+.dot {
+    margin: 0 8px;
+    font-size: 50px;
+    color: red;
+    vertical-align: middle;
   }

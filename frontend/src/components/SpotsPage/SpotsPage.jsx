@@ -21,19 +21,26 @@ const SpotsPage = () => {
         <h1>Explore Spots</h1>
         <div className='spots-grid'>
             {spots_array.map((spot) => (
-                <Link to={`/spots/${spot.id}`} className="spot-link" 
+                <Link to={`/spots/${spot.id}`} 
+                    className="spot-link" 
                     title={spot.name} // Tooltip text
-                    key={spot.id}>
+                    key={spot.id}
+                >
                     <div className='spot-tile' key={spot.id}>
                         <img src={spot.previewImage} 
                             alt={`${spot.city}, ${spot.state}`} className="thumbnail-image">
                         </img>
+                        {/*  add spot name with star rating */}
+                        <div className="spot-name-rating">
+                            <h3>{spot.city}</h3>
+                            <p className="star-rating">
+                            <span className="star-icon">★</span>
+                            {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+                            </p>
+                        </div>
                         <h3>{spot.city}</h3>
                         <p>{spot.state}</p>
                         <p className="price">${spot.price} night</p>
-                        <p className="star-rating">
-                            {spot.avgRating?spot.avgRating.toFixed(1):'New'}
-                        </p>
                     </div>
                 </Link>
                 
