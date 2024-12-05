@@ -11,21 +11,26 @@ const SpotDetails = () => {
     dispatch(fetchSingleSpot(spotId));
   }, [dispatch, spotId]);
 
-  const spot = useSelector((state) => state.spot?state.spot:null);
+  const spot = useSelector((state) => state.spot?state.spot.singleSpot:[]);
 
-  const spot_obj = Object.values(spot)[0];
-
-  if (!Object.entries(spot_obj).length) return <p>Loading...</p>;
+  if (!Object.entries(spot).length) return <p>Loading...</p>;
 
   return (
     <div>
-      <h1>{spot_obj.name}</h1>
-      <p>{spot_obj.description}</p>
-      <p>{spot_obj.address}</p>
-      <p>{spot_obj.city}</p>
-      <p>{spot_obj.country}</p>
-      <p>{spot_obj.price}</p>
-      <p>{spot_obj.avgRating}</p>
+      <h1>{spot?.name}</h1>
+      <p>
+        Location: {spot.city}, {spot.state}, {spot.country}
+      </p>
+
+      <div>
+        <img></img>
+      </div>
+      <p>{spot.description}</p>
+      <p>{spot.address}</p>
+      <p>{spot.city}</p>
+      <p>{spot.country}</p>
+      <p>{spot.price}</p>
+      <p>{spot.avgRating}</p>
     </div>
   );
 };

@@ -9,6 +9,7 @@
   h1 {
     margin-bottom: 20px;
     font-size: 32px;
+    /* color: red */
   }
   
   .spots-grid {
@@ -27,10 +28,10 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   
-  .spot-tile:hover {
+  /* .spot-tile:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+  } */
   
   .spot-image {
     width: 100%;
@@ -44,8 +45,29 @@
     color: #333;
   }
   
-  .spot-tile p {
+  /* why having below prevents the classNames under p element not working*/
+  /* .spot-tile p {
     margin: 10px;
     font-size: 14px;
     color: #666;
+
+  } */
+
+  .price {
+    color: red
+  }
+
+  .thumbnail-image {
+    width: 100%;
+    height: 150px; 
+    object-fit: cover; /* Ensures the image is cropped proportionally */
+    border-radius: 400px;
+    margin: 10px 0;
+  }
+
+  .star-rating {
+    font-size: 14px;
+    font-weight: bold;
+    color: #883343; 
+    margin-top: 5px;
   }
