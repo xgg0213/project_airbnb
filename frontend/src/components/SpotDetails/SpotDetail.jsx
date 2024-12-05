@@ -15,22 +15,54 @@ const SpotDetails = () => {
 
   if (!Object.entries(spot).length) return <p>Loading...</p>;
 
+  // Reserve Button Handler
+  const handleReserveClick = () => {
+    alert('Feature coming soon');
+  };
+
+
   return (
     <div>
       <h1>{spot?.name}</h1>
-      <p>
+      <p className='location'>
         Location: {spot.city}, {spot.state}, {spot.country}
       </p>
 
-      <div>
-        <img></img>
+      <div className="images-container">
+        <img
+          src={spot.SpotImages[0].url}
+          alt={`${spot.name} large view`}
+          className="large-image"
+        />
+        <div className="small-images">
+          {spot.SpotImages.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`${spot.name} small view ${index + 1}`}
+              className="small-image"
+            />
+          ))}
+        </div>
       </div>
-      <p>{spot.description}</p>
-      <p>{spot.address}</p>
-      <p>{spot.city}</p>
-      <p>{spot.country}</p>
-      <p>{spot.price}</p>
-      <p>{spot.avgRating}</p>
+      
+      <p className="hosted-by">
+        Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
+      </p>
+
+
+      <p className="description">{spot.description}</p>
+
+
+      <div className="callout-box">
+        <h3>Details</h3>
+        <p>Price: ${spot.price} <span>night</span></p>
+        <p>Rating: {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}</p>
+        {/* Reserve Button */}
+        <button className="reserve-button" onClick={handleReserveClick}>
+          Reserve
+        </button>
+      </div>
     </div>
   );
 };
