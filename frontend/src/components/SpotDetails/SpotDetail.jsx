@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSingleSpot } from '../../store/spot';
+import { fetchSpotReviews } from '../../store/review';
 import { useParams } from 'react-router-dom';
 import './SpotDetail.css'
 
@@ -10,10 +11,13 @@ const SpotDetails = () => {
 
   useEffect(() => {
     dispatch(fetchSingleSpot(spotId));
+    dispatch(fetchSpotReviews(spotId))
   }, [dispatch, spotId]);
 
-  const spot = useSelector((state) => state.spot?state.spot.singleSpot:[]);
-
+  const spot = useSelector((state) => state.spot?state.spot.singleSpot:{});
+  const reviews = useSelector((state) => state.review ? state.review.spotReviews : {});
+  const currentUser = useSelector((state) => state.session.user);
+  const reviews_array = Object.values(reviews)
   if (!Object.entries(spot).length) return <p>Loading...</p>;
 
   // Reserve Button Handler
@@ -22,7 +26,10 @@ const SpotDetails = () => {
   };
 
   const hasReviews = spot.numReviews && spot.numReviews > 0;
-
+  const isOwner = currentUser?.id === spot.Owner?.id;
+  
+  // Sort reviews by newest
+  const sortedReviews = reviews_array.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div className='spot-details'>
@@ -88,10 +95,22 @@ const SpotDetails = () => {
           </h2>
         </div>
 
-        {/* Placeholder for Reviews */}
+        {/* Review Section */}
         <div className="reviews-section">
           <h3>Reviews</h3>
-          {/* List of reviews to be added */}
+          {sortedReviews.length > 0 ? (
+          sortedReviews.map((review) => (
+            <div key={review.id} className="review-card">
+              <p><strong>{review.User.firstName}</strong></p>
+              <p>{review.review}</p>
+              <p className="review-date">{new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
+            </div>
+          ))
+        ) : currentUser && !isOwner ? (
+          <p>Be the first to post a review!</p>
+        ): (
+          <p>No Reviews Yet</p>
+        )}
         </div>
       </div>
     </div>
