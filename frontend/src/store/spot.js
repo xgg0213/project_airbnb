@@ -1,6 +1,7 @@
 // Action types
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const LOAD_SINGLE_SPOT = 'spots/LOAD_SINGLE_SPOT';
+const ADD_SPOT = 'spots/ADD_SPOT';
 
 // Action creator
 // Load all spots
@@ -14,6 +15,12 @@ const loadSingleSpot = (spot) => ({
     type: LOAD_SINGLE_SPOT,
     spot,
 });
+
+// Add a new spot
+const addSpot = (spot) => ({
+    type: ADD_SPOT,
+    spot,
+})
 
 // Thunks
 export const fetchAllSpots = () => async (dispatch) => {
@@ -48,6 +55,21 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
     }
 };
 
+export const createSpot = (payload) => async(dispatch) => {
+    const response = await fetch('/api/spots', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    
+      if (response.ok) {
+        const newSpot = await response.json();
+
+        dispatch(addSpot(newSpot));
+        return newSpot;
+      }
+};
+
 // initial state
 const initialState = {
     allSpots: {}, // List of all spots
@@ -68,7 +90,6 @@ const spotReducer = (state = initialState, action) => {
             ...state,
             allSpots: {...spotsState}
         }
-
       }
         
       case LOAD_SINGLE_SPOT: {
@@ -76,6 +97,16 @@ const spotReducer = (state = initialState, action) => {
             ...state,
             singleSpot: action.spot, 
           };
+      }
+
+      case ADD_SPOT: {
+        return {
+            ...state,
+            allSpots: {
+                ...state.allSpots,
+                [action.spot.id]: action.spot
+            }
+        }
       }
         
       default:
