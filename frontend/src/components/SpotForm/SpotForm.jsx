@@ -49,20 +49,27 @@ const SpotForm = () => {
       city,
       state,
       country,
-      price: parseFloat(price),
+    //   price: parseFloat(price),
+      price,
       description,
-      previewImage,
-      images: [image1, image2, image3, image4].filter(Boolean),
+      lat: 80,
+      lng: 80
+
+
+    //   previewImage,
+    //   images: [image1, image2, image3, image4].filter(Boolean),
     };
 
     const result = await dispatch(createSpot(newSpot));
     console.log('Create Spot Result:', result); 
 
-    if (result.errors) {
-      setErrors(result.errors);
-    } else {
-      navigate(`/spots/${result.id}`); // Navigate to the new spot's detail page
-    }
+    // if (result?.errors) {
+    //   setErrors(result.errors);
+    // } else {
+    //   navigate(`/spots/${result.id}`); // Navigate to the new spot's detail page
+    // }
+
+    // navigate(`/spots/${result.id}`)
   };
 
   return (

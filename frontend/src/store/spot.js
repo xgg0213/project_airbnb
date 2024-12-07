@@ -1,3 +1,7 @@
+import { csrfFetch } from './csrf'
+
+// use csrfFetch instead of simple fetch - allows authorization
+
 // Action types
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const LOAD_SINGLE_SPOT = 'spots/LOAD_SINGLE_SPOT';
@@ -56,12 +60,12 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
 };
 
 export const createSpot = (payload) => async(dispatch) => {
-    const response = await fetch('/api/spots', {
+    const response = await csrfFetch('/api/spots', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-    
+      console.log(response);
       if (response.ok) {
         const newSpot = await response.json();
 
