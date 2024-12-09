@@ -9,7 +9,8 @@ const LOAD_CURRENT_SPOTS = 'spots/LOAD_CURRENT_SPOTS'
 const ADD_SPOT = 'spots/ADD_SPOT';
 const ADD_IMAGE = 'spots/ADD_IMAGE';
 const DELETE_SPOT = 'spots/DELETE_SPOT';
-const UPDATE_SPOT = 'spots/UPDATE_SPOT'
+const UPDATE_SPOT = 'spots/UPDATE_SPOT';
+const CLEAR_SINGLE_SPOT = 'spot/CLEAR_SINGLE_SPOT';
 
 // Action creator
 // Load all spots
@@ -149,6 +150,10 @@ export const createSpot = (payload) => async(dispatch) => {
       }
 };
 
+export const clearSingleSpot = () => ({
+    type: CLEAR_SINGLE_SPOT,
+});
+
 // Add images to a spot
 export const addImagesToSpot = (spotId, images) => async (dispatch) => {
     const imagesPromises = images.map(async (image) => {
@@ -257,6 +262,14 @@ const spotReducer = (state = initialState, action) => {
                 ...action.spot,
               },
         }
+      }
+
+      // clear single spot
+      case CLEAR_SINGLE_SPOT: {
+            return {
+                ...state,
+                singleSpot: {},
+            };
       }
 
       case ADD_IMAGE: {

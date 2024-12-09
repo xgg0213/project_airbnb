@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSpot, addImagesToSpot } from '../../store/spot';
 import { useNavigate, useParams } from 'react-router-dom'; 
-import { fetchSingleSpot, updateASpot } from '../../store/spot';
+import { fetchSingleSpot, updateASpot, clearSingleSpot } from '../../store/spot';
 import './SpotForm.css';
 
 const SpotForm = () => {
@@ -11,7 +11,7 @@ const SpotForm = () => {
   const {spotId} = useParams();
   const spot = useSelector((state) => state.spot.singleSpot || {});
 //   const spotImages = useSelector((state) => state.spot.)
-  const isUpdateMode = Boolean(spot);
+  const isUpdateMode = Boolean(spotId);
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -30,30 +30,58 @@ const SpotForm = () => {
   const [errors, setErrors] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  console.log(spot);
+//   console.log(spot);
 // populate the form if the spotId already exists
 useEffect(() => {
     if (isUpdateMode) {
       dispatch(fetchSingleSpot(spotId));
+    } else {
+        dispatch(clearSingleSpot())
     }
   }, [dispatch, spotId, isUpdateMode]);
 
+
 // Reset form state when the component mounts
 useEffect(() => {
-    setName(spot.name?spot.name:'');
-    setAddress(spot.address?spot.address:'');
-    setCity(spot.city?spot.city:'');
-    setState(spot.state?spot.state:'');
-    setCountry(spot.country?spot.country:'');
-    setPrice(spot.price?spot.price:'');
-    setDescription(spot.description?spot.description:'');
-    setPreviewImage(spot.SpotImages.previewImage?spot.previewImage:'');
-    setImage1(spot.SpotImages.image1?spot.image1:'');
-    setImage2(spot.image2?spot.image2:'');
-    setImage3(spot.image3?spot.image3:'');
-    setImage4(spot.image4?spot.image4:'');
-    // setFormSubmitted(false);
-}, [spot, isUpdateMode]); 
+    if (isUpdateMode && spot) {
+        const previewImage = spot.SpotImages?.find((img) => img.preview)?.url || '';
+        const otherImages = spot.SpotImages?.filter((img) => !img.preview) || [];
+        setName(spot.name?spot.name:'');
+        setAddress(spot.address?spot.address:'');
+        setCity(spot.city?spot.city:'');
+        setState(spot.state?spot.state:'');
+        setCountry(spot.country?spot.country:'');
+        setLat(spot.lat?spot.lat:0);
+        setLng(spot.lng?spot.lng:0);
+        setPrice(spot.price?spot.price:'');
+        setDescription(spot.description?spot.description:'');
+        setPreviewImage(previewImage?previewImage:'');
+        setImage1(otherImages[0]?otherImages[0]:'');
+        setImage2(otherImages[1]?otherImages[1]:'');
+        setImage3(otherImages[2]?otherImages[2]:'');
+        setImage4(otherImages[3]?otherImages[3]:'');
+        setErrors({});
+        setFormSubmitted(false)
+    } else {
+        setName('');
+        setAddress('');
+        setCity('');
+        setState('');
+        setLat('');
+        setLng('');
+        setCountry('');
+        setPrice('');
+        setDescription('');
+        setPreviewImage('');
+        setImage1('');
+        setImage2('');
+        setImage3('');
+        setImage4('');
+        setErrors({});
+        setFormSubmitted(false);
+    }
+}, [isUpdateMode, spot]); 
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,6 +117,8 @@ useEffect(() => {
       price,
       description,
     };
+
+    console.log(formData)
 
     let result;
     if (isUpdateMode) {
