@@ -34,7 +34,7 @@ function ReviewFormModal({ closeModal, spotId }) {
         setServerErrors(result.errors.message || 'An unexpected error occurred.');
       } else {
         closeModal(); // Close the modal on success
-      };
+      }
     };    
   
     // validate if a review is qualified
@@ -77,8 +77,8 @@ return (
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
 
 export default ReviewFormModal;

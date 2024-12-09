@@ -5,9 +5,11 @@ import { csrfFetch } from './csrf'
 // Action types
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const LOAD_SINGLE_SPOT = 'spots/LOAD_SINGLE_SPOT';
+const LOAD_CURRENT_SPOTS = 'spots/LOAD_CURRENT_SPOTS' 
 const ADD_SPOT = 'spots/ADD_SPOT';
 const ADD_IMAGE = 'spots/ADD_IMAGE';
-const ADD_REVIEW = 'spots/ADD_REVIEW';
+const DELETE_SPOT = 'spots/DELETE_SPOT';
+const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 
 // Action creator
 // Load all spots
@@ -22,9 +24,27 @@ const loadSingleSpot = (spot) => ({
     spot,
 });
 
+// Load current user's spots
+export const loadCurrentSpots = (spots) => ({
+    type: LOAD_CURRENT_SPOTS,
+    spots,
+  });
+
+// Delete a spot
+export const deleteSpot = (spotId) => ({
+    type: DELETE_SPOT,
+    spotId,
+  });
+
 // Add a new spot
 const addSpot = (spot) => ({
     type: ADD_SPOT,
+    spot,
+})
+
+// Update a spot
+const updateSpot = (spot) => ({
+    type: UPDATE_SPOT,
     spot,
 })
 
@@ -68,6 +88,52 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
     }
 };
 
+export const fetchCurrentSpots = () => async (dispatch) => {
+    const response = await csrfFetch('/api/spots/current');
+    
+    if (response.ok) {
+      const currentSpots = await response.json();
+      const spots_array = Object.values(currentSpots.Spots);
+      const current_spots_new = {}
+      spots_array.map(spot => {
+        current_spots_new[spot.id]=spot
+      })
+    //   console.log(currentSpots);
+    //   console.log(spots_array);
+    //   console.log(current_spots_new)
+      dispatch(loadCurrentSpots(current_spots_new));
+    }
+};
+
+export const deleteASpot = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'DELETE',
+    }); 
+
+    if (response.ok) {
+      
+      dispatch(deleteSpot(spotId));
+    } else {
+      console.error('Failed to delete spot');
+    }
+};
+
+export const updateASpot = (spotId, formData) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+    }); 
+
+    if (response.ok) {
+        const updatedSpot = await response.json();
+        dispatch(dispatch(updateSpot(updatedSpot)));
+        return updatedSpot;
+    } else {
+      console.error('Failed to delete spot');
+    }
+};
+
 export const createSpot = (payload) => async(dispatch) => {
     const response = await csrfFetch('/api/spots', {
         method: 'POST',
@@ -85,7 +151,7 @@ export const createSpot = (payload) => async(dispatch) => {
 
 // Add images to a spot
 export const addImagesToSpot = (spotId, images) => async (dispatch) => {
-    const images = images.map(async (image) => {
+    const imagesPromises = images.map(async (image) => {
       const response = await csrfFetch(`/api/spots/${spotId}/images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,6 +160,7 @@ export const addImagesToSpot = (spotId, images) => async (dispatch) => {
   
       if (response.ok) {
         const newImage = await response.json();
+        console.log(newImage);
         dispatch(addImage(newImage));
         return newImage;
       } else {
@@ -102,7 +169,7 @@ export const addImagesToSpot = (spotId, images) => async (dispatch) => {
         return { errors };
       }
     });
-    return images;
+    return imagesPromises;
 }
 
 
@@ -121,7 +188,7 @@ const spotReducer = (state = initialState, action) => {
         spots_array.forEach((spot) => {
             spotsState[spot.id] = spot;
         });
-        // return spotsState
+
         return {
             ...state,
             allSpots: {...spotsState}
@@ -135,6 +202,40 @@ const spotReducer = (state = initialState, action) => {
           };
       }
 
+      case LOAD_CURRENT_SPOTS: {
+        const currentSpots = {};
+        const currentSpotsArray = Object.values(action.spots);
+        currentSpotsArray.forEach((spot) => {
+            currentSpots[spot.id] = spot;
+        });
+        // console.log(action.spots)
+        return {
+            ...state,
+            currentSpots: currentSpots,
+        };
+      }
+
+      case DELETE_SPOT: {
+        const newState = { ...state };
+
+        // Remove from allSpots
+        if (action.spotId && newState.allSpots[action.spotId]) {
+            delete newState.allSpots[action.spotId];
+        }
+
+        // Remove spot from userSpots if it exists
+        if (newState.userSpots[action.spotId]) {
+            delete newState.userSpots[action.spotId];
+        }
+
+        // Clear singleSpot if it matches the deleted spot
+        if (newState.singleSpot.id === action.spotId) {
+            newState.singleSpot = {};
+        }
+
+        return newState;
+      }
+
       case ADD_SPOT: {
         return {
             ...state,
@@ -142,6 +243,19 @@ const spotReducer = (state = initialState, action) => {
                 ...state.allSpots,
                 [action.spot.id]: action.spot
             }
+        }
+      }
+
+      case UPDATE_SPOT: {
+        return {
+            ...state,
+            allSpots: {
+                ...state.allSpots,
+                [action.spot.id]: action.spot
+            },
+            singleSpot: {
+                ...action.spot,
+              },
         }
       }
 

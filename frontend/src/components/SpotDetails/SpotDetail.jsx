@@ -29,12 +29,11 @@ const SpotDetails = () => {
   const handleReserveClick = () => {
     alert('Feature coming soon');
   };
-
   // if the spot has reviews already
   const hasReviews = spot.numReviews && spot.numReviews > 0;
   // if the current session user is the owner
   const isOwner = currentUser?.id === spot.Owner?.id
-  
+  // console.log(spot)
   // Sort reviews by newest
   const sortedReviews = reviews_array.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   // if the current user has reviewed this spot
@@ -62,7 +61,7 @@ const SpotDetails = () => {
       <h1>{spot?.name}</h1>
 
       <p className='location'>
-        Location: {spot.city}, {spot.state}, {spot.country}
+        Location: {spot?.city}, {spot?.state}, {spot?.country}
       </p>
 
       <div className="images-container">
@@ -84,7 +83,7 @@ const SpotDetails = () => {
       </div>
       
       <p className="hosted-by">
-        Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
+        Hosted by {spot.Owner?.firstName} {spot.Owner?.lastName}
       </p>
 
       <p className="description">{spot.description}</p>

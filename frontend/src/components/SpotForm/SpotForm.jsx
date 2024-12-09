@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createSpot, addImagesToSpot } from '../../store/spot';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, useParams } from 'react-router-dom'; 
+import { fetchSingleSpot, updateASpot } from '../../store/spot';
 import './SpotForm.css';
 
 const SpotForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
+  const {spotId} = useParams();
+  const spot = useSelector((state) => state.spot.singleSpot || {});
+//   const spotImages = useSelector((state) => state.spot.)
+  const isUpdateMode = Boolean(spot);
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -25,24 +30,30 @@ const SpotForm = () => {
   const [errors, setErrors] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  console.log(spot);
+// populate the form if the spotId already exists
+useEffect(() => {
+    if (isUpdateMode) {
+      dispatch(fetchSingleSpot(spotId));
+    }
+  }, [dispatch, spotId, isUpdateMode]);
 
 // Reset form state when the component mounts
 useEffect(() => {
-    setName('');
-    setAddress('');
-    setCity('');
-    setState('');
-    setCountry('');
-    setPrice('');
-    setDescription('');
-    setPreviewImage('');
-    setImage1('');
-    setImage2('');
-    setImage3('');
-    setImage4('');
-    setErrors({});
-    setFormSubmitted(false);
-}, []); 
+    setName(spot.name?spot.name:'');
+    setAddress(spot.address?spot.address:'');
+    setCity(spot.city?spot.city:'');
+    setState(spot.state?spot.state:'');
+    setCountry(spot.country?spot.country:'');
+    setPrice(spot.price?spot.price:'');
+    setDescription(spot.description?spot.description:'');
+    setPreviewImage(spot.SpotImages.previewImage?spot.previewImage:'');
+    setImage1(spot.SpotImages.image1?spot.image1:'');
+    setImage2(spot.image2?spot.image2:'');
+    setImage3(spot.image3?spot.image3:'');
+    setImage4(spot.image4?spot.image4:'');
+    // setFormSubmitted(false);
+}, [spot, isUpdateMode]); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +77,7 @@ useEffect(() => {
       return;
     }
 
-    const newSpot = {
+    const formData = {
       name,
       address,
       city,
@@ -79,26 +90,32 @@ useEffect(() => {
       description,
     };
 
-    const result = await dispatch(createSpot(newSpot));
-    console.log('Create Spot Result:', result); 
+    let result;
+    if (isUpdateMode) {
+        result = await dispatch(updateASpot(spotId, formData));
+    } else {
+        result = await dispatch(createSpot(formData));
+    }
 
-    const newImages = [
-        { url: previewImage, preview: true },
-        ...(image1 ? [{ url: image1, preview: false }] : []),
-        ...(image2 ? [{ url: image2, preview: false }] : []),
-        ...(image3 ? [{ url: image3, preview: false }] : []),
-        ...(image4 ? [{ url: image4, preview: false }] : []),
-    ];
 
-    await dispatch(addImagesToSpot(result.id, newImages));
+    // how to ensure the image info is always reflected?
+        const newImages = [
+          { url: previewImage, preview: true },
+          ...(image1 ? [{ url: image1, preview: false }] : []),
+          ...(image2 ? [{ url: image2, preview: false }] : []),
+          ...(image3 ? [{ url: image3, preview: false }] : []),
+          ...(image4 ? [{ url: image4, preview: false }] : []),
+        ];
+        await dispatch(addImagesToSpot(result.id, newImages));
+    // }
 
     navigate(`/spots/${result.id}`)
   };
 
   return (
     <div className="new-spot-form-container">
-      <h1>Create a New Spot</h1>
-      <form onSubmit={handleSubmit} className="new-spot-form">
+      <h1>{isUpdateMode?'Update your spot': 'Create a New Spot'}</h1>
+      <form onSubmit={handleSubmit} className="spot-form">
         {errors.length > 0 && (
           <ul className="form-errors">
             {errors.map((error, idx) => (
@@ -274,7 +291,7 @@ useEffect(() => {
             onChange={(e) => setImage4(e.target.value)}
           />
         </label>
-        <button type="submit">Create Spot</button>
+        <button type="submit">{isUpdateMode ? 'Update your Spot' : 'Create Spot'}</button>
       </form>
     </div>
   );
