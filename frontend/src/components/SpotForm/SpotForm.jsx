@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createSpot } from '../../store/spot';
+import { createSpot, addImagesToSpot } from '../../store/spot';
 import { useNavigate } from 'react-router-dom'; 
 import './SpotForm.css';
 
@@ -12,6 +12,8 @@ const SpotForm = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
   const [country, setCountry] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
@@ -23,6 +25,25 @@ const SpotForm = () => {
   const [errors, setErrors] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+
+// Reset form state when the component mounts
+useEffect(() => {
+    setName('');
+    setAddress('');
+    setCity('');
+    setState('');
+    setCountry('');
+    setPrice('');
+    setDescription('');
+    setPreviewImage('');
+    setImage1('');
+    setImage2('');
+    setImage3('');
+    setImage4('');
+    setErrors({});
+    setFormSubmitted(false);
+}, []); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true)
@@ -33,6 +54,8 @@ const SpotForm = () => {
     if (!address) validationErrors.address = 'Street Address is required';
     if (!city) validationErrors.city = 'City is required';
     if (!state) validationErrors.state = 'State is required';
+    if (!lat) validationErrors.lat = 'Latitude is required';
+    if (!lng) validationErrors.lng = 'lng is required';
     if (description.length < 30) validationErrors.description = 'Description needs 30 or more characters';
     if (!name) validationErrors.name = 'Title is required';
     if (!price || price <= 0) validationErrors.price = 'Price per night is required';
@@ -48,28 +71,28 @@ const SpotForm = () => {
       address,
       city,
       state,
+      lat,
+      lng,
       country,
     //   price: parseFloat(price),
       price,
       description,
-      lat: 80,
-      lng: 80
-
-
-    //   previewImage,
-    //   images: [image1, image2, image3, image4].filter(Boolean),
     };
 
     const result = await dispatch(createSpot(newSpot));
     console.log('Create Spot Result:', result); 
 
-    // if (result?.errors) {
-    //   setErrors(result.errors);
-    // } else {
-    //   navigate(`/spots/${result.id}`); // Navigate to the new spot's detail page
-    // }
+    const newImages = [
+        { url: previewImage, preview: true },
+        ...(image1 ? [{ url: image1, preview: false }] : []),
+        ...(image2 ? [{ url: image2, preview: false }] : []),
+        ...(image3 ? [{ url: image3, preview: false }] : []),
+        ...(image4 ? [{ url: image4, preview: false }] : []),
+    ];
 
-    // navigate(`/spots/${result.id}`)
+    await dispatch(addImagesToSpot(result.id, newImages));
+
+    navigate(`/spots/${result.id}`)
   };
 
   return (
@@ -128,6 +151,28 @@ const SpotForm = () => {
             onChange={(e) => setState(e.target.value)}
           />
           {formSubmitted && errors.state && <p className="field-error">{errors.state}</p>}
+        </label>
+
+        <label>
+          lat
+          <input
+            type="number"
+            placeholder="lat"
+            value={lat}
+            onChange={(e) => setLat(e.target.value)}
+          />
+          {formSubmitted && errors.lat && <p className="field-error">{errors.lat}</p>}
+        </label>
+
+        <label>
+          lng
+          <input
+            type="number"
+            placeholder="lng"
+            value={lng}
+            onChange={(e) => setLng(e.target.value)}
+          />
+          {formSubmitted && errors.lng && <p className="field-error">{errors.lng}</p>}
         </label>
 
         {/* Section 2 */}

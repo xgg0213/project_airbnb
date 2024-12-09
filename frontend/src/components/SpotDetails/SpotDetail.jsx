@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSingleSpot } from '../../store/spot';
 import { fetchSpotReviews } from '../../store/review';
 import { useParams } from 'react-router-dom';
+import { useModal } from '../../context/Modal';
+import ReviewFormModal from '../ReviewFormModal';
 import './SpotDetail.css'
 
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
+  const { setModalContent, closeModal } = useModal();
 
   useEffect(() => {
     dispatch(fetchSingleSpot(spotId));
@@ -16,8 +19,10 @@ const SpotDetails = () => {
 
   const spot = useSelector((state) => state.spot?state.spot.singleSpot:{});
   const reviews = useSelector((state) => state.review ? state.review.spotReviews : {});
+  const spotImages = spot.SpotImagesn||[]; 
   const currentUser = useSelector((state) => state.session.user);
-  const reviews_array = Object.values(reviews)
+  const reviews_array = Object.values(reviews);
+
   if (!Object.entries(spot).length) return <p>Loading...</p>;
 
   // Reserve Button Handler
@@ -25,11 +30,32 @@ const SpotDetails = () => {
     alert('Feature coming soon');
   };
 
+  // if the spot has reviews already
   const hasReviews = spot.numReviews && spot.numReviews > 0;
-  const isOwner = currentUser?.id === spot.Owner?.id;
+  // if the current session user is the owner
+  const isOwner = currentUser?.id === spot.Owner?.id
   
   // Sort reviews by newest
   const sortedReviews = reviews_array.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  // if the current user has reviewed this spot
+  const alreadyReviewed = reviews_array?.length
+  ? reviews_array.find((r) => r.userId === currentUser?.id) !== undefined
+  : false;
+
+  // // post your review button handler
+  // const handlePostReview = () => {
+  //   alert('Redirect to Post Your Review form!'); // Replace with actual navigation logic
+  // };
+
+  const openReviewModal = () => {
+    setModalContent(
+      <ReviewFormModal
+        spotId={spotId}
+        closeModal={closeModal}
+      />
+    );
+  };
+
 
   return (
     <div className='spot-details'>
@@ -41,15 +67,15 @@ const SpotDetails = () => {
 
       <div className="images-container">
         <img
-          src={spot.SpotImages[0].url}
+          src={spotImages[0]?.url ||'' }
           alt={`${spot.name} large view`}
           className="large-image"
         />
         <div className="small-images">
-          {spot.SpotImages.map((image, index) => (
+          {spotImages.slice(1).map((image, index) => (
             <img
               key={index}
-              src={image}
+              src={image?.url || ''}
               alt={`${spot.name} small view ${index + 1}`}
               className="small-image"
             />
@@ -98,12 +124,22 @@ const SpotDetails = () => {
         {/* Review Section */}
         <div className="reviews-section">
           <h3>Reviews</h3>
+          {/* Conditionally show Post Your Review button */}
+          {currentUser && !isOwner && !alreadyReviewed && (
+            <button className="post-review-button" onClick={openReviewModal}>
+              Post Your Review
+            </button>
+            
+          )}
+
           {sortedReviews.length > 0 ? (
           sortedReviews.map((review) => (
             <div key={review.id} className="review-card">
               <p><strong>{review.User.firstName}</strong></p>
               <p>{review.review}</p>
-              <p className="review-date">{new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}</p>
+              <p className="review-date">
+                {new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}
+              </p>
             </div>
           ))
         ) : currentUser && !isOwner ? (

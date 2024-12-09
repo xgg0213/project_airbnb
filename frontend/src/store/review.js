@@ -1,5 +1,6 @@
 // Action type
 const LOAD_REVIEWS = 'review/LOAD_REVIEWS';
+const ADD_REVIEW = 'review/ADD_REVIEW';
 
 // load all reviews for a spot
 export const loadReviews = (reviews) => ({
@@ -7,11 +8,34 @@ export const loadReviews = (reviews) => ({
   reviews,
 });
 
+// add a review
+export const addReview = (review) => ({
+  type: ADD_REVIEW,
+  review,
+});
+
 export const fetchSpotReviews = (spotId) => async (dispatch) => {
   const response = await fetch(`/api/spots/${spotId}/reviews`);
   if (response.ok) {
     const reviews = await response.json();
     dispatch(loadReviews(reviews.Reviews));
+  }
+};
+
+export const createReview = (spotId, reviewData) => async (dispatch) => {
+  const response = await fetch(`/api/spots/${spotId}/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(reviewData),
+  });
+
+  if (response.ok) {
+    const newReview = await response.json();
+    dispatch(addReview(newReview)); // Dispatch action to add the new review
+    return newReview;
+  } else {
+    const error = await response.json();
+    return { errors: error.errors || ['An unexpected error occurred.'] };
   }
 };
 
@@ -29,7 +53,17 @@ const reviewReducer = (state = initialState, action) => {
             spotReviews: reviewState,
             };
     }
-      
+    
+    case ADD_REVIEW: {
+      return {
+        ...state,
+        spotReviews: {
+          ...state.spotReviews,
+          [action.review.id]: action.review, // Add the new review
+        },
+      };
+    }
+    
     default:
         return state;
   }

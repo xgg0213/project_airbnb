@@ -6,6 +6,8 @@ import { csrfFetch } from './csrf'
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 const LOAD_SINGLE_SPOT = 'spots/LOAD_SINGLE_SPOT';
 const ADD_SPOT = 'spots/ADD_SPOT';
+const ADD_IMAGE = 'spots/ADD_IMAGE';
+const ADD_REVIEW = 'spots/ADD_REVIEW';
 
 // Action creator
 // Load all spots
@@ -25,6 +27,13 @@ const addSpot = (spot) => ({
     type: ADD_SPOT,
     spot,
 })
+
+// Add an image to a spot
+const addImage = (image) => ({
+    type: ADD_IMAGE,
+    image,
+});
+
 
 // Thunks
 export const fetchAllSpots = () => async (dispatch) => {
@@ -65,7 +74,7 @@ export const createSpot = (payload) => async(dispatch) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      console.log(response);
+      
       if (response.ok) {
         const newSpot = await response.json();
 
@@ -73,6 +82,29 @@ export const createSpot = (payload) => async(dispatch) => {
         return newSpot;
       }
 };
+
+// Add images to a spot
+export const addImagesToSpot = (spotId, images) => async (dispatch) => {
+    const images = images.map(async (image) => {
+      const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(image),
+      });
+  
+      if (response.ok) {
+        const newImage = await response.json();
+        dispatch(addImage(newImage));
+        return newImage;
+      } else {
+        const errors = await response.json();
+        console.error('Failed to add image:', image.url);
+        return { errors };
+      }
+    });
+    return images;
+}
+
 
 // initial state
 const initialState = {
@@ -112,6 +144,17 @@ const spotReducer = (state = initialState, action) => {
             }
         }
       }
+
+      case ADD_IMAGE: {
+        return {
+          ...state,
+          singleSpot: {
+            ...state.singleSpot,
+            SpotImages: [...(state.singleSpot.SpotImages || []), action.image],
+          },
+        };
+      }
+
         
       default:
         return state;
