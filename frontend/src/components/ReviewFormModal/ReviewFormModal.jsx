@@ -10,11 +10,13 @@ function ReviewFormModal({ closeModal, spotId }) {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
   const [errors, setErrors] = useState({});
-  const [serverErrors, setServerErrors] = useState({});
+  const [serverErrors, setServerErrors] = useState('');
 
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    setErrors({});
+    setServerErrors('');
 
     // Validate inputs
     const validationErrors = {};
@@ -27,10 +29,10 @@ function ReviewFormModal({ closeModal, spotId }) {
     }
 
     // handle server error
-    const reviewData = { comment: review, stars: rating };
+    const reviewData = { review, stars: rating };
     const result = await dispatch(createReview(spotId, reviewData));
 
-      if (result.errors) {
+      if (result && result.errors) {
         setServerErrors(result.errors.message || 'An unexpected error occurred.');
       } else {
         closeModal(); // Close the modal on success
@@ -38,9 +40,9 @@ function ReviewFormModal({ closeModal, spotId }) {
     };    
   
     // validate if a review is qualified
-const isSubmitDisabled = review.length < 10 || rating <= 0;
+    const isSubmitDisabled = review.length < 10 || rating <= 0;
   
-return (
+    return (
     <div className="review-form-modal">
       <h2>How was your stay?</h2>
       {serverErrors && <p className="server-error">{serverErrors}</p>}

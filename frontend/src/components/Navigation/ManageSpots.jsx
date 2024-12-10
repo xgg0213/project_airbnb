@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentSpots, deleteASpot } from '../../store/spot';
+import { fetchCurrentSpots, deleteASpot, fetchAllSpots } from '../../store/spot';
 import { Link, useNavigate } from 'react-router-dom';
+import { useModal } from '../../context/Modal';
 import './ManageSpots.css';
 
 const ManageSpots = () => {
   const dispatch = useDispatch();
   const currentSpots = useSelector((state) => state.spot.currentSpots || {});
   const navigate = useNavigate();
+  const { setModalContent, closeModal} = useModal();
 
   useEffect(() => {
     dispatch(fetchCurrentSpots());
@@ -25,12 +27,38 @@ const ManageSpots = () => {
     )
   }
 
-  const handleDelete = async (spotId) => {
-    const confirmed = window.confirm('Are you sure you want to delete this spot?');
-    if (confirmed) {
-      await dispatch(deleteASpot(spotId)); // Thunk for deleting a spot
+  // handle delete spot - with pop up window
+  // const handleDelete = async (spotId) => {
+  //   const confirmed = window.confirm('Are you sure you want to delete this spot?');
+  //   if (confirmed) {
+  //     await dispatch(deleteASpot(spotId)); // Thunk for deleting a spot
 
-    }
+  //   }
+  // };
+
+  // with modal
+  const handleDeleteSpot = (spotId) => {
+    setModalContent(
+      <div className="confirmation-modal">
+        <h2>Confirm Delete</h2>
+        <p>Are you sure you want to remove this spot?</p>
+        <div className="confirmation-buttons">
+          <button
+            className="confirm-delete-button"
+            onClick={async () => {
+              await dispatch(deleteASpot(spotId));
+              dispatch(fetchAllSpots(spotId));
+              closeModal();
+            }}
+          >
+            Yes (Delete Spot)
+          </button>
+          <button className="cancel-delete-button" onClick={closeModal}>
+            No (Keep Spot)
+          </button>
+        </div>
+      </div>
+    );
   };
 
   const handleUpdate = (spotId) => {
@@ -81,7 +109,7 @@ const ManageSpots = () => {
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent navigation to /spots/:spotId
                       console.log('Delete button clicked'); // Debugging
-                      handleDelete(spot.id);
+                      handleDeleteSpot(spot.id);
                     }}
                   >
                     Delete

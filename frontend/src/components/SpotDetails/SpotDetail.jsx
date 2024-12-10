@@ -5,6 +5,7 @@ import { fetchSpotReviews } from '../../store/review';
 import { useParams } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 import ReviewFormModal from '../ReviewFormModal';
+import { deleteReview } from '../../store/review';
 import './SpotDetail.css'
 
 const SpotDetails = () => {
@@ -52,6 +53,41 @@ const SpotDetails = () => {
         spotId={spotId}
         closeModal={closeModal}
       />
+    );
+  };
+
+  // handle delete review
+  // with pop up window
+  // const handleDeleteReview = async (reviewId) => {
+  //   const confirmed = window.confirm('Are you sure you want to delete this review?');
+  //   if (confirmed) {
+  //     await dispatch(deleteReview(reviewId));
+  //     dispatch(fetchSpotReviews(spotId)); // Refresh reviews after deletion
+  //   }
+  // };
+
+  // with modal
+  const handleDeleteReview = (reviewId) => {
+    setModalContent(
+      <div className="confirmation-modal">
+        <h2>Confirm Delete</h2>
+        <p>Are you sure you want to delete this review?</p>
+        <div className="confirmation-buttons">
+          <button
+            className="confirm-delete-button"
+            onClick={async () => {
+              await dispatch(deleteReview(reviewId));
+              dispatch(fetchSpotReviews(spotId));
+              closeModal();
+            }}
+          >
+            Yes (Delete Review)
+          </button>
+          <button className="cancel-delete-button" onClick={closeModal}>
+            No (Keep Review)
+          </button>
+        </div>
+      </div>
     );
   };
 
@@ -105,6 +141,7 @@ const SpotDetails = () => {
         <button className="reserve-button" onClick={handleReserveClick}>
           Reserve
         </button>
+      </div>
 
         {/* Review Summary Info Before Reviews */}
         <div className="review-summary">
@@ -134,20 +171,25 @@ const SpotDetails = () => {
           {sortedReviews.length > 0 ? (
           sortedReviews.map((review) => (
             <div key={review.id} className="review-card">
-              <p><strong>{review.User.firstName}</strong></p>
+              <p><strong>{review.User?.firstName}</strong></p>
               <p>{review.review}</p>
               <p className="review-date">
                 {new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}
               </p>
+              {currentUser?.id === review.userId && (
+                <button
+                  className="delete-review-button"
+                  onClick={() => handleDeleteReview(review.id)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           ))
-        ) : currentUser && !isOwner ? (
-          <p>Be the first to post a review!</p>
-        ): (
-          <p>No Reviews Yet</p>
+        ) : (
+          <p>{currentUser && !isOwner ? 'Be the first to post a review!': 'No Reviews Yet'}</p>
         )}
         </div>
-      </div>
     </div>
   );
 };

@@ -229,8 +229,8 @@ const spotReducer = (state = initialState, action) => {
         }
 
         // Remove spot from userSpots if it exists
-        if (newState.userSpots[action.spotId]) {
-            delete newState.userSpots[action.spotId];
+        if (newState.currentSpots[action.spotId]) {
+            delete newState.currentSpots[action.spotId];
         }
 
         // Clear singleSpot if it matches the deleted spot

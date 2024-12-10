@@ -1,6 +1,9 @@
+import { csrfFetch } from "./csrf";
+
 // Action type
 const LOAD_REVIEWS = 'review/LOAD_REVIEWS';
 const ADD_REVIEW = 'review/ADD_REVIEW';
+const DELETE_REVIEW = 'review/DELETE_REVIEW';
 
 // load all reviews for a spot
 export const loadReviews = (reviews) => ({
@@ -14,6 +17,12 @@ export const addReview = (review) => ({
   review,
 });
 
+// delete a review
+export const deleteReviewAction = (reviewId) => ({
+  type: DELETE_REVIEW,
+  reviewId,
+});
+
 export const fetchSpotReviews = (spotId) => async (dispatch) => {
   const response = await fetch(`/api/spots/${spotId}/reviews`);
   if (response.ok) {
@@ -23,7 +32,7 @@ export const fetchSpotReviews = (spotId) => async (dispatch) => {
 };
 
 export const createReview = (spotId, reviewData) => async (dispatch) => {
-  const response = await fetch(`/api/spots/${spotId}/reviews`, {
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(reviewData),
@@ -36,6 +45,13 @@ export const createReview = (spotId, reviewData) => async (dispatch) => {
   } else {
     const error = await response.json();
     return { errors: error.errors || ['An unexpected error occurred.'] };
+  }
+};
+
+export const deleteReview = (reviewId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
+  if (response.ok) {
+    dispatch(deleteReviewAction(reviewId));
   }
 };
 
@@ -62,6 +78,12 @@ const reviewReducer = (state = initialState, action) => {
           [action.review.id]: action.review, // Add the new review
         },
       };
+    }
+
+    case DELETE_REVIEW: {
+      const reviewState = { ...state };
+      delete reviewState.spotReviews[action.reviewId];
+      return reviewState;
     }
     
     default:
