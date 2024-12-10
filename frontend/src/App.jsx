@@ -51,6 +51,10 @@ const router = createBrowserRouter([
         path: "/spots/:spotId/edit",
         element: <SpotForm />,
       },
+      // {
+      //   path: "/spots/:spotId/reviews",
+      //   element: <SpotForm />,
+      // },
       {
         path: '/spots/current',
         element: <ManageSpots />

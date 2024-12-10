@@ -24,27 +24,34 @@ function Navigation({ isLoaded }) {
     //   )}
     // </ul>
     <nav className="navigation-bar">
+      <div className='nav-left'>
+        <NavLink to='/'>
+          <img src='/airbnb-logo.png' alt='Site Logo' className='site-logo' />
+        </NavLink>
+      </div>
       <div className="nav-right">
+        {sessionUser && (
+            <NavLink
+              to="/spots/new"
+              className="nav-new-spot"
+              onClick={toggleMenu}
+            >
+              Create a New Spot
+            </NavLink>
+        )}
         <button className="menu-toggle" onClick={toggleMenu}>
-          ☰
+          ☰ {isLoaded && <ProfileButton user={sessionUser} />}
         </button>
-        {showMenu && (
+        {/* {showMenu && (
           <div className="menu-dropdown">
-            <NavLink exact to="/" className="nav-link" onClick={toggleMenu}>
+            <NavLink to="/" className="nav-link" onClick={toggleMenu}>
               Home
             </NavLink>
-            {sessionUser && (
-              <NavLink
-                to="/spots/new"
-                className="nav-new-spot"
-                onClick={toggleMenu}
-              >
-                Create a New Spot
-              </NavLink>
-            )}
+            
           </div>
-        )}
-        {isLoaded && <ProfileButton user={sessionUser} />}
+        )} */}
+        {/* {isLoaded && <ProfileButton user={sessionUser} />} */}
+
       </div>
       
 
