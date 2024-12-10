@@ -20,15 +20,16 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
+        console.log(data.errors)
         if (data && data.errors) {
-          setErrors(data.errors);
+          // setErrors(data.errors);
+          setErrors({ credential: "The provided credentials were invalid" })
         }
       });
   };
 
   // validation
   const isSubmitDisabled = credential.length < 4 || password.length < 6;
-
   return (
     <>
       <h1>Log In</h1>
@@ -41,6 +42,9 @@ function LoginFormModal() {
             onChange={(e) => setCredential(e.target.value)}
             required
           />
+          {credential && credential.length < 4 && (
+            <p className="field-error">Username must be 4 or more characters</p>
+          )}
         </label>
         <label>
           Password
@@ -50,6 +54,9 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {password && password.length < 6 && (
+            <p className="field-error">Password must be 6 or more characters</p>
+          )}
         </label>
         {errors.credential && (
           <p>{errors.credential}</p>
