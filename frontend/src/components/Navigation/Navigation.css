@@ -76,23 +76,24 @@ Copy code
 }
 
 .nav-new-spot {
-  background-color: #ff385c;
-  color: #ffffff;
+  /* background-color: #ff385c; */
+  color: darkslateblue;
   padding: 8px 16px;
   border-radius: 20px;
   text-decoration: none;
   font-size: 14px;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  /* transition: background-color 0.2s ease; */
 }
 
 .nav-new-spot:hover {
-  background-color: #e31c5f;
+  background-color: gray;
 }
 
 .menu-toggle {
   background: none;
-  border: none;
+  /* border: 1px solid black; */
+  border-radius: 20px; 
   cursor: pointer;
   font-size: 18px;
   display: flex;
@@ -100,12 +101,16 @@ Copy code
   gap: 8px;
 }
 
-.menu-toggle img,
+/* .menu-toggle img,
 .menu-toggle .profile-button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+} */
+
+.profile-dropdown {
+  width: 40px;
 }
 
 /* Dropdown Menu */

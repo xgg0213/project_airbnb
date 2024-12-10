@@ -155,7 +155,7 @@ useEffect(() => {
         )}
 
         {/* Section 1 */}
-        <h1>Where&apos;s your place located?</h1>
+        <h2>Where&apos;s your place located?</h2>
         <p className="section-caption">
             Guests will only get your exact address once they booked a reservation.
         </p>
@@ -179,29 +179,34 @@ useEffect(() => {
           />
           {formSubmitted && errors.address && <p className="field-error">{errors.address}</p>}
         </label>
-        <label>
-          City
-          <input
-            type="text"
-            placeholder="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-          {formSubmitted && errors.city && <p className="field-error">{errors.city}</p>}
-        </label>
-        <label>
-          State
-          <input
-            type="text"
-            placeholder="State"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          />
-          {formSubmitted && errors.state && <p className="field-error">{errors.state}</p>}
-        </label>
 
+        <div className='city-state-containter'>
+          <label>
+            City
+            <input
+              type="text"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            {formSubmitted && errors.city && <p className="field-error">{errors.city}</p>}
+          </label>
+          <span className='comma'> , </span>
+          <label>
+            State
+            <input
+              type="text"
+              placeholder="State"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
+            {formSubmitted && errors.state && <p className="field-error">{errors.state}</p>}
+          </label>
+
+        </div>
+        
         <label>
-          lat
+          Latitude
           <input
             type="number"
             placeholder="lat"
@@ -212,7 +217,7 @@ useEffect(() => {
         </label>
 
         <label>
-          lng
+          Longitude
           <input
             type="number"
             placeholder="lng"
@@ -223,7 +228,7 @@ useEffect(() => {
         </label>
 
         {/* Section 2 */}
-        <h1>Describe your place to guests</h1>
+        <h2>Describe your place to guests</h2>
         <p className="section-caption">
         Mention the best features of your space, any special amentities like fast 
         wifi or parking, and what you love about the neighborhood.
@@ -239,7 +244,7 @@ useEffect(() => {
         </label>
 
         {/* Section 3 */}
-        <h1>Create a title for your spot</h1>
+        <h2>Create a title for your spot</h2>
         <p className="section-caption">
         Catch guests&apos; attention with a spot title that highlights what makes your place special.
         </p>
@@ -255,7 +260,7 @@ useEffect(() => {
         </label>
 
         {/* Section 4 */}
-        <h1>Set a base price for your spot</h1>
+        <h2>Set a base price for your spot</h2>
         <p className="section-caption">
         Competitive pricing can help your listing stand out and rank higher in search results.
         </p>
@@ -271,7 +276,7 @@ useEffect(() => {
         </label>
 
         {/* Section 5 */}
-        <h1>Liven up your spot with photos</h1>
+        <h2>Liven up your spot with photos</h2>
         <p className="section-caption">
         Submit a link to at least one photo to publish your spot.
         </p>

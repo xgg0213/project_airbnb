@@ -31,28 +31,32 @@ function LoginFormModal() {
   // validation
   const isSubmitDisabled = credential.length < 4 || password.length < 6;
   return (
-    <>
+    <div className='login-modal-container'>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='login-form'>
         <label>
-          Username or Email
+          {/* Username or Email */}
           <input
             type="text"
+            placeholder='Username or Email'
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
-            required
+            className='form-input'
+            // required
           />
           {credential && credential.length < 4 && (
             <p className="field-error">Username must be 4 or more characters</p>
           )}
         </label>
         <label>
-          Password
+          {/* Password */}
           <input
             type="password"
+            placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            className='form-input'
+            // required
           />
           {password && password.length < 6 && (
             <p className="field-error">Password must be 6 or more characters</p>
@@ -61,9 +65,9 @@ function LoginFormModal() {
         {errors.credential && (
           <p>{errors.credential}</p>
         )}
-        <button type="submit" disabled={isSubmitDisabled}>Log In</button>
+        <button type="submit" disabled={isSubmitDisabled} className='submit-button'>Log In</button>
       </form>
-    </>
+    </div>
   );
 }
 
