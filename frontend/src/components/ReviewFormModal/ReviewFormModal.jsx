@@ -47,20 +47,20 @@ function ReviewFormModal({ closeModal, spotId }) {
       <h2>How was your stay?</h2>
       {serverErrors && <p className="server-error">{serverErrors}</p>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Comment
+        {/* <label> */}
+          {/* Comment */}
           <textarea
             placeholder="Leave your review here..."
             value={review}
             onChange={(e) => setReview(e.target.value)}
           ></textarea>
           {errors.review && <p className="field-error">{errors.review}</p>}
-        </label>
+        {/* </label> */}
         <div className="star-rating">
-          <label>Stars</label>
+          
           <div className="stars">
             {[1, 2, 3, 4, 5].map((star) => (
-              <label key={star}>
+              <label key={star} className='star-label'>
                 <input
                   type="radio"
                   name="rating"
@@ -72,6 +72,7 @@ function ReviewFormModal({ closeModal, spotId }) {
               </label>
             ))}
           </div>
+          <h3>Stars</h3>
           {errors.rating && <p className="field-error">{errors.rating}</p>}
         </div>
         <button type="submit" disabled={isSubmitDisabled}>

@@ -1,0 +1,148 @@
+/* Overall modal container styling */
+.review-form-modal {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+  }
+
+  /* how was your stay */
+.review-form-modal h2 {
+    text-align: center;
+}
+  
+  /* Modal title */
+  .review-form-modal h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Error messages */
+  .server-error,
+  .field-error {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+  }
+  
+  /* Form styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Textarea for comments */
+  textarea {
+    /* display:flex;
+    justify-content: center; */
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  textarea:focus {
+    border-color: #0077ff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 119, 255, 0.5);
+  }
+  
+  /* Star rating container */
+  .star-rating {
+    width: 100%;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .star-rating h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  /* Stars */
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .star-rating input[type="radio"] {
+    display: none;
+  }
+  
+  .star {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    /* transition: color 0.2s ease-in-out; */
+  }
+
+  .star-rating input[type="radio"]:checked ~ .star {
+    color: #ffcc00;
+  }
+  
+  .star-rating input[type="radio"]:checked + .star,
+  .star:hover {
+    color: #ffcc00;
+    /* transform: scale(1.2); */
+  }
+
+  /* Ensure stars before the clicked star are also selected */
+.star:hover ~ .star {
+    transform: none;
+  }
+  
+.star-rating input[type="radio"]:checked + .star:hover ~ .star {
+    color: #ccc;
+}
+  
+  /* Submit button */
+  button[type="submit"] {
+    width: 80%;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #0077ff;
+    cursor: pointer;
+    box-shadow: 1px 5px 5px 5px;
+  }
+  
+  button[type="submit"]:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  button[type="submit"]:hover:enabled {
+    background-color: #0056cc;
+  }
+  
+  
+  /* Responsive design
+  @media (max-width: 600px) {
+    .review-form-modal {
+      padding: 15px;
+    }
+  
+    textarea {
+      height: 80px;
+    }
+  
+    .stars {
+      gap: 5px;
+    }
+  } */
