@@ -166,6 +166,7 @@ useEffect(() => {
             placeholder="Country"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
+            id='country-input'
           />
           {formSubmitted && errors.country && <p className="field-error">{errors.country}</p>}
         </label>
@@ -176,6 +177,7 @@ useEffect(() => {
             placeholder="Street Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            id='street-input'
           />
           {formSubmitted && errors.address && <p className="field-error">{errors.address}</p>}
         </label>
@@ -188,10 +190,11 @@ useEffect(() => {
               placeholder="City"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              id='city-input'
             />
             {formSubmitted && errors.city && <p className="field-error">{errors.city}</p>}
           </label>
-          <span className='comma'> , </span>
+          <span className='comma-state'> , </span>
           <label>
             State
             <input
@@ -199,34 +202,38 @@ useEffect(() => {
               placeholder="State"
               value={state}
               onChange={(e) => setState(e.target.value)}
+              id='state-input'
             />
             {formSubmitted && errors.state && <p className="field-error">{errors.state}</p>}
           </label>
 
         </div>
-        
-        <label>
-          Latitude
-          <input
-            type="number"
-            placeholder="lat"
-            value={lat}
-            onChange={(e) => setLat(e.target.value)}
-          />
-          {formSubmitted && errors.lat && <p className="field-error">{errors.lat}</p>}
-        </label>
-
-        <label>
-          Longitude
-          <input
-            type="number"
-            placeholder="lng"
-            value={lng}
-            onChange={(e) => setLng(e.target.value)}
-          />
-          {formSubmitted && errors.lng && <p className="field-error">{errors.lng}</p>}
-        </label>
-
+        <div className='lat-lng-containter'>
+          <label>
+            Latitude
+            <input
+              type="number"
+              placeholder="lat"
+              value={lat}
+              onChange={(e) => setLat(e.target.value)}
+              id='lat-input'
+            />
+            {formSubmitted && errors.lat && <p className="field-error">{errors.lat}</p>}
+          </label>
+            <span className='comma-lat'> , </span>
+          <label>
+            Longitude
+            <input
+              type="number"
+              placeholder="lng"
+              value={lng}
+              onChange={(e) => setLng(e.target.value)}
+              id='lng-input'
+            />
+            {formSubmitted && errors.lng && <p className="field-error">{errors.lng}</p>}
+          </label>
+        </div>
+        <hr className="divider" />
         {/* Section 2 */}
         <h2>Describe your place to guests</h2>
         <p className="section-caption">
@@ -234,39 +241,41 @@ useEffect(() => {
         wifi or parking, and what you love about the neighborhood.
         </p>
         <label>
-          Description
-          <textarea
-            placeholder="Please write at least 30 characters"
+          {/* Description */}
+          <input
+            placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
+            id='description'
+          ></input>
           {formSubmitted && errors.description && <p className="field-error">{errors.description}</p>}
         </label>
-
+        <hr className="divider" />
         {/* Section 3 */}
         <h2>Create a title for your spot</h2>
         <p className="section-caption">
         Catch guests&apos; attention with a spot title that highlights what makes your place special.
         </p>
         <label>
-          Title
+          {/* Title */}
           <input
             type="text"
             placeholder="Name of your spot"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            id='title-input'
           />
           {formSubmitted && errors.name && <p className="field-error">{errors.name}</p>}
         </label>
-
+        <hr className="divider" />
         {/* Section 4 */}
         <h2>Set a base price for your spot</h2>
         <p className="section-caption">
         Competitive pricing can help your listing stand out and rank higher in search results.
         </p>
-        <label>
-          Price
-          <input
+        <label id='price-section'>
+          {/* Price */}
+          $ <input
             type="number"
             placeholder="Price per night (USD)"
             value={price}
@@ -274,7 +283,7 @@ useEffect(() => {
           />
           {formSubmitted && errors.price && <p className="field-error">{errors.price}</p>}
         </label>
-
+        <hr className="divider" />
         {/* Section 5 */}
         <h2>Liven up your spot with photos</h2>
         <p className="section-caption">
@@ -287,11 +296,12 @@ useEffect(() => {
             placeholder="Preview Image URL"
             value={previewImage}
             onChange={(e) => setPreviewImage(e.target.value)}
+            id='image-url'
           />
           {formSubmitted && errors.previewImage && <p className="field-error">{errors.previewImage}</p>}
         </label>
         <label>
-          Image 1
+          {/* Image 1 */}
           <input
             type="text"
             placeholder="Image URL"
@@ -300,33 +310,40 @@ useEffect(() => {
           />
         </label>
         <label>
-          Image 2
+          {/* Image 2 */}
           <input
             type="text"
             placeholder="Image URL"
             value={image2}
             onChange={(e) => setImage2(e.target.value)}
+            id='image-url'
           />
         </label>
         <label>
-          Image 3
+          {/* Image 3 */}
           <input
             type="text"
             placeholder="Image URL"
             value={image3}
             onChange={(e) => setImage3(e.target.value)}
+            id='image-url'
           />
         </label>
         <label>
-          Image 4
+          {/* Image 4 */}
           <input
             type="text"
             placeholder="Image URL"
             value={image4}
             onChange={(e) => setImage4(e.target.value)}
+            id='image-url'
           />
         </label>
-        <button type="submit">{isUpdateMode ? 'Update your Spot' : 'Create Spot'}</button>
+        <hr className="divider" />
+        <div className="new-spot-button-container">
+        <button type="submit" id='new-spot-button'>{isUpdateMode ? 'Update your Spot' : 'Create Spot'}</button>
+        </div>
+        
       </form>
     </div>
   );

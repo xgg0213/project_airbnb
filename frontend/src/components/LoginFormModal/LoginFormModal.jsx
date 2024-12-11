@@ -20,12 +20,18 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        console.log(data.errors)
-        if (data && data.errors) {
+        if (data && data.message) {
           // setErrors(data.errors);
           setErrors({ credential: "The provided credentials were invalid" })
         }
       });
+  };
+
+  const handleDemoUserLogin = () => {
+    // Log in as a demo user
+    dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
+      .then(closeModal)
+      .catch((err) => console.error(err));
   };
 
   // validation
@@ -33,6 +39,9 @@ function LoginFormModal() {
   return (
     <div className='login-modal-container'>
       <h1>Log In</h1>
+      {errors.credential && (
+          <p>{errors.credential}</p>
+        )}
       <form onSubmit={handleSubmit} className='login-form'>
         <label>
           {/* Username or Email */}
@@ -42,7 +51,7 @@ function LoginFormModal() {
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             className='form-input'
-            // required
+
           />
           {credential && credential.length < 4 && (
             <p className="field-error">Username must be 4 or more characters</p>
@@ -56,16 +65,17 @@ function LoginFormModal() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className='form-input'
-            // required
+
           />
           {password && password.length < 6 && (
             <p className="field-error">Password must be 6 or more characters</p>
           )}
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
+        
         <button type="submit" disabled={isSubmitDisabled} className='submit-button'>Log In</button>
+        <button type="button" className="demo-user-button" onClick={handleDemoUserLogin}>
+          Demo User
+        </button>
       </form>
     </div>
   );

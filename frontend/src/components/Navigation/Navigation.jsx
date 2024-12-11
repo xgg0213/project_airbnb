@@ -40,7 +40,7 @@ function Navigation({ isLoaded }) {
             </NavLink>
         )}
         <button className="menu-toggle" onClick={toggleMenu}>
-          ☰ {isLoaded && <ProfileButton user={sessionUser} />}
+          {isLoaded && <ProfileButton user={sessionUser} />}
         </button>
         {/* {showMenu && (
           <div className="menu-dropdown">
