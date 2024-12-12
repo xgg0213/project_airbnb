@@ -13,7 +13,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import SpotsPage from './components/SpotsPage';
 import SpotDetail from './components/SpotDetails';
-import ManageSpots from './components/Navigation/ManageSpots';
+import ManageSpots from './components/ManageSpot'
 import SpotForm from './components/SpotForm/SpotForm';
 import * as sessionActions from './store/session';
 

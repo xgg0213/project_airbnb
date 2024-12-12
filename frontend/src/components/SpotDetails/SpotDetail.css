@@ -1,12 +1,71 @@
+/* Overall container for the page */
+.spot-details {
+  max-width: 1200px;
+  margin: 0 auto; /* Center the entire container */
+  padding: 20px;
+  text-align: left; /* Ensure all content is left-aligned */
+}
+
+/* images section */
+.images-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 20px 20px 20px 20px;
+  width: 100%; 
+}
+
+.large-image {
+  flex: 1; /* Ensures the large image and the small images take equal space */
+  max-width: 600px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.small-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  grid-template-rows: repeat(2, 1fr); /* Two equal rows */
+  gap: 8px; /* Spacing between images */
+  flex: 1; /* Matches the large image size */
+  max-width: 600px;
+}
+
+.small-image {
+  width: 100%; /* Each image takes full space of its grid cell */
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* .small-image:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+} */
+
+
+/* description & callout box */
+.details {
+  display: flex;
+  /* justify-content: column; */
+  gap: 300px;
+}
+
 .callout-box {
     background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    border: 2px solid black;
     border-radius: 8px;
-    padding: 20px;
-    max-width: 500px;
+    margin: 30px 50px 50px 50px;
+    width: 500px;
     font-size: 16px;
     /* float: center; */
     text-align: left;
+    /* display: flex;
+    justify-content: row; */
   }
   
   .callout-box h3 {
@@ -19,16 +78,20 @@
   }
 
   .reserve-button {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
+    /* display: block; */
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    margin: 10px 20px 10px 20px;
+    padding: 10px 50px;
     margin-top: 10px;
     background-color: #ff5a5f;
     color: white;
     font-size: 16px;
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     text-align: center;
   }
@@ -37,29 +100,97 @@
     background-color: #ff787c;
   }
 
-  /* Review Summary */
-.review-summary {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  }
-  
-  .review-summary .star-icon {
-    color: #ffa500; /* Gold for star */
-    margin-right: 10px;
-  }
-  
-  /* Reviews Section */
-  .reviews-section {
-    margin-top: 40px;
-  }
 
-  /* Centered Dot Styling */
-.dot {
-    margin: 0 8px;
-    font-size: 50px;
-    color: red;
-    vertical-align: middle;
-  }
+/* General Alignment for Both Sections */
+.review-summary,
+.reviews-section {
+  max-width: 800px; /* Optional: Set a max-width to limit section width */
+  margin: 0; /* Remove auto-centering */
+  text-align: left; /* Left-align content */
+  padding: 0; /* Remove additional padding */
+}
+
+/* Review Summary Section */
+.review-summary {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.review-summary .star-icon {
+  color: #f5c518; /* Gold color for star */
+  font-size: 2rem;
+}
+
+.review-summary .dot {
+  margin: 0 8px;
+  color: #888; /* Neutral color for dot */
+}
+
+/* Reviews Section */
+.reviews-section {
+  margin-top: 20px;
+}
+
+.post-review-button {
+  margin-bottom: 20px; /* Consistent spacing */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #007bff; /* Blue text */
+  background: none; /* No background */
+  border: 1px solid #007bff; /* Blue border */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.post-review-button:hover {
+  color: #0056b3; /* Darker blue text on hover */
+  border-color: #0056b3; /* Darker blue border on hover */
+}
+
+/* Individual Review Cards */
+.review-card {
+  margin-bottom: 20px;
+  padding: 0; /* No padding */
+  border: none; /* No border */
+}
+
+.review-card p {
+  margin: 8px 0;
+  color: #444;
+}
+
+.review-card .review-date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.delete-review-button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: #dc3545; /* Red text */
+  background: none; /* No background */
+  border: 1px solid #dc3545; /* Red border */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.delete-review-button:hover {
+  color: #a71d2a; /* Darker red text on hover */
+  border-color: #a71d2a; /* Darker red border on hover */
+}
+
+/* Empty State Text */
+.reviews-section > p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  text-align: left; /* Left-align text */
+}

@@ -10,6 +10,7 @@ const ManageSpots = () => {
   const currentSpots = useSelector((state) => state.spot.currentSpots || {});
   const navigate = useNavigate();
   const { setModalContent, closeModal} = useModal();
+  
 
   useEffect(() => {
     dispatch(fetchCurrentSpots());
@@ -75,7 +76,7 @@ const ManageSpots = () => {
       <div className="spot-list">
         {spotsArray.map((spot) => (
           <div key={spot.id} className="spot-tile" onClick={() => handleNavigate(spot.id)}>
-            {/* <Link to={`/spots/${spot.id}`} className="spot-link"> */}
+
               <div className="spot-content">
                 <img
                   src={spot.previewImage || '/default-thumbnail.jpg'}
@@ -108,7 +109,6 @@ const ManageSpots = () => {
                     className="delete-button"
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent navigation to /spots/:spotId
-                      console.log('Delete button clicked'); // Debugging
                       handleDeleteSpot(spot.id);
                     }}
                   >
@@ -116,7 +116,6 @@ const ManageSpots = () => {
                   </button>
                 </div>
               </div>
-             {/* </Link> where link should be */}
           </div>
         ))}
       </div>

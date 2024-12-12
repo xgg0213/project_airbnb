@@ -56,10 +56,10 @@ useEffect(() => {
         setPrice(spot.price?spot.price:'');
         setDescription(spot.description?spot.description:'');
         setPreviewImage(previewImage?previewImage:'');
-        setImage1(otherImages[0]?otherImages[0]:'');
-        setImage2(otherImages[1]?otherImages[1]:'');
-        setImage3(otherImages[2]?otherImages[2]:'');
-        setImage4(otherImages[3]?otherImages[3]:'');
+        setImage1(otherImages[0]?otherImages[0].url:'');
+        setImage2(otherImages[1]?otherImages[1].url:'');
+        setImage3(otherImages[2]?otherImages[2].url:'');
+        setImage4(otherImages[3]?otherImages[3].url:'');
         setErrors({});
         setFormSubmitted(false)
     } else {
@@ -273,16 +273,16 @@ useEffect(() => {
         <p className="section-caption">
         Competitive pricing can help your listing stand out and rank higher in search results.
         </p>
-        <label id='price-section'>
-          {/* Price */}
-          $ <input
+        <div id='price-section'>
+          <div id='dollor-sign'>$ </div> 
+          <input
             type="number"
             placeholder="Price per night (USD)"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
           {formSubmitted && errors.price && <p className="field-error">{errors.price}</p>}
-        </label>
+        </div>
         <hr className="divider" />
         {/* Section 5 */}
         <h2>Liven up your spot with photos</h2>
@@ -290,7 +290,6 @@ useEffect(() => {
         Submit a link to at least one photo to publish your spot.
         </p>
         <label>
-          Preview Image
           <input
             type="text"
             placeholder="Preview Image URL"

@@ -20,7 +20,7 @@ const SpotDetails = () => {
 
   const spot = useSelector((state) => state.spot?state.spot.singleSpot:{});
   const reviews = useSelector((state) => state.review ? state.review.spotReviews : {});
-  const spotImages = spot.SpotImagesn||[]; 
+  const spotImages = spot.SpotImages||[]; 
   const currentUser = useSelector((state) => state.session.user);
   const reviews_array = Object.values(reviews);
 
@@ -91,7 +91,7 @@ const SpotDetails = () => {
     );
   };
 
-
+  
   return (
     <div className='spot-details'>
       <h1>{spot?.name}</h1>
@@ -118,30 +118,35 @@ const SpotDetails = () => {
         </div>
       </div>
       
-      <p className="hosted-by">
-        Hosted by {spot.Owner?.firstName} {spot.Owner?.lastName}
-      </p>
-
-      <p className="description">{spot.description}</p>
-
-      {/* callout info box */}
-      <div className="callout-box">
-        <h3>Details</h3>
-        <p>Price: ${spot.price} <span>night</span></p>
-        <p>Rating: 
-          {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-          {hasReviews && (
-            <>
-              <span className="dot">·</span> 
-              {spot.numReviews} Review {spot.numReviews !== 1 ? 's' : ''}
-            </>
-          )}
-        </p>
-        {/* Reserve Button */}
-        <button className="reserve-button" onClick={handleReserveClick}>
-          Reserve
-        </button>
+      <div className='details'>
+        <div className='details-text'>
+          <h4 className="hosted-by">
+            Hosted by {spot.Owner?.firstName} {spot.Owner?.lastName}
+          </h4>
+          <p className="description">{spot.description}</p>
+        </div>
+        
+        {/* callout info box */}
+        <div className="callout-box">
+          <p>${spot.price} <span>night</span></p>
+          <p>
+            {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+            {hasReviews && (
+              <>
+                <span className="dot">·</span> 
+                {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
+              </>
+            )}
+          </p>
+          {/* Reserve Button */}
+          <button className="reserve-button" onClick={handleReserveClick}>
+            Reserve
+          </button>
+        </div>
       </div>
+      
+      <hr className="divider" />
+      
 
         {/* Review Summary Info Before Reviews */}
         <div className="review-summary">
@@ -159,7 +164,6 @@ const SpotDetails = () => {
 
         {/* Review Section */}
         <div className="reviews-section">
-          <h3>Reviews</h3>
           {/* Conditionally show Post Your Review button */}
           {currentUser && !isOwner && !alreadyReviewed && (
             <button className="post-review-button" onClick={openReviewModal}>
@@ -172,10 +176,11 @@ const SpotDetails = () => {
           sortedReviews.map((review) => (
             <div key={review.id} className="review-card">
               <p><strong>{review.User?.firstName}</strong></p>
-              <p>{review.review}</p>
               <p className="review-date">
                 {new Date(review.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' })}
               </p>
+              <p>{review.review}</p>
+              
               {currentUser?.id === review.userId && (
                 <button
                   className="delete-review-button"
