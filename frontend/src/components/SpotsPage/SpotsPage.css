@@ -1,3 +1,5 @@
+
+/* general styling */
 .spots-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -6,11 +8,13 @@
     text-align: center;
   }
   
-  h1 {
+.spot-page h1 {
     margin-bottom: 20px;
     font-size: 32px;
-    /* color: red */
+    display: flex;
+    justify-content: center;
   }
+
   
   .spots-grid {
     display: grid;
@@ -25,6 +29,8 @@
     overflow: hidden;
     text-align: left;
     background-color: #f9f9f9;
+    /* display:flex;
+    justify-content: space-between; */
     transition: transform 0.2s, box-shadow 0.2s;
   }
   
@@ -40,35 +46,35 @@
   }
   
   .spot-tile h3 {
-    margin: 10px;
-    font-size: 18px;
+    /* margin: 10px; */
+    font-size: 10px;
     color: #333;
   }
+
+  #spot-tile-description {
+    display: flex;
+    justify-content: space-between;
+  }
   
-  /* why having below prevents the classNames under p element not working*/
-  /* .spot-tile p {
-    margin: 10px;
-    font-size: 14px;
-    color: #666;
 
-  } */
-
-  .price {
-    color: red
+  #price {
+    color: black;
+    text-decoration: none !important;
+    font-size: 10px;
   }
 
   .thumbnail-image {
     width: 100%;
     height: 150px; 
-    object-fit: cover; /* Ensures the image is cropped proportionally */
-    border-radius: 400px;
+    object-fit: cover; 
+    /* border-radius: 400px; */
     margin: 10px 0;
   }
 
   .star-rating {
     font-size: 14px;
     font-weight: bold;
-    color: #883343; 
+    color: orange; 
     margin-top: 5px;
   }
 

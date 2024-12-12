@@ -33,7 +33,7 @@ function Navigation({ isLoaded }) {
         {sessionUser && (
             <NavLink
               to="/spots/new"
-              className="nav-new-spot"
+              id="nav-new-spot"
               onClick={toggleMenu}
             >
               Create a New Spot
@@ -42,15 +42,6 @@ function Navigation({ isLoaded }) {
         <button className="menu-toggle" onClick={toggleMenu}>
           {isLoaded && <ProfileButton user={sessionUser} />}
         </button>
-        {/* {showMenu && (
-          <div className="menu-dropdown">
-            <NavLink to="/" className="nav-link" onClick={toggleMenu}>
-              Home
-            </NavLink>
-            
-          </div>
-        )} */}
-        {/* {isLoaded && <ProfileButton user={sessionUser} />} */}
 
       </div>
       

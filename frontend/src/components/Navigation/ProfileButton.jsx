@@ -9,6 +9,7 @@ import * as sessionActions from '../../store/session';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import OpenModalMenuItem from './OpenModalMenuItem';
+import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -49,45 +50,45 @@ function ProfileButton({ user }) {
   return (
     <div onClick={toggleMenu}>
       <>☰</>
-      <button >
+      <button id='menu-button'>
         <FaUserCircle />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
-            <li>Hello, {user.firstName}</li>
+          <div>
+            <div>Hello, {user.firstName}</div>
             {/* <li>{user.firstName} {user.lastName}</li> */}
-            <li>{user.email}</li>
-            <li>
+            <div>{user.email}</div>
+            <div>
               <NavLink to="/spots/current" onClick={closeMenu}>
                 Manage Spots
               </NavLink>
-            </li>
-            <li>
+            </div>
+            <div>
               <button onClick={logout}>Log Out</button>
-            </li>
-          </>
+            </div>
+          </div>
         ) : (
-          <>
-            <li>
+          <div>
+            <div>
               <OpenModalMenuItem
                 // buttonText="Log In"
                 itemText = "Log In"
                 onButtonClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
-            </li>
-            <li>
+            </div>
+            <div>
               <OpenModalMenuItem
                 // buttonText="Sign Up"
                 itemText = 'Sign Up'
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
-            </li>
-          </>
+            </div>
+          </div>
         )}
-      </ul>
+      </div>
     </div>
   );
 }

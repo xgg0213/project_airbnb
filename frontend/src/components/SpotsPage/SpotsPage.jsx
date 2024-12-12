@@ -31,16 +31,19 @@ const SpotsPage = () => {
                             alt={`${spot.city}, ${spot.state}`} className="thumbnail-image">
                         </img>
                         {/*  add spot name with star rating */}
-                        <div className="spot-name-rating">
-                            <h3>{spot.city}</h3>
-                            <p className="star-rating">
-                            <span className="star-icon">★</span>
-                            {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-                            </p>
+                        <div id='spot-tile-description'>
+                          <h3>{spot.city}</h3>
+                          <h3>{spot.state}</h3>
+                          <div className="spot-name-rating">
+                              <p className="star-rating">
+                              <span className="star-icon">★</span>
+                              {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+                              </p>
+                          </div>
+                          
+                          
                         </div>
-                        <h3>{spot.city}</h3>
-                        <p>{spot.state}</p>
-                        <p className="price">${spot.price} night</p>
+                        <p id="price">${spot.price} night</p>
                     </div>
                 </Link>
                 

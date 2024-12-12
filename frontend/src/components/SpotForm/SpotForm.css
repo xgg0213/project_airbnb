@@ -1,11 +1,11 @@
-h1 {
+.new-spot-form-container h1 {
   text-align: left;
   font-size: 40px;
   margin-bottom: 20px;
   color: #333;
 }
 
-h2 {
+.new-spot-form-container h2 {
   text-align: left;
 }
 

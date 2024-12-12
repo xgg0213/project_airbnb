@@ -43,8 +43,7 @@ function LoginFormModal() {
           <p>{errors.credential}</p>
         )}
       <form onSubmit={handleSubmit} className='login-form'>
-        <label>
-          {/* Username or Email */}
+     
           <input
             type="text"
             placeholder='Username or Email'
@@ -56,9 +55,8 @@ function LoginFormModal() {
           {credential && credential.length < 4 && (
             <p className="field-error">Username must be 4 or more characters</p>
           )}
-        </label>
-        <label>
-          {/* Password */}
+
+
           <input
             type="password"
             placeholder='Password'
@@ -70,7 +68,6 @@ function LoginFormModal() {
           {password && password.length < 6 && (
             <p className="field-error">Password must be 6 or more characters</p>
           )}
-        </label>
         
         <button type="submit" disabled={isSubmitDisabled} className='submit-button'>Log In</button>
         <button type="button" className="demo-user-button" onClick={handleDemoUserLogin}>
