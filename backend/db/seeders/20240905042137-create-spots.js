@@ -92,6 +92,18 @@ module.exports = {
       description: "A tranquil sanctuary in Sydney featuring feline-inspired decor and a peaceful atmosphere for a relaxing getaway.",
       price: 190
     },
+    {
+      ownerId: 1,
+      address: "123 Purr Lane",
+      city: "Melbourne",
+      state: "VIC",
+      country: "Australia",
+      lat: -37.8136,
+      lng: 144.9631,
+      name: "Melbourne Cat Retreat",
+      description: "An elegant retreat in Melbourne, designed with cat lovers in mind. This charming getaway offers cozy furnishings, unique feline-themed decor, and a tranquil ambiance that makes it perfect for relaxation. Located in a vibrant neighborhood, it provides easy access to Melbourne's renowned cafes, parks, and cultural attractions. Whether you're seeking a quiet escape or a luxurious base to explore the city, this retreat guarantees a memorable stay filled with comfort and whimsy.",
+      price: 250
+    }
 
    ], {validate: true})
   },
@@ -178,6 +190,18 @@ module.exports = {
         description: "A tranquil sanctuary in Sydney featuring feline-inspired decor and a peaceful atmosphere for a relaxing getaway.",
         price: 190
       },
+      {
+        ownerId: 1,
+        address: "123 Purr Lane",
+        city: "Melbourne",
+        state: "VIC",
+        country: "Australia",
+        lat: -37.8136,
+        lng: 144.9631,
+        name: "Melbourne Cat Retreat",
+        description: "An elegant retreat in Melbourne, designed with cat lovers in mind. This charming getaway offers cozy furnishings, unique feline-themed decor, and a tranquil ambiance that makes it perfect for relaxation. Located in a vibrant neighborhood, it provides easy access to Melbourne's renowned cafes, parks, and cultural attractions. Whether you're seeking a quiet escape or a luxurious base to explore the city, this retreat guarantees a memorable stay filled with comfort and whimsy.",
+        price: 250
+      }
     ], 
     {});
   }

@@ -170,6 +170,31 @@ module.exports = {
       url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
+    {
+      spotId: 7,
+      url: "https://images.pexels.com/photos/1082255/pexels-photo-1082255.jpeg?auto=compress&cs=tinysrgb&w=600",
+      preview: true
+    },
+    {
+      spotId: 7,
+      url: "https://images.pexels.com/photos/161005/cat-kitten-pets-tom-cat-161005.jpeg?auto=compress&cs=tinysrgb&w=600",
+      preview: false
+    },
+    {
+      spotId: 7,
+      url: "https://images.pexels.com/photos/1208938/pexels-photo-1208938.jpeg?auto=compress&cs=tinysrgb&w=600",
+      preview: false
+    },
+    {
+      spotId: 7,
+      url: "https://images.pexels.com/photos/2756100/pexels-photo-2756100.png?auto=compress&cs=tinysrgb&w=600",
+      preview: false
+    },
+    {
+      spotId: 7,
+      url: "https://images.pexels.com/photos/5468435/pexels-photo-5468435.jpeg?auto=compress&cs=tinysrgb&w=600",
+      preview: false
+    },
 
    ], {validate:true})
   },
@@ -332,6 +357,31 @@ module.exports = {
       {
         spotId: 6,
         url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
+        preview: false
+      },
+      {
+        spotId: 7,
+        url: "https://images.pexels.com/photos/1082255/pexels-photo-1082255.jpeg?auto=compress&cs=tinysrgb&w=600",
+        preview: true
+      },
+      {
+        spotId: 7,
+        url: "https://images.pexels.com/photos/161005/cat-kitten-pets-tom-cat-161005.jpeg?auto=compress&cs=tinysrgb&w=600",
+        preview: false
+      },
+      {
+        spotId: 7,
+        url: "https://images.pexels.com/photos/1208938/pexels-photo-1208938.jpeg?auto=compress&cs=tinysrgb&w=600",
+        preview: false
+      },
+      {
+        spotId: 7,
+        url: "https://images.pexels.com/photos/2756100/pexels-photo-2756100.png?auto=compress&cs=tinysrgb&w=600",
+        preview: false
+      },
+      {
+        spotId: 7,
+        url: "https://images.pexels.com/photos/5468435/pexels-photo-5468435.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
     ], 
