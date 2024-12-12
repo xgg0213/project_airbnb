@@ -68,6 +68,18 @@ module.exports = {
       review: "Fantastic stay! The Cozy Kitty Condo was everything I hoped for and more.",
       stars: 5
     },
+    {
+      userId: 1,
+      spotId: 4,
+      review: "The place was a delightful retreat! Loved the peaceful ambiance and clean facilities. A minor improvement could be better Wi-Fi.",
+      stars: 4
+    },
+    {
+      userId: 1,
+      spotId: 3,
+      review: "Amazing stay! The host was incredibly welcoming, and the location was perfect for exploring the nearby attractions. Highly recommend this spot!",
+      stars: 5
+    },
    ])
   },
 
@@ -127,6 +139,18 @@ module.exports = {
         userId: 9,
         spotId: 1,
         review: "Fantastic stay! The Cozy Kitty Condo was everything I hoped for and more.",
+        stars: 5
+      },
+      {
+        userId: 1,
+        spotId: 4,
+        review: "The place was a delightful retreat! Loved the peaceful ambiance and clean facilities. A minor improvement could be better Wi-Fi.",
+        stars: 4
+      },
+      {
+        userId: 1,
+        spotId: 3,
+        review: "Amazing stay! The host was incredibly welcoming, and the location was perfect for exploring the nearby attractions. Highly recommend this spot!",
         stars: 5
       },
 
