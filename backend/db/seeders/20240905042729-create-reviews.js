@@ -21,35 +21,53 @@ module.exports = {
     */
    await Review.bulkCreate([
     {
-      userId:2,
-      spotId:1,
-      review: "sample review left by user2 for spot1",
-      stars:4
+      userId: 2,
+      spotId: 1,
+      review: "The kitty condo was lovely, but I felt it could use a bit more light during the day.",
+      stars: 4
     },
     {
-      userId:3,
-      spotId:2,
-      review:"sample review left by user3 for spot2",
-      stars:5
+      userId: 3,
+      spotId: 2,
+      review: "Absolutely loved the Parisian Cat Haven! Every detail was thoughtful and charming.",
+      stars: 5
     },
     {
-      userId:4,
-      spotId:1,
-      review:"sample review left by user4 for spot1",
-      stars:5
+      userId: 4,
+      spotId: 1,
+      review: "The decor was adorable and the location perfect. Highly recommend for cat lovers!",
+      stars: 5
     },
     {
-      userId:5,
-      spotId:2,
-      review:"sample review left by user5 for spot2",
-      stars:3
+      userId: 5,
+      spotId: 2,
+      review: "The place was decent but lacked some of the amenities promised in the listing.",
+      stars: 3
     },
     {
-      userId:5,
-      spotId:3,
-      review:"sample review left by user5 for spot3",
-      stars:5
-    }
+      userId: 5,
+      spotId: 3,
+      review: "Tokyo Cat Loft exceeded my expectations! A wonderful experience for any feline fan.",
+      stars: 5
+    },
+    {
+      userId: 8,
+      spotId: 6,
+      review: "The Sydney Cat Sanctuary was okay, but it felt a bit outdated compared to the photos.",
+      stars: 2
+    },
+    {
+      userId: 9,
+      spotId: 3,
+      review: "Great location and beautifully designed space! Just a little noisy at night.",
+      stars: 4
+    },
+    {
+      userId: 9,
+      spotId: 1,
+      review: "Fantastic stay! The Cozy Kitty Condo was everything I hoped for and more.",
+      stars: 5
+    },
    ])
   },
 
@@ -64,35 +82,54 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, [
       {
-        userId:2,
-        spotId:1,
-        review:"sample review left by user2 for spot1",
-        stars:4
+        userId: 2,
+        spotId: 1,
+        review: "The kitty condo was lovely, but I felt it could use a bit more light during the day.",
+        stars: 4
       },
       {
-        userId:3,
-        spotId:2,
-        review:"sample review left by user3 for spot2",
-        stars:5
+        userId: 3,
+        spotId: 2,
+        review: "Absolutely loved the Parisian Cat Haven! Every detail was thoughtful and charming.",
+        stars: 5
       },
       {
-        userId:4,
-        spotId:1,
-        review:"sample review left by user4 for spot1",
-        stars:5
+        userId: 4,
+        spotId: 1,
+        review: "The decor was adorable and the location perfect. Highly recommend for cat lovers!",
+        stars: 5
       },
       {
-        userId:5,
-        spotId:2,
-        review:"sample review left by user5 for spot2",
-        stars:3
+        userId: 5,
+        spotId: 2,
+        review: "The place was decent but lacked some of the amenities promised in the listing.",
+        stars: 3
       },
       {
-        userId:5,
-        spotId:3,
-        review:"sample review left by user5 for spot3",
-        stars:5
-      }
+        userId: 5,
+        spotId: 3,
+        review: "Tokyo Cat Loft exceeded my expectations! A wonderful experience for any feline fan.",
+        stars: 5
+      },
+      {
+        userId: 8,
+        spotId: 6,
+        review: "The Sydney Cat Sanctuary was okay, but it felt a bit outdated compared to the photos.",
+        stars: 2
+      },
+      {
+        userId: 9,
+        spotId: 3,
+        review: "Great location and beautifully designed space! Just a little noisy at night.",
+        stars: 4
+      },
+      {
+        userId: 9,
+        spotId: 1,
+        review: "Fantastic stay! The Cozy Kitty Condo was everything I hoped for and more.",
+        stars: 5
+      },
+
     ], 
     {});
   }

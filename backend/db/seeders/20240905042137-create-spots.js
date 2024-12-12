@@ -21,41 +21,78 @@ module.exports = {
     */
    await Spot.bulkCreate([
     {
-      ownerId:1,
-      address:"address1",
-      city:"NYC",
-      state:"NY",
-      country:"USA",
+      ownerId: 1,
+      address: "123 Kitty Lane",
+      city: "New York",
+      state: "NY",
+      country: "USA",
       lat: 40.7128,
       lng: -74.0060,
-      name:"name1",
-      description:"sample spot description NYC 1",
-      price: 100
+      name: "Cozy Kitty Condo",
+      description: "A purr-fectly cozy condo in NYC, complete with kitty-themed decor and a cat-friendly atmosphere.",
+      price: 150
     },
     {
-      ownerId:2,
-      address:"address2",
-      city:"Paris",
-      state:"Paris",
-      country:"France",
+      ownerId: 2,
+      address: "456 Catnip Street",
+      city: "Paris",
+      state: "Paris",
+      country: "France",
       lat: 48.8566,
       lng: 2.3522,
-      name:"name2",
-      description:"sample spot description Paris 1",
-      price: 110
+      name: "Parisian Cat Haven",
+      description: "A chic Parisian apartment designed with cat lovers in mind. Enjoy a relaxing stay with plenty of cat-themed amenities.",
+      price: 200
     },
     {
-      ownerId:3,
-      address:"address3",
-      city:"Tokyo",
-      state:"Tokyo",
-      country:"Japan",
+      ownerId: 3,
+      address: "789 Meow Avenue",
+      city: "Tokyo",
+      state: "Tokyo",
+      country: "Japan",
       lat: 35.6762,
       lng: 139.6503,
-      name:"name3",
-      description:"sample spot description Tokyo 1",
-      price: 120
-    }
+      name: "Tokyo Cat Loft",
+      description: "A modern Tokyo loft featuring playful cat murals and cozy nooks for relaxation. Perfect for feline enthusiasts.",
+      price: 170
+    },
+    {
+      ownerId: 4,
+      address: "321 Paw Place",
+      city: "Los Angeles",
+      state: "CA",
+      country: "USA",
+      lat: 34.0522,
+      lng: -118.2437,
+      name: "Hollywood Cat Retreat",
+      description: "Stay like a star in this Hollywood retreat with luxurious cat-inspired interiors and breathtaking city views.",
+      price: 250
+    },
+    {
+      ownerId: 5,
+      address: "654 Feline Blvd",
+      city: "London",
+      state: "London",
+      country: "United Kingdom",
+      lat: 51.5074,
+      lng: -0.1278,
+      name: "British Cat Cottage",
+      description: "A charming cottage in London filled with cat-themed charm and cozy comfort for a memorable stay.",
+      price: 180
+    },
+    {
+      ownerId: 6,
+      address: "987 Whisker Way",
+      city: "Sydney",
+      state: "NSW",
+      country: "Australia",
+      lat: -33.8688,
+      lng: 151.2093,
+      name: "Sydney Cat Sanctuary",
+      description: "A tranquil sanctuary in Sydney featuring feline-inspired decor and a peaceful atmosphere for a relaxing getaway.",
+      price: 190
+    },
+
    ], {validate: true})
   },
 
@@ -70,41 +107,77 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, [
       {
-        ownerId:1,
-        address:"address1",
-        city:"NYC",
-        state:"NY",
-        country:"USA",
+        ownerId: 1,
+        address: "123 Kitty Lane",
+        city: "New York",
+        state: "NY",
+        country: "USA",
         lat: 40.7128,
         lng: -74.0060,
-        name:"name1",
-        description:"sample spot description NYC 1",
-        price: 100
+        name: "Cozy Kitty Condo",
+        description: "A purr-fectly cozy condo in NYC, complete with kitty-themed decor and a cat-friendly atmosphere.",
+        price: 150
       },
       {
-        ownerId:2,
-        address:"address2",
-        city:"Paris",
-        state:"Paris",
-        country:"France",
+        ownerId: 2,
+        address: "456 Catnip Street",
+        city: "Paris",
+        state: "Paris",
+        country: "France",
         lat: 48.8566,
         lng: 2.3522,
-        name:"name2",
-        description:"sample spot description Paris 1",
-        price: 110
+        name: "Parisian Cat Haven",
+        description: "A chic Parisian apartment designed with cat lovers in mind. Enjoy a relaxing stay with plenty of cat-themed amenities.",
+        price: 200
       },
       {
-        ownerId:3,
-        address:"address3",
-        city:"Tokyo",
-        state:"Tokyo",
-        country:"Japan",
+        ownerId: 3,
+        address: "789 Meow Avenue",
+        city: "Tokyo",
+        state: "Tokyo",
+        country: "Japan",
         lat: 35.6762,
         lng: 139.6503,
-        name:"name3",
-        description:"sample spot description Tokyo 1",
-        price: 120
-      }
+        name: "Tokyo Cat Loft",
+        description: "A modern Tokyo loft featuring playful cat murals and cozy nooks for relaxation. Perfect for feline enthusiasts.",
+        price: 170
+      },
+      {
+        ownerId: 4,
+        address: "321 Paw Place",
+        city: "Los Angeles",
+        state: "CA",
+        country: "USA",
+        lat: 34.0522,
+        lng: -118.2437,
+        name: "Hollywood Cat Retreat",
+        description: "Stay like a star in this Hollywood retreat with luxurious cat-inspired interiors and breathtaking city views.",
+        price: 250
+      },
+      {
+        ownerId: 5,
+        address: "654 Feline Blvd",
+        city: "London",
+        state: "London",
+        country: "United Kingdom",
+        lat: 51.5074,
+        lng: -0.1278,
+        name: "British Cat Cottage",
+        description: "A charming cottage in London filled with cat-themed charm and cozy comfort for a memorable stay.",
+        price: 180
+      },
+      {
+        ownerId: 6,
+        address: "987 Whisker Way",
+        city: "Sydney",
+        state: "NSW",
+        country: "Australia",
+        lat: -33.8688,
+        lng: 151.2093,
+        name: "Sydney Cat Sanctuary",
+        description: "A tranquil sanctuary in Sydney featuring feline-inspired decor and a peaceful atmosphere for a relaxing getaway.",
+        price: 190
+      },
     ], 
     {});
   }
