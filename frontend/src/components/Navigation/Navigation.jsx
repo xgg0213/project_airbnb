@@ -26,7 +26,7 @@ function Navigation({ isLoaded }) {
     <nav className="navigation-bar">
       <div className='nav-left'>
         <NavLink to='/'>
-          <img src='/airbnb-logo.png' alt='Site Logo' className='site-logo' />
+          <img src='/site-logo-2.png' alt='Site Logo' className='site-logo' />
         </NavLink>
       </div>
       <div className="nav-right">

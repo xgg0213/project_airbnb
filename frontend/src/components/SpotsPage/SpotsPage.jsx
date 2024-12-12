@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSpots } from '../../store/spot';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './SpotsPage.css'
 
 const SpotsPage = () => {
@@ -11,7 +11,7 @@ const SpotsPage = () => {
   useEffect(() => {
     dispatch(fetchAllSpots());
   }, [dispatch]);
-//   console.log(spots)
+
   const spots_array=Object.values(spots);
 
   if (!spots_array.length) return <p>No spots available</p>;
@@ -19,36 +19,31 @@ const SpotsPage = () => {
   return (
     <div className='spots-page'>
         <h1>Explore Spots</h1>
-        <div className='spots-grid'>
-            {spots_array.map((spot) => (
-                <Link to={`/spots/${spot.id}`} 
-                    className="spot-link" 
-                    title={spot.name} // Tooltip text
-                    key={spot.id}
-                >
-                    <div className='spot-tile' key={spot.id}>
-                        <img src={spot.previewImage} 
-                            alt={`${spot.city}, ${spot.state}`} className="thumbnail-image">
-                        </img>
-                        {/*  add spot name with star rating */}
-                        <div id='spot-tile-description'>
-                          <h3>{spot.city}</h3>
-                          <h3>{spot.state}</h3>
-                          <div className="spot-name-rating">
-                              <p className="star-rating">
-                              <span className="star-icon">★</span>
-                              {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-                              </p>
-                          </div>
-                          
-                          
-                        </div>
-                        <p id="price">${spot.price} night</p>
-                    </div>
-                </Link>
-                
-            ))}  
-        </div>
+        <div className="spots-grid">
+        {spots_array.map((spot) => (
+          <NavLink to={`/spots/${spot.id}`} className="spot-link" key={spot.id}>
+            <div className="spot-tile">
+              <div className="spot-tooltip">{spot.name}</div> 
+              <img
+                src={spot.previewImage}
+                alt={`${spot.city}, ${spot.state}`}
+                className="spot-image"
+              />
+              <div id="spot-tile-description">
+                <h3>{spot.city}, {spot.state}</h3>
+                <div className="spot-name-rating">
+                  <p className="star-rating">
+                    <span className="star-icon">★</span>
+                    {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+                  </p>
+                </div>
+              </div>
+              <div id="price">${spot.price} night</div>
+            </div>
+            
+          </NavLink>
+        ))}
+      </div>
     </div>
   );
 };

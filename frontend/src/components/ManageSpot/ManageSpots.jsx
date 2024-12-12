@@ -70,9 +70,21 @@ const ManageSpots = () => {
     navigate(`/spots/${spotId}`);
   };
 
+  const handleCreateSpot = () => {
+    navigate('/spots/new')
+  }
+
   return (
     <div className="manage-spots">
-      <h1>Manage Spots</h1>
+      <h1>Manage Your Spots</h1>
+      <button 
+        className='create-new-spot'
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent navigation to /spots/:spotId
+          handleCreateSpot();
+        }}
+      >
+        Create a New Spot</button>
       <div className="spot-list">
         {spotsArray.map((spot) => (
           <div key={spot.id} className="spot-tile" onClick={() => handleNavigate(spot.id)}>

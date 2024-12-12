@@ -9,12 +9,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  /* background-color: #ffffff; */
+  background-color:#FAEDCD; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* position: sticky; */
   top: 0;
-  /* z-index: 1000; */
-  position:relative
+  position:relative;
+  border-radius: 8px;
 }
 
 /* Left Section - Logo */
@@ -26,6 +25,8 @@
 .site-logo {
   height: 40px;
   cursor: pointer;
+  border-radius: 8px;
+  padding: 1px 0 0 0;
   /* transition: transform 0.2s ease; */
 }
 
@@ -35,12 +36,10 @@
 
 
 /* Right Section - Menu & Buttons */
-/* .nav-right {
+.nav-right {
   display: flex;
   align-items: center;
-  position: relative;
-  gap: 15px;
-} */
+}
 
 #nav-new-spot {
   /* background-color: #ff385c; */
@@ -69,37 +68,6 @@
   gap: 8px;
 }
 
-
-/* .profile-dropdown {
-  width: 40px;
-} */
-
-/* Dropdown Menu */
-/* .menu-dropdown {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  z-index: 1000;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu-dropdown .nav-link {
-  padding: 10px;
-  text-decoration: none;
-  color: #333333;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-}
-
-.menu-dropdown .nav-link:hover {
-  background-color: #f7f7f7;
-} */
 
 
 /* Responsive Styling

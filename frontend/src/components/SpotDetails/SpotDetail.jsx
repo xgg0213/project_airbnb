@@ -128,16 +128,19 @@ const SpotDetails = () => {
         
         {/* callout info box */}
         <div className="callout-box">
-          <p>${spot.price} <span>night</span></p>
-          <p>
-            {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-            {hasReviews && (
-              <>
-                <span className="dot">·</span> 
-                {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
-              </>
-            )}
-          </p>
+          <div className='reviews-rating'>
+            <p>${spot.price} night </p>
+            <p>
+              {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+              {hasReviews && (
+                <>
+                  <span className="dot">·</span> 
+                  {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
+                </>
+              )}
+            </p>
+          </div>
+         
           {/* Reserve Button */}
           <button className="reserve-button" onClick={handleReserveClick}>
             Reserve
@@ -156,7 +159,7 @@ const SpotDetails = () => {
             {hasReviews && (
             <>
               <span className="dot">·</span> 
-              {spot.numReviews} Review {spot.numReviews !== 1 ? 's' : ''}
+              {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
             </>
           )}
           </h2>

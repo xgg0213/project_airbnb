@@ -1,84 +1,95 @@
+/* General Page Styling */
 
-/* general styling */
+.spot-link {
+  text-decoration: none;
+}
+
 .spots-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  
-.spot-page h1 {
-    margin-bottom: 20px;
-    font-size: 32px;
-    display: flex;
-    justify-content: center;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
 
-  
-  .spots-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 10px;
-  }
-  
-  .spot-tile {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: left;
-    background-color: #f9f9f9;
-    /* display:flex;
-    justify-content: space-between; */
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  /* .spot-tile:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  } */
-  
-  .spot-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
-  
-  .spot-tile h3 {
-    /* margin: 10px; */
-    font-size: 10px;
-    color: #333;
-  }
+.spots-page h1 {
+  margin-bottom: 20px;
+  font-size: 32px;
+}
 
-  #spot-tile-description {
-    display: flex;
-    justify-content: space-between;
-  }
-  
+/* Spots Grid */
+.spots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 10px;
 
-  #price {
-    color: black;
-    text-decoration: none !important;
-    font-size: 10px;
-  }
+}
 
-  .thumbnail-image {
-    width: 100%;
-    height: 150px; 
-    object-fit: cover; 
-    /* border-radius: 400px; */
-    margin: 10px 0;
-  }
+/* Spot Tile */
+.spot-tile {
+  position: relative; /* Enables positioning for the tooltip */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  overflow: hidden;
+  text-align: left;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
 
-  .star-rating {
-    font-size: 14px;
-    font-weight: bold;
-    color: orange; 
-    margin-top: 5px;
-  }
+.spot-tile:hover {
+  transform: scale(1.02); /* Subtle zoom effect */
+}
 
-  .star-icon {
-    margin-right: 5px;
-    font-size: 16px;
-  }
+/* Tooltip Styling */
+.spot-tooltip {
+  visibility: hidden; /*Initially hidden*/
+  position: absolute;
+}
+
+.spot-tile:hover + .spot-tooltip {
+  visibility: visible;
+  display:block;
+  color: red;
+}
+
+/* Spot Image */
+.spot-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Spot Description */
+#spot-tile-description {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.spot-tile h3 {
+  font-size: 14px;
+  color: #333;
+  margin: 12px 0 0 0;
+}
+
+/* Spot Price */
+#price {
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+  margin: 10px;
+}
+
+/* Star Rating */
+.star-rating {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.star-icon {
+  margin-right: 5px;
+}
