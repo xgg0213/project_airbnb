@@ -1,13 +1,52 @@
-/* #menu-button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+#menu-button {
+    border: none;
+    background-color: none;
     object-fit: cover;
-} */
+}
 
+#menu-button:hover {
+    cursor: pointer;
+}
 .profile-dropdown{
-    position:absolute;
+    position: absolute; /* Make the drop-down position independent of parent flow */
+
+    right: 0; /* Align the drop-down to the left edge of the container */
     border: 2px darkgray solid;
-    margin: 5px 50px 5px 5px;
-    width: 60px;
+    border-radius: 5px;
+    margin: 5px 5px 5px 0px;
+    padding: 5px;
+    width: 100px;
+    align-items: left;
+    text-decoration: none;
+}
+
+.profile-dropdown-details {
+    font-size: 10px;
+}
+
+#hello-name {
+    padding: 0px 0 3px 0;
+}
+
+#hello-email {
+    padding: 0 0 3px 0;
+}
+
+#hello-manage-spots {
+    padding: 0 0 3px 0;
+    text-decoration: none;
+}
+
+#log-out-button {
+    padding: 2px 8px 2px 8px;
+    font-size: 8px;
+    color: #fff;
+    background: #696969;
+    border: 1px solid #202020;
+    box-shadow: 1px 2px 2px 2px #202020;
+    cursor: pointer;
+}
+
+#initial-log-in, #initial-sign-up {
+    padding: 0 0px 0 8px;
 }

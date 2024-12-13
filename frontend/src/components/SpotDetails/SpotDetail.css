@@ -2,7 +2,8 @@
 .spot-details {
   max-width: 1200px;
   margin: 0 auto; /* Center the entire container */
-  padding: 20px;
+  /* padding: 20px; */
+  width: 90%;
   text-align: left; /* Ensure all content is left-aligned */
 }
 
@@ -35,11 +36,10 @@
 }
 
 .small-image {
-  width: 100%; /* Each image takes full space of its grid cell */
+  width: 100%; 
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
-  /* transition: transform 0.3s ease, box-shadow 0.3s ease; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -48,11 +48,17 @@
 /* description & callout box */
 .details {
   display: flex;
-  justify-content: space-between;
-  gap: 300px;
+  /* justify-content: space-around; */
+  /* gap: 300px; */
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+.details-text {
+  width: 180%;
+  text-align: left;
+  padding: 10px 0 0 0 ;
 }
 
 .callout-box {
@@ -61,17 +67,17 @@
   border: 2px solid darkgray;
   border-radius: 8px;
   margin: 30px 0 50px 50px;
-  width: 500px;
+  width: 100%;
   font-size: 16px;
   /* float: center; */
   text-align: left;
-  /* display: flex;
-  justify-content: space-between; */
+
 }
 
 .reviews-rating {
   display: flex;
   justify-content: space-between;
+  padding: 0 30px 0 30px;
 }
 
 .callout-box p {
@@ -80,12 +86,12 @@
 
 .reserve-button {
   /* display: block; */
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  margin: 10px 20px 10px 20px;
+  /* display: flex;
+  align-items: center; */
+  width: 70%;
+  margin: 10px 20px 20px 50px;
   padding: 10px 50px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   background-color: #CCD5AE;
   color: #D4A373;
   font-size: 16px;
@@ -129,7 +135,7 @@
 
 /* Reviews Section */
 .reviews-section {
-  margin-top: 20px;
+  padding: 0 0 30px 0;
   font-size: 15px;
 }
 
@@ -194,3 +200,67 @@
 
 
 /* Confirmation modal styling */
+.confirmation-modal {
+  width: 100%;
+}
+
+
+
+#confirm-question {
+  text-align: left;
+  line-height: 15px;;
+  font-size: 15px;
+  font-weight: none;
+  width: 100%;
+}
+
+
+/* Adjustable for screensizes */
+/* Responsive Design for Screens */
+@media (max-width: 768px) {
+  .images-container {
+    flex-direction: column;
+  }
+
+  .large-image,
+  .small-images {
+    max-width: 100%;
+    flex: none;
+  }
+
+  .details {
+    flex-direction: column;
+  }
+
+  .details-text {
+    width: 100%;
+  }
+
+  .callout-box {
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .reviews-section,
+  .review-summary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .small-images {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .post-review-button,
+  .delete-review-button {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .callout-box {
+    font-size: 14px;
+    padding: 15px;
+  }
+}

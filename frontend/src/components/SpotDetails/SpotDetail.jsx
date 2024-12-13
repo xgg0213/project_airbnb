@@ -72,7 +72,7 @@ const SpotDetails = () => {
     setModalContent(
       <div className="confirmation-modal">
         <h2>Confirm Delete</h2>
-        <p>Are you sure you want to delete this review?</p>
+        <p id='confirm-question'>Are you sure you want to delete this review?</p>
         <div className="confirmation-buttons">
           <button
             className="confirm-delete-button"
@@ -131,13 +131,14 @@ const SpotDetails = () => {
           <div className='reviews-rating'>
             <p>${spot.price} night </p>
             <p>
+            <span className="star-icon">★</span>
               {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-              {hasReviews && (
+              {hasReviews ? (
                 <>
-                  <span className="dot">·</span> 
+                  <span className="dot"> · </span> 
                   {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
                 </>
-              )}
+              ): null}
             </p>
           </div>
          
@@ -155,13 +156,13 @@ const SpotDetails = () => {
         <div className="review-summary">
           <h2>
             <span className="star-icon">★</span>
-            {spot.avgRating ? ` ${spot.avgRating.toFixed(1)}` : ' New'} 
-            {hasReviews && (
-            <>
-              <span className="dot">·</span> 
-              {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
-            </>
-          )}
+            {spot.avgRating ? `${spot.avgRating.toFixed(1)}` : 'New'} 
+            {hasReviews && spot.numReviews > 0 ? (
+              <>
+                <span className="dot">·</span> 
+                {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
+              </>
+            ) : null}
           </h2>
         </div>
 

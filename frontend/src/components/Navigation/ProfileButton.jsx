@@ -55,35 +55,35 @@ function ProfileButton({ user }) {
       </button>
       <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <div>
-            <div>Hello, {user.firstName}</div>
+          <div className='profile-dropdown-details'>
+            <div id='hello-name'>Hello, {user.firstName}</div>
             {/* <li>{user.firstName} {user.lastName}</li> */}
-            <div>{user.email}</div>
-            <div>
+            <div id='hello-email'>{user.email}</div>
+            <div id='hello-manage-spots'>
               <NavLink to="/spots/current" onClick={closeMenu}>
                 Manage Spots
               </NavLink>
             </div>
-            <div>
-              <button onClick={logout}>Log Out</button>
+            <div >
+              <button id='log-out-button' onClick={logout}>Log Out</button>
             </div>
           </div>
         ) : (
           <div>
-            <div>
-              <OpenModalMenuItem
-                // buttonText="Log In"
-                itemText = "Log In"
-                onButtonClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
-            </div>
-            <div>
+            <div id='initial-sign-up'>
               <OpenModalMenuItem
                 // buttonText="Sign Up"
                 itemText = 'Sign Up'
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
+              />
+            </div>
+            <div id='initial-log-in'>
+              <OpenModalMenuItem
+                // buttonText="Log In"
+                itemText = "Log In"
+                onButtonClick={closeMenu}
+                modalComponent={<LoginFormModal />}
               />
             </div>
           </div>

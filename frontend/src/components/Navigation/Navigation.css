@@ -43,9 +43,9 @@
 
 #nav-new-spot {
   /* background-color: #ff385c; */
-  color: darkslateblue;
+  color: #696969;
   padding: 8px 16px;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   text-decoration: none;
   font-size: 14px;
   font-weight: bold;
@@ -53,13 +53,13 @@
 }
 
 #nav-new-spot:hover {
-  background-color: gray;
+  transform: scale(1.02);
 }
 
 .menu-toggle {
   background: none;
-  /* border: 1px solid black; */
-  border-radius: 20px; 
+  border: 1.5px solid #202020;
+  border-radius: 15px; 
   /* border: 5px solid black; */
   cursor: pointer;
   font-size: 18px;

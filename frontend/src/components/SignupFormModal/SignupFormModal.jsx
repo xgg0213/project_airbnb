@@ -62,7 +62,7 @@ function SignupFormModal() {
             
           />
 
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p id='signup-error'>{errors.firstName}</p>}
 
           <input
             type="text"
@@ -72,7 +72,7 @@ function SignupFormModal() {
             
           />
 
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p id='signup-error'>{errors.lastName}</p>}
           <input
             type="text"
             placeholder='Email'
@@ -81,7 +81,7 @@ function SignupFormModal() {
             
           />
 
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p id='signup-error'>{errors.email}</p>}
 
         <input
             type="text"
@@ -91,7 +91,7 @@ function SignupFormModal() {
             
           />
  
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p id='signup-error'>{errors.username}</p>}
 
 
           <input
@@ -101,7 +101,7 @@ function SignupFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             
           />
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p id='signup-error'>{errors.password}</p>}
 
           <input
             type="password"
@@ -111,7 +111,7 @@ function SignupFormModal() {
             
           />
         {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
+          <p id='signup-error'>{errors.confirmPassword}</p>
         )}
         <button type="submit" disabled={isSubmitDisabled}>Sign Up</button>
       </form>

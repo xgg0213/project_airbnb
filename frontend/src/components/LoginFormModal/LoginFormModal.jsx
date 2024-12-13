@@ -40,7 +40,7 @@ function LoginFormModal() {
     <div className='login-modal-container'>
       <h1>Log In</h1>
       {errors.credential && (
-          <p>{errors.credential}</p>
+          <p id='error-credential-log-in'>{errors.credential}</p>
         )}
       <form onSubmit={handleSubmit} className='login-form'>
      
@@ -69,8 +69,8 @@ function LoginFormModal() {
             <p className="field-error">Password must be 6 or more characters</p>
           )}
         
-        <button type="submit" disabled={isSubmitDisabled} className='submit-button'>Log In</button>
-        <button type="button" className="demo-user-button" onClick={handleDemoUserLogin}>
+        <button type="submit" disabled={isSubmitDisabled} id='submit-button-log-in'>Log In</button>
+        <button type="button" id="demo-user-button" onClick={handleDemoUserLogin}>
           Demo User
         </button>
       </form>

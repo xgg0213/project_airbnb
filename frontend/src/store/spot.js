@@ -84,13 +84,13 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
       const spot_new = {...spot_item};
       
       const formattedSpotImages = {};
-      if (spot.SpotImages) {
-        spot.SpotImages.forEach((image) => {
+      if (spot_new.SpotImages) {
+        spot_new.SpotImages.forEach((image) => {
           formattedSpotImages[image.id] = image;
         });
       }
       const spotWithImagesAsObject = { ...spot_new, SpotImages: formattedSpotImages };
-
+      // console.log(spot_new)
       dispatch(loadSingleSpot(spotWithImagesAsObject));
     } else {
       console.error('Failed to fetch spot details');
@@ -136,6 +136,7 @@ export const updateASpot = (spotId, formData) => async (dispatch) => {
 
     if (response.ok) {
         const updatedSpot = await response.json();
+
         dispatch(dispatch(updateSpot(updatedSpot)));
         return updatedSpot;
     } else {
@@ -183,6 +184,28 @@ export const addImagesToSpot = (spotId, images) => async (dispatch) => {
     });
     return imagesPromises;
 }
+
+// Delete images to a spot
+// export const deleteImagesToSpot = (imageId) => async (dispatch) => {
+//   const imagesPromises = images.map(async (image) => {
+//     const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(image),
+//     });
+
+//     if (response.ok) {
+//       const newImage = await response.json();
+//       dispatch(addImage(newImage));
+//       return newImage;
+//     } else {
+//       const errors = await response.json();
+//       console.error('Failed to add image:', image.url);
+//       return { errors };
+//     }
+//   });
+//   return imagesPromises;
+// }
 
 
 // initial state
@@ -275,7 +298,7 @@ const spotReducer = (state = initialState, action) => {
                 ...state.allSpots,
                 [action.spot.id]: action.spot
             },
-            singleSpot: action.spot
+            singleSpot: {...action.spot}
         }
       }
 

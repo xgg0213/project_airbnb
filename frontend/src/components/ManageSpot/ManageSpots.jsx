@@ -42,7 +42,7 @@ const ManageSpots = () => {
     setModalContent(
       <div className="confirmation-modal">
         <h2>Confirm Delete</h2>
-        <p>Are you sure you want to remove this spot?</p>
+        <p>Are you sure you want to remove this spot from the listings?</p>
         <div className="confirmation-buttons">
           <button
             className="confirm-delete-button"

@@ -44,7 +44,7 @@ useEffect(() => {
 // Reset form state when the component mounts
 useEffect(() => {
     if (isUpdateMode && spot) {
-        const images_array = Object.values(spot.SpotImages)
+        const images_array = Object.values(spot?.SpotImages)
         // console.log(images_array);
         const previewImage = images_array.find((img) => img.preview)?.url || '';
         const otherImages = images_array.filter((img) => !img.preview);
@@ -129,14 +129,18 @@ useEffect(() => {
 
 
     // how to ensure the image info is always reflected?
-        const newImages = [
-          { url: previewImage, preview: true },
-          ...(image1 ? [{ url: image1, preview: false }] : []),
-          ...(image2 ? [{ url: image2, preview: false }] : []),
-          ...(image3 ? [{ url: image3, preview: false }] : []),
-          ...(image4 ? [{ url: image4, preview: false }] : []),
-        ];
-        await dispatch(addImagesToSpot(result.id, newImages));
+    const newImages = [
+      { url: previewImage, preview: true },
+      ...(image1 ? [{ url: image1, preview: false }] : []),
+      ...(image2 ? [{ url: image2, preview: false }] : []),
+      ...(image3 ? [{ url: image3, preview: false }] : []),
+      ...(image4 ? [{ url: image4, preview: false }] : []),
+    ];
+
+    // do a conditional addImagesSpot
+    await dispatch(addImagesToSpot(result.id, newImages));
+  
+
     // }
 
     navigate(`/spots/${result.id}`)
