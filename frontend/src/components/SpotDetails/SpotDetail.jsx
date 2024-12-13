@@ -132,7 +132,8 @@ const SpotDetails = () => {
             <p>${spot.price} night </p>
             <p>
             <span className="star-icon">★</span>
-              {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+              {/* {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'} */}
+              {spot.avgRating ? spot.avgRating : 'New'}
               {hasReviews ? (
                 <>
                   <span className="dot"> · </span> 
@@ -156,7 +157,8 @@ const SpotDetails = () => {
         <div className="review-summary">
           <h2>
             <span className="star-icon">★</span>
-            {spot.avgRating ? `${spot.avgRating.toFixed(1)}` : 'New'} 
+            {/* {spot.avgRating ? `${spot.avgRating.toFixed(1)}` : 'New'} */}
+            {spot.avgRating ? `${spot.avgRating}` : 'New'}  
             {hasReviews && spot.numReviews > 0 ? (
               <>
                 <span className="dot">·</span> 

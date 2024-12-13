@@ -34,7 +34,8 @@ const SpotsPage = () => {
                 <div className="spot-name-rating">
                   <p className="star-rating">
                     <span className="star-icon">★</span>
-                    {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+                    {/* {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'} */}
+                    {spot.avgRating ? spot.avgRating : 'New'}
                   </p>
                 </div>
               </div>

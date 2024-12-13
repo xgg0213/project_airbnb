@@ -102,7 +102,8 @@ const ManageSpots = () => {
                   </div>
                   <div className="spot-rating">
                     <span className="star-icon">★</span>
-                    {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
+                    {/* {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'} */}
+                    {spot.avgRating ? spot.avgRating : 'New'}
                   </div>
                 </div>
                 <div className="spot-price">${spot.price} / night</div>
