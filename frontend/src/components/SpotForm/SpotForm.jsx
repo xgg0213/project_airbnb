@@ -29,7 +29,7 @@ const SpotForm = () => {
   const [image4, setImage4] = useState('');
   const [errors, setErrors] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true); 
 
 //   console.log(spot);
 // populate the form if the spotId already exists
