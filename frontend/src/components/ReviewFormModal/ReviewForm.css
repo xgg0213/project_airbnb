@@ -62,7 +62,7 @@ textarea {
   font-size: 15px;
   font-weight: bold;
   color: #333;
-  margin: 18px 25px 0 0;
+  margin: 18px 30px 0 0;
 }
   
 /* Stars */
@@ -80,7 +80,6 @@ textarea {
   display: none;
 }
 
-
 .star-rating input[type="radio"]:checked ~ .star {
   color: #ffcc00;
 }
@@ -90,11 +89,7 @@ textarea {
   color: #ffcc00;
 }
 
-/* below is not working */
-/* Ensure stars before the clicked star are also selected */
-.star:hover ~ .star {
-    transform: none;
-}
+
   
 
   

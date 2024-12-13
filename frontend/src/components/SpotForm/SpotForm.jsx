@@ -29,21 +29,26 @@ const SpotForm = () => {
   const [image4, setImage4] = useState('');
   const [errors, setErrors] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
 //   console.log(spot);
 // populate the form if the spotId already exists
 useEffect(() => {
+  const loadSpot = async () => {
     if (isUpdateMode) {
-      dispatch(fetchSingleSpot(spotId));
+      await dispatch(fetchSingleSpot(spotId));
     } else {
-        dispatch(clearSingleSpot())
+      dispatch(clearSingleSpot());
     }
-  }, [dispatch, spotId, isUpdateMode]);
+    setIsLoading(false); // Mark loading as complete
+  };
+  loadSpot();
+}, [dispatch, spotId, isUpdateMode]);
 
 
 // Reset form state when the component mounts
 useEffect(() => {
-    if (isUpdateMode) {
+    if (isUpdateMode && spot && !isLoading) {
         const images_array = spot?.SpotImages
         // console.log(images_array);
         const previewImage = images_array.find((img) => img.preview)?.url || '';
