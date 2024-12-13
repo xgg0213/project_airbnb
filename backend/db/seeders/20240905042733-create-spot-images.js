@@ -122,52 +122,52 @@ module.exports = {
     },
     {
       spotId: 5,
-      url: "https://images.pexels.com/photos/29720292/pexels-photo-29720292/free-photo-of-cozy-ragdoll-cat-relaxing-on-brass-shelf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      url: "https://images.pexels.com/photos/2257262/pexels-photo-2257262.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: true
     },
     {
       spotId: 5,
-      url: "https://images.pexels.com/photos/13304877/pexels-photo-13304877.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      url: "https://images.pexels.com/photos/1931369/pexels-photo-1931369.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 5,
-      url: "https://images.pexels.com/photos/13304875/pexels-photo-13304875.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      url: "https://images.pexels.com/photos/679572/pexels-photo-679572.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 5,
-      url: "https://images.pexels.com/photos/3073694/pexels-photo-3073694.jpeg?auto=compress&cs=tinysrgb&w=600",
+      url: "https://images.pexels.com/photos/1307503/pexels-photo-1307503.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 5,
-      url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
+      url: "https://images.pexels.com/photos/2294531/pexels-photo-2294531.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 6,
-      url: "https://images.pexels.com/photos/29720292/pexels-photo-29720292/free-photo-of-cozy-ragdoll-cat-relaxing-on-brass-shelf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      url: "https://images.pexels.com/photos/7445055/pexels-photo-7445055.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: true
     },
     {
       spotId: 6,
-      url: "https://images.pexels.com/photos/13304877/pexels-photo-13304877.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      url: "https://images.pexels.com/photos/3155894/pexels-photo-3155894.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 6,
-      url: "https://images.pexels.com/photos/13304875/pexels-photo-13304875.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      url: "https://images.pexels.com/photos/290263/pexels-photo-290263.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 6,
-      url: "https://images.pexels.com/photos/3073694/pexels-photo-3073694.jpeg?auto=compress&cs=tinysrgb&w=600",
+      url: "https://images.pexels.com/photos/4079248/pexels-photo-4079248.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
       spotId: 6,
-      url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
+      url: "https://images.pexels.com/photos/25033908/pexels-photo-25033908/free-photo-of-adorable-sad-kitten.jpeg?auto=compress&cs=tinysrgb&w=600",
       preview: false
     },
     {
@@ -311,52 +311,52 @@ module.exports = {
       },
       {
         spotId: 5,
-        url: "https://images.pexels.com/photos/29720292/pexels-photo-29720292/free-photo-of-cozy-ragdoll-cat-relaxing-on-brass-shelf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        url: "https://images.pexels.com/photos/2257262/pexels-photo-2257262.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: true
       },
       {
         spotId: 5,
-        url: "https://images.pexels.com/photos/13304877/pexels-photo-13304877.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        url: "https://images.pexels.com/photos/1931369/pexels-photo-1931369.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 5,
-        url: "https://images.pexels.com/photos/13304875/pexels-photo-13304875.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+        url: "https://images.pexels.com/photos/679572/pexels-photo-679572.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 5,
-        url: "https://images.pexels.com/photos/3073694/pexels-photo-3073694.jpeg?auto=compress&cs=tinysrgb&w=600",
+        url: "https://images.pexels.com/photos/1307503/pexels-photo-1307503.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 5,
-        url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
+        url: "https://images.pexels.com/photos/2294531/pexels-photo-2294531.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 6,
-        url: "https://images.pexels.com/photos/29720292/pexels-photo-29720292/free-photo-of-cozy-ragdoll-cat-relaxing-on-brass-shelf.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        url: "https://images.pexels.com/photos/7445055/pexels-photo-7445055.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: true
       },
       {
         spotId: 6,
-        url: "https://images.pexels.com/photos/13304877/pexels-photo-13304877.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        url: "https://images.pexels.com/photos/3155894/pexels-photo-3155894.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 6,
-        url: "https://images.pexels.com/photos/13304875/pexels-photo-13304875.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+        url: "https://images.pexels.com/photos/290263/pexels-photo-290263.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 6,
-        url: "https://images.pexels.com/photos/3073694/pexels-photo-3073694.jpeg?auto=compress&cs=tinysrgb&w=600",
+        url: "https://images.pexels.com/photos/4079248/pexels-photo-4079248.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
         spotId: 6,
-        url: "https://images.pexels.com/photos/1653357/pexels-photo-1653357.jpeg?auto=compress&cs=tinysrgb&w=600",
+        url: "https://images.pexels.com/photos/25033908/pexels-photo-25033908/free-photo-of-adorable-sad-kitten.jpeg?auto=compress&cs=tinysrgb&w=600",
         preview: false
       },
       {
