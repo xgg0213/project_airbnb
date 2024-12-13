@@ -40,7 +40,7 @@ useEffect(() => {
     } else {
       dispatch(clearSingleSpot());
     }
-    setIsLoading(false); // Mark loading as complete
+    setIsLoading(false); 
   };
   loadSpot();
 }, [dispatch, spotId, isUpdateMode]);
@@ -48,7 +48,7 @@ useEffect(() => {
 
 // Reset form state when the component mounts
 useEffect(() => {
-    if (isUpdateMode && spot && !isLoading) {
+    if (isUpdateMode && spot?.id) {
         const images_array = spot?.SpotImages
         // console.log(images_array);
         const previewImage = images_array.find((img) => img.preview)?.url || '';
@@ -69,7 +69,8 @@ useEffect(() => {
         setImage4(otherImages[3]?otherImages[3].url:'');
         setErrors({});
         setFormSubmitted(false)
-    } else {
+    } 
+    else {
         setName('');
         setAddress('');
         setCity('');
@@ -154,22 +155,22 @@ useEffect(() => {
       result = await dispatch(createSpot(formData));
       // Handle images
       // When creating a new spot
-      if (!isUpdateMode) {
-        const newImages = [
-          { url: previewImage, preview: true },
-          ...(image1 ? [{ url: image1, preview: false }] : []),
-          ...(image2 ? [{ url: image2, preview: false }] : []),
-          ...(image3 ? [{ url: image3, preview: false }] : []),
-          ...(image4 ? [{ url: image4, preview: false }] : []),
-        ];
-    
-        await dispatch(addImagesToSpot(result.id, newImages));
-      }
-      
+ 
+      const newImages = [
+        { url: previewImage, preview: true },
+        ...(image1 ? [{ url: image1, preview: false }] : []),
+        ...(image2 ? [{ url: image2, preview: false }] : []),
+        ...(image3 ? [{ url: image3, preview: false }] : []),
+        ...(image4 ? [{ url: image4, preview: false }] : []),
+      ];
+  
+      await dispatch(addImagesToSpot(result.id, newImages));
       navigate(`/spots/${result.id}`)
     }
 
-
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
     
 
   };

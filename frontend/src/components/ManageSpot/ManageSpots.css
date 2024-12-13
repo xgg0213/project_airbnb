@@ -115,14 +115,12 @@
 
 /* Delete modal styling */
 .confirmation-modal {
-  max-width: 400px;
+  width: 100%;
   /* margin: 0 auto; */
   padding: 20px;
-  background-color: #fff; /* White background */
+  background-color: #fff; 
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for focus */
   text-align: center;
-  font-family: Arial, sans-serif; /* Optional: Set a default font */
 }
 
 /* Modal Header */
