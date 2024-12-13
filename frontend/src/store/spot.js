@@ -82,16 +82,9 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
       const spot = await response.json();
       const spot_item = spot[0]
       const spot_new = {...spot_item};
-      
-      const formattedSpotImages = {};
-      if (spot_new.SpotImages) {
-        spot_new.SpotImages.forEach((image) => {
-          formattedSpotImages[image.id] = image;
-        });
-      }
-      const spotWithImagesAsObject = { ...spot_new, SpotImages: formattedSpotImages };
+
       // console.log(spot_new)
-      dispatch(loadSingleSpot(spotWithImagesAsObject));
+      dispatch(loadSingleSpot(spot_new));
     } else {
       console.error('Failed to fetch spot details');
     }
@@ -185,28 +178,6 @@ export const addImagesToSpot = (spotId, images) => async (dispatch) => {
     return imagesPromises;
 }
 
-// Delete images to a spot
-// export const deleteImagesToSpot = (imageId) => async (dispatch) => {
-//   const imagesPromises = images.map(async (image) => {
-//     const response = await csrfFetch(`/api/spots/${spotId}/images`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(image),
-//     });
-
-//     if (response.ok) {
-//       const newImage = await response.json();
-//       dispatch(addImage(newImage));
-//       return newImage;
-//     } else {
-//       const errors = await response.json();
-//       console.error('Failed to add image:', image.url);
-//       return { errors };
-//     }
-//   });
-//   return imagesPromises;
-// }
-
 
 // initial state
 const initialState = {
@@ -231,19 +202,9 @@ const spotReducer = (state = initialState, action) => {
       }
         
       case LOAD_SINGLE_SPOT: {
-        const formattedSpotImages = {};
-        const images_array = Object.values(action.spot.SpotImages)
-        if (action.spot.SpotImages) {
-          images_array.forEach((image) => {
-            formattedSpotImages[image.id] = image;
-          });
-        }
         return {
           ...state,
-          singleSpot: {
-            ...action.spot,
-            SpotImages: formattedSpotImages,
-          },
+          singleSpot: action.spot, 
         };
       }
 
@@ -298,7 +259,10 @@ const spotReducer = (state = initialState, action) => {
                 ...state.allSpots,
                 [action.spot.id]: action.spot
             },
-            singleSpot: {...action.spot}
+            singleSpot: {
+                ...state,
+                ...action.spot,
+              },
         }
       }
 

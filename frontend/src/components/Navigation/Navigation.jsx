@@ -1,16 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+// import { useState } from 'react';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
-  const [showMenu, setShowMenu] = useState(false);
-
-  const toggleMenu = () => {
-    setShowMenu((prev) => !prev)
-  }
 
   return (
     // <ul>
@@ -34,13 +29,13 @@ function Navigation({ isLoaded }) {
             <NavLink
               to="/spots/new"
               id="nav-new-spot"
-              onClick={toggleMenu}
             >
               Create a New Spot
             </NavLink>
         )}
-        <button className="menu-toggle" onClick={toggleMenu}>
-          {isLoaded && !showMenu && <ProfileButton user={sessionUser} />}
+        <button className="menu-toggle" 
+        >
+          {isLoaded && <ProfileButton user={sessionUser} />}
         </button>
 
       </div>
