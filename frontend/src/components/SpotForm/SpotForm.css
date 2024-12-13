@@ -13,7 +13,7 @@
 
 /* Form Title */
 .new-spot-form-container h1 {
-  font-size: 2rem;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
   color: #333;
@@ -36,7 +36,7 @@
 
 /* Section Captions */
 .section-caption {
-  font-size: 1rem;
+  font-size: 18px;
   color: #666;
   margin: 0 0 0px 0;
   width: 100%;
@@ -61,7 +61,7 @@
 label input {
   width: 100%; /* Ensure input spans the container width */
   padding: 8px 12px;
-  font-size: 1rem;
+  font-size: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 5px;
@@ -70,7 +70,7 @@ label input {
 }
 
 .field-error {
-  font-size: 0.9rem;
+  font-size: 10px;
   color: #dc3545;
   margin-top: 5px;
 }
@@ -99,7 +99,7 @@ label input {
 
 .comma-state,
 .comma-lat {
-  font-size: 1rem;
+  font-size: 15px;
   color: #444;
   margin: 0 5px; /* Add space around commas */
   align-self: center; /* Center comma vertically */
@@ -123,7 +123,7 @@ label input {
 
 #new-spot-button {
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: bold;
   color: #D4A373;
   background-color: #E9EDC9;
