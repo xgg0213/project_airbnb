@@ -44,8 +44,10 @@ useEffect(() => {
 // Reset form state when the component mounts
 useEffect(() => {
     if (isUpdateMode && spot) {
-        const previewImage = spot.SpotImages?.find((img) => img.preview)?.url || '';
-        const otherImages = spot.SpotImages?.filter((img) => !img.preview) || [];
+        const images_array = Object.values(spot.SpotImages)
+        // console.log(images_array);
+        const previewImage = images_array.find((img) => img.preview)?.url || '';
+        const otherImages = images_array.filter((img) => !img.preview);
         setName(spot.name?spot.name:'');
         setAddress(spot.address?spot.address:'');
         setCity(spot.city?spot.city:'');
@@ -117,8 +119,6 @@ useEffect(() => {
       price,
       description,
     };
-
-    console.log(formData)
 
     let result;
     if (isUpdateMode) {
@@ -233,7 +233,7 @@ useEffect(() => {
             {formSubmitted && errors.lng && <p className="field-error">{errors.lng}</p>}
           </label>
         </div>
-        <hr className="divider" />
+        <hr className='divider' />
         {/* Section 2 */}
         <h2>Describe your place to guests</h2>
         <p className="section-caption">

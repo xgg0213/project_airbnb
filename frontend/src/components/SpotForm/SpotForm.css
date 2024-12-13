@@ -2,12 +2,13 @@
 .new-spot-form-container {
   max-width: 800px; /* Limit the width for readability */
   margin: 0 auto; /* Center the form horizontally */
-  padding: 20px 100px 20px 100px;
+  padding: 20px 150px 20px 150px;
   text-align: left; /* Ensure all content inside aligns to the left */
   box-sizing: border-box;
   display: flex; /* Use Flexbox for vertical centering */
   flex-direction: column;
   justify-content: center; /* Center vertically */
+  overflow-wrap: break-word;
 }
 
 /* Form Title */
@@ -29,11 +30,15 @@
   width: 100%;
 }
 
+.spot-form h2 {
+  margin:10px 0 0 0;
+}
+
 /* Section Captions */
 .section-caption {
   font-size: 1rem;
   color: #666;
-  margin-bottom: 20px;
+  margin: 0 0 0px 0;
   width: 100%;
 }
 
@@ -46,10 +51,10 @@
 }
 
 /* Labels and Inputs */
-label {
+.spot-form label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin: 0 0 0 0;
   width: 100%; /* Full width to align with the container */
 }
 
@@ -61,6 +66,7 @@ label input {
   border-radius: 4px;
   margin-top: 5px;
   box-sizing: border-box; /* Include padding in width calculations */
+  overflow-wrap: break-word;
 }
 
 .field-error {
@@ -74,7 +80,7 @@ label input {
 .lat-lng-containter {
   display: flex;
   gap: 10px; /* Consistent spacing between fields */
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   width: 100%;
 }
 
@@ -100,16 +106,15 @@ label input {
 }
 
 #description {
-  line-height: 100px;
+  width: 100%; /* Make the input take full width */
+  height: 100px; /* Adjust height for multi-line input */
+  overflow-wrap: break-word;
 }
 
 /* Divider */
-.divider {
-  border: none;
-  height: 1px;
-  background-color: #ddd;
-  margin: 20px 0;
-}
+/* .divider {
+  border: 1px solid red;
+} */
 
 /* Buttons */
 .new-spot-button-container {
@@ -120,16 +125,12 @@ label input {
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: bold;
-  color: #fff;
-  background-color: #007bff;
+  color: #D4A373;
+  background-color: #E9EDC9;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 150%;
-}
-
-#new-spot-button:hover {
-  background-color: #0056b3;
+  width: 120%;
 }
 
 /* Price Section */
@@ -141,8 +142,10 @@ label input {
 }
 
 #dollar-sign {
-  font-size: 3000px;
   font-weight: bold;
+  /* font-size: 20px;
+  padding: 100px;
+  line-height: 100px; */
 }
 
 #price-section input {

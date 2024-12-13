@@ -22,7 +22,7 @@ const SpotsPage = () => {
         <div className="spots-grid">
         {spots_array.map((spot) => (
           <NavLink to={`/spots/${spot.id}`} className="spot-link" key={spot.id}>
-            <div className="spot-tile">
+            <div className="spot-tile-spot-page">
               <div className="spot-tooltip">{spot.name}</div> 
               <img
                 src={spot.previewImage}

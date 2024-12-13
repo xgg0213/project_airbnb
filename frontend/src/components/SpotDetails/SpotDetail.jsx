@@ -20,10 +20,11 @@ const SpotDetails = () => {
 
   const spot = useSelector((state) => state.spot?state.spot.singleSpot:{});
   const reviews = useSelector((state) => state.review ? state.review.spotReviews : {});
-  const spotImages = spot.SpotImages||[]; 
+  const spotImages = spot.SpotImages||{}; 
   const currentUser = useSelector((state) => state.session.user);
   const reviews_array = Object.values(reviews);
-
+  const images_array = Object.values(spotImages)
+  
   if (!Object.entries(spot).length) return <p>Loading...</p>;
 
   // Reserve Button Handler
@@ -90,7 +91,6 @@ const SpotDetails = () => {
       </div>
     );
   };
-
   
   return (
     <div className='spot-details'>
@@ -102,12 +102,12 @@ const SpotDetails = () => {
 
       <div className="images-container">
         <img
-          src={spotImages[0]?.url ||'' }
+          src={images_array[0]?.url ||'' }
           alt={`${spot.name} large view`}
           className="large-image"
         />
         <div className="small-images">
-          {spotImages.slice(1).map((image, index) => (
+          {images_array.slice(1).map((image, index) => (
             <img
               key={index}
               src={image?.url || ''}

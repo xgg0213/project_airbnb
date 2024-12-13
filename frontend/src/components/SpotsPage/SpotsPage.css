@@ -27,19 +27,19 @@
 }
 
 /* Spot Tile */
-.spot-tile {
+.spot-tile-spot-page {
   position: relative; /* Enables positioning for the tooltip */
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
   overflow: hidden;
   text-align: left;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  /* transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; */
   cursor: pointer;
   text-decoration: none;
 }
 
-.spot-tile:hover {
+.spot-tile-spot-page:hover {
   transform: scale(1.02); /* Subtle zoom effect */
 }
 
@@ -49,7 +49,7 @@
   position: absolute;
 }
 
-.spot-tile:hover + .spot-tooltip {
+.spot-tile-spot-page:hover + .spot-tooltip {
   visibility: visible;
   display:block;
   color: red;
@@ -69,7 +69,7 @@
   padding: 10px;
 }
 
-.spot-tile h3 {
+.spot-tile-spot-page h3 {
   font-size: 14px;
   color: #333;
   margin: 12px 0 0 0;

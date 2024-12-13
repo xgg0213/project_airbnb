@@ -83,7 +83,15 @@ export const fetchSingleSpot = (spotId) => async (dispatch) => {
       const spot_item = spot[0]
       const spot_new = {...spot_item};
       
-      dispatch(loadSingleSpot(spot_new));
+      const formattedSpotImages = {};
+      if (spot.SpotImages) {
+        spot.SpotImages.forEach((image) => {
+          formattedSpotImages[image.id] = image;
+        });
+      }
+      const spotWithImagesAsObject = { ...spot_new, SpotImages: formattedSpotImages };
+
+      dispatch(loadSingleSpot(spotWithImagesAsObject));
     } else {
       console.error('Failed to fetch spot details');
     }
@@ -165,7 +173,6 @@ export const addImagesToSpot = (spotId, images) => async (dispatch) => {
   
       if (response.ok) {
         const newImage = await response.json();
-        console.log(newImage);
         dispatch(addImage(newImage));
         return newImage;
       } else {
@@ -201,10 +208,20 @@ const spotReducer = (state = initialState, action) => {
       }
         
       case LOAD_SINGLE_SPOT: {
+        const formattedSpotImages = {};
+        const images_array = Object.values(action.spot.SpotImages)
+        if (action.spot.SpotImages) {
+          images_array.forEach((image) => {
+            formattedSpotImages[image.id] = image;
+          });
+        }
         return {
-            ...state,
-            singleSpot: action.spot, 
-          };
+          ...state,
+          singleSpot: {
+            ...action.spot,
+            SpotImages: formattedSpotImages,
+          },
+        };
       }
 
       case LOAD_CURRENT_SPOTS: {
@@ -258,9 +275,7 @@ const spotReducer = (state = initialState, action) => {
                 ...state.allSpots,
                 [action.spot.id]: action.spot
             },
-            singleSpot: {
-                ...action.spot,
-              },
+            singleSpot: action.spot
         }
       }
 
@@ -277,7 +292,10 @@ const spotReducer = (state = initialState, action) => {
           ...state,
           singleSpot: {
             ...state.singleSpot,
-            SpotImages: [...(state.singleSpot.SpotImages || []), action.image],
+            SpotImages: {
+              ...(state.singleSpot.SpotImages || {}),
+              [action.image.id]: action.image,
+            },
           },
         };
       }

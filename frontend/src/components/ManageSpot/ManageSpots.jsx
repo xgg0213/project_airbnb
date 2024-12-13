@@ -89,23 +89,24 @@ const ManageSpots = () => {
         {spotsArray.map((spot) => (
           <div key={spot.id} className="spot-tile" onClick={() => handleNavigate(spot.id)}>
 
-              <div className="spot-content">
+
                 <img
                   src={spot.previewImage || '/default-thumbnail.jpg'}
                   alt={`${spot.name} thumbnail`}
                   className="thumbnail-image"
                 />
-                <div className="spot-info">
-                  <h3>{spot.name}</h3>
-                  <p className="spot-location">
+
+                <div className='spot-details-manage-spot'>
+                  <div className="spot-location">
                     {spot.city}, {spot.state}
-                  </p>
-                  <p className="spot-rating">
+                  </div>
+                  <div className="spot-rating">
                     <span className="star-icon">★</span>
                     {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'}
-                  </p>
-                  <p className="spot-price">${spot.price} / night</p>
+                  </div>
                 </div>
+                <div className="spot-price">${spot.price} / night</div>
+  
                 <div className="spot-actions">
                   <button
                     className="update-button"
@@ -127,7 +128,6 @@ const ManageSpots = () => {
                     Delete
                   </button>
                 </div>
-              </div>
           </div>
         ))}
       </div>
