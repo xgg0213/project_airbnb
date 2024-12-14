@@ -92,7 +92,7 @@ useEffect(() => {
 
 
   const validImageURL = (url) => {
-    return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))$/i.test(url);
+    return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))(?:\?.*)?$/i.test(url);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();

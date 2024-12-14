@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { createReview } from '../../store/review';
 import './ReviewForm.css';
 
-function ReviewFormModal({ closeModal, spotId }) {
+function ReviewFormModal({ closeModal, spotId, onReviewAdded }) {
   const dispatch = useDispatch();
   // const sessionUser = useSelector((state) => state.session.user);
   const [review, setReview] = useState("");
@@ -35,6 +35,8 @@ function ReviewFormModal({ closeModal, spotId }) {
       if (result && result.errors) {
         setServerErrors(result.errors.message || 'An unexpected error occurred.');
       } else {
+        // Add the review to the Redux state
+        if (onReviewAdded) onReviewAdded(); // Notify parent component
         closeModal(); // Close the modal on success
       }
     };    

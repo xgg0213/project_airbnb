@@ -53,6 +53,10 @@ const SpotDetails = () => {
       <ReviewFormModal
         spotId={spotId}
         closeModal={closeModal}
+        onReviewAdded={() => {
+          dispatch(fetchSingleSpot(spotId)); // Re-fetch spot details
+          dispatch(fetchSpotReviews(spotId)); // Re-fetch reviews
+        }}
       />
     );
   };
@@ -78,7 +82,8 @@ const SpotDetails = () => {
             className="confirm-delete-button"
             onClick={async () => {
               await dispatch(deleteReview(reviewId));
-              dispatch(fetchSpotReviews(spotId));
+              await dispatch(fetchSpotReviews(spotId));
+              await dispatch(fetchSingleSpot(spotId)); // Re-fetch spot details
               closeModal();
             }}
           >
