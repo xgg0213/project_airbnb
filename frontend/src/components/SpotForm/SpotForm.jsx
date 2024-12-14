@@ -17,10 +17,10 @@ const SpotForm = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [lat, setLat] = useState('');
-  const [lng, setLng] = useState('');
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
   const [country, setCountry] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState(0);
   const [description, setDescription] = useState('');
   const [previewImage, setPreviewImage] = useState('');
   const [image1, setImage1] = useState('');
@@ -130,34 +130,51 @@ useEffect(() => {
       address,
       city,
       state,
-      lat,
-      lng,
+      // lat,
+      // lng,
+      lat: parseFloat(lat), // Ensure lat/lng are numbers
+      lng: parseFloat(lng),
       country,
-      price,
+      price: parseFloat(price), // Ensure price is a positive number
+      // price,
       description,
     };
 
     let updatedData = formData;
+    const newSpotData={
+      address:spot.address,
+      name:spot.name,
+      city:spot.city,
+      state:spot.state,
+      country:spot.country,
+      descrption:spot.description,
+      price:spot.price,
+      lat:spot.lat,
+      lng:spot.lng,
+    }
+    // console.log(updatedData);
     // console.log(spot)
     // console.log(isUpdateMode);
     // Only include changes in the update mode 
     if (isUpdateMode) {
       updatedData = {};
-      
+      console.log('spot,',spot)
+
       Object.keys(formData).forEach((key) => {
         if (formData[key] !== spot[key]) {
           updatedData[key] = formData[key];
-          // console.log(key)
         }
       });
-      // console.log(updatedData)
     }
 
-    // Submit only if there are changes
+    // Submit only if there are changes - code below needs to be enhanced to resolve the backend issue
     let result;
     if (isUpdateMode && Object.keys(updatedData).length > 0) {
-      // console.log(spotId);
-      result = await dispatch(updateASpot(spotId, updatedData));
+      console.log(updatedData)
+      const newInputData = {...newSpotData,...updatedData}
+      console.log(newInputData)
+      result = await dispatch(updateASpot(spotId, newInputData));
+      console.log("test");
       navigate(`/spots/${spotId}`)
     } else if (isUpdateMode) {
       navigate(`/spots/${spotId}`)

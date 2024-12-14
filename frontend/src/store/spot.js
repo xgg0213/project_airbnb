@@ -121,20 +121,47 @@ export const deleteASpot = (spotId) => async (dispatch) => {
 };
 
 export const updateASpot = (spotId, formData) => async (dispatch) => {
-    const response = await csrfFetch(`/api/spots/${spotId}`, {
+    // console.log('test1');
+    // const response = await csrfFetch(`/api/spots/${spotId}`, {
+    //     method: 'PUT',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(formData),
+    // }); 
+    // // console.log('test2')
+    // // console.log(response);
+    // if (response.ok) {
+    //     const updatedSpot = await response.json();
+
+    //     dispatch(updateSpot(updatedSpot));
+    //     return updatedSpot;
+    // } else {
+    //   const errorData = await response.json(); // Extract error details from the response
+    //   console.error('Failed to update spot:', errorData);
+    //   return { error: errorData.message || 'Failed to update spot' }; // Return error for frontend handling
+    // }
+
+    // try {
+      const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-    }); 
-
-    if (response.ok) {
+      });
+      console.log(response);
+      if (response.ok) {
         const updatedSpot = await response.json();
-
-        dispatch(dispatch(updateSpot(updatedSpot)));
+  
+        dispatch(updateSpot(updatedSpot)); // Correctly dispatch the action
         return updatedSpot;
-    } else {
-      console.error('Failed to delete spot');
-    }
+      } else {
+        const errorData = await response.json(); // Extract error details from the response
+        console.error('Failed to update spot:', errorData);
+        return { error: errorData.message || 'Failed to update spot' }; // Return error for frontend handling
+      }
+    // } 
+    // catch (error) {
+    //   console.error('Update Spot Thunk Error:', error.message);
+    //   return { error: error.message }; // Handle any unexpected errors
+    // }
 };
 
 export const createSpot = (payload) => async(dispatch) => {

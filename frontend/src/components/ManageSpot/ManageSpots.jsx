@@ -113,7 +113,7 @@ const ManageSpots = () => {
                     className="update-button"
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent navigation to /spots/:spotId
-                      console.log('Update button clicked'); // Debugging
+  
                       handleUpdate(spot.id);
                     }}
                   >
