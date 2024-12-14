@@ -469,12 +469,9 @@ router.put(
     validateIdNaN,
     validateSpotId,
     validateAuthSpot,
-    validateSpot,
+    // validateSpot,
     async (req, res) => {
       const spotId = req.params.spotId;
-
-      // console.log('PUT /:spotId triggered');
-      // console.log('Request Body:', req.body);
 
       // spotId not found
       const updatedSpot = await Spot.findOne({
@@ -484,29 +481,34 @@ router.put(
     // spotId found && matching
       const {address, city, state, country, lat, lng, name, description, price} = req.body;
 
-      await updatedSpot.update({
-          address: address?address:updatedSpot.address,
-          city: city?city:updatedSpot.city,
-          state: state?state:updatedSpot.state,
-          country: country?country:updatedSpot.country,
-          lat: lat?lat:updatedSpot.lat,
-          lng: lng?lng:updatedSpot.lng,
-          name: name?name:updatedSpot.name,
-          description: description?description:updatedSpot.description,
-          price: price?price:updatedSpot.price,
-      });
+      // await updatedSpot.update({
+      //     address: address?address:updatedSpot.address,
+      //     city: city?city:updatedSpot.city,
+      //     state: state?state:updatedSpot.state,
+      //     country: country?country:updatedSpot.country,
+      //     lat: lat?lat:updatedSpot.lat,
+      //     lng: lng?lng:updatedSpot.lng,
+      //     name: name?name:updatedSpot.name,
+      //     description: description?description:updatedSpot.description,
+      //     price: price?price:updatedSpot.price,
+      // });
 
-    //   await updatedSpot.update({
-    //     address,
-    //     city,
-    //     state,
-    //     country,
-    //     lat,
-    //     lng,
-    //     name,
-    //     description,
-    //     price,
-    // });
+      const changes = {};
+
+      if (address !== undefined && address !== updatedSpot.address) changes.address = address;
+      if (city !== undefined && city !== updatedSpot.city) changes.city = city;
+      if (state !== undefined && state !== updatedSpot.state) changes.state = state;
+      if (country !== undefined && country !== updatedSpot.country) changes.country = country;
+      if (lat !== undefined && lat !== updatedSpot.lat) changes.lat = lat;
+      if (lng !== undefined && lng !== updatedSpot.lng) changes.lng = lng;
+      if (name !== undefined && name !== updatedSpot.name) changes.name = name;
+      if (description !== undefined && description !== updatedSpot.description) changes.description = description;
+      if (price !== undefined && price !== updatedSpot.price) changes.price = price;
+
+      // Only update if there are changes
+      if (Object.keys(changes).length > 0) {
+        await updatedSpot.update(changes);
+      }
 
       return res.status(200).json(updatedSpot)
     }

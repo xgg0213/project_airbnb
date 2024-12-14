@@ -24,6 +24,29 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+// validate user exists
+const validateUserExists = async(req, res, next) => {
+  const {username, email} = req.body;
+  const checkUser = await User.findOne({
+    where: {
+      [Op.or]: {
+        username: username,
+        email: email
+      }
+    }
+  });
+  if (!checkUser) return next();
+
+  const err = new Error("User already exists");
+  // const err = new Error("Bad request")
+  err.title = "user exists";
+  err.message = 'User already exists'
+  err.errors = { "email": "User with that email already exists",
+                 "username": "User with that username already exists" };
+  err.status = 500;
+  return next(err);
+};
+
 const handleValidationIds = (req, _res, next) => {
   const validationErrors = validationResult(req);
 
@@ -156,27 +179,7 @@ const validateReviewExists = async(req, res, next) => {
 
 };
 
-// validate user exists
-const validateUserExists = async(req, res, next) => {
-  const {username, email} = req.body;
-  const checkUser = await User.findOne({
-    where: {
-      [Op.or]: {
-        username: username,
-        email: email
-      }
-    }
-  });
-  if (!checkUser) return next();
 
-  const err = new Error("User already exists");
-  err.title = "user exists";
-  err.message = 'User already exists'
-  err.errors = { "email": "User with that email already exists",
-                 "username": "User with that username already exists" };
-  err.status = 500;
-  return next(err);
-};
 
 
 // validate image number <=10

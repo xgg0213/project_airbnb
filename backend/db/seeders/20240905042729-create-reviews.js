@@ -80,6 +80,20 @@ module.exports = {
       review: "Amazing stay! The host was incredibly welcoming, and the location was perfect for exploring the nearby attractions. Highly recommend this spot!",
       stars: 5
     },
+    {
+      userId: 6,
+      spotId: 1,
+      review: "The stay was delightful! The host was incredibly accommodating, and the location made it easy to visit nearby attractions. Highly recommend for anyone visiting the area.",
+      stars: 5,
+      createdAt: '2024-01-01T00:00:00.000Z', // ISO format for 2024-01-01
+    },
+    {
+      userId: 8,
+      spotId: 1,
+      review: "This spot was fantastic! The host went above and beyond, and the neighborhood was peaceful with great amenities nearby.",
+      stars: 5,
+      createdAt: '2024-02-01T00:00:00.000Z', // ISO format for 2024-02-01
+    },
    ])
   },
 
@@ -152,6 +166,20 @@ module.exports = {
         spotId: 3,
         review: "Amazing stay! The host was incredibly welcoming, and the location was perfect for exploring the nearby attractions. Highly recommend this spot!",
         stars: 5
+      },
+      {
+        userId: 6,
+        spotId: 1,
+        review: "The stay was delightful! The host was incredibly accommodating, and the location made it easy to visit nearby attractions. Highly recommend for anyone visiting the area.",
+        stars: 5,
+        createdAt: '2024-01-01T00:00:00.000Z', // ISO format for 2024-01-01
+      },
+      {
+        userId: 8,
+        spotId: 1,
+        review: "This spot was fantastic! The host went above and beyond, and the neighborhood was peaceful with great amenities nearby.",
+        stars: 5,
+        createdAt: '2024-02-01T00:00:00.000Z', // ISO format for 2024-02-01
       },
 
     ], 
