@@ -371,6 +371,98 @@ router.post(
 );
 
 // Edit a Spot
+// const requireAuth = function (req, _res, next) {
+//   if (req.user) return next();
+
+//   const err = new Error('Authentication required');
+//   err.title = 'Authentication required';
+//   err.errors = { message: 'Authentication required' };
+//   err.status = 401;
+//   return next(err);
+// };
+
+// const validateIdNaN = (req, res, next) => {
+//   const id = req.params.bookingId || req.params.spotId || req.params.reviewId || req.params.imageId
+//   const numericId = Number(id);
+
+//   if (!isNaN(numericId)) return next();
+
+//   const err = new Error("couldn't be found");
+//   err.title = "couldn't be found";
+//   err.status = 404;
+//   if (req.params.bookingId) err.message = "Booking couldn't be found";
+//   if (req.params.reviewId) err.message = "Review couldn't be found";
+//   if (req.params.spotId) err.message = "Spot couldn't be found";
+//   if (req.originalUrl.includes('spot-images')) err.message = "Spot Image couldn't be found";
+//   if (req.originalUrl.includes('review-images')) err.message = "Review Image couldn't be found"
+  
+//   return next(err);
+// };
+
+// const validateSpotId = async(req, res, next) => {
+//   const spotId = req.params.spotId;
+//   const updatedSpot = await Spot.findOne({
+//       where: {id:+req.params.spotId},
+//   });
+
+//   if (updatedSpot) return next();
+
+//   const err = new Error("Spot couldn't be found");
+//     err.title = "couldn't be found";
+//     err.errors = { message: "Spot couldn't be found" };
+//     err.status = 404;
+//     return next(err);
+// };
+
+// const validateAuthSpot = async (req, res, next) => {
+//   const spotId = req.params.spotId;
+//   const current = req.user.id
+//   const spot = await Spot.findByPk(+req.params.spotId);
+
+//   if (Number(current) === Number(spot.ownerId)) return next();
+
+//   const err = new Error('Forbidden');
+//   err.title = 'Forbidden';
+//   err.errors = { message: 'Forbidden' };
+//   err.status = 403;
+//   return next(err);
+// };
+
+// const validateSpot = [
+//   check('address')
+//     .exists({ checkFalsy: true })
+//     .withMessage('Street address is required'),
+//   check('city')
+//     .exists({ checkFalsy: true })
+//     .withMessage('City is required'),
+//   check('state')
+//     .exists({ checkFalsy: true })
+//     .withMessage('State is required'),
+//   check('country')
+//     .exists({ checkFalsy: true })
+//     .withMessage('Country is required'),
+//   check('lat')
+//     .exists({ checkFalsy: true })
+//     .isFloat({min: -90, max: 90})
+//     .withMessage('Latitude must be within -90 and 90'),
+//   check('lng')
+//     .exists({ checkFalsy: true })
+//     .isFloat({min: -180, max: 180})
+//     .withMessage('Longitude must be within -180 and 180'),
+//   check('name')
+//     .exists({checkFalsy: true})
+//     .isLength({max:49})
+//     .withMessage('Name must be less than 50 characters'),
+//   check('description')
+//     .exists({checkFalsy: true})
+//     .withMessage('Description is required'),
+//   check('price')
+//     .exists({checkFalsy: true})
+//     .isFloat({min:0})
+//     .withMessage('Price per day must be a positive number'),
+//   handleValidationErrors
+// ];
+
 router.put(
     '/:spotId',
     requireAuth,
@@ -380,6 +472,9 @@ router.put(
     validateSpot,
     async (req, res) => {
       const spotId = req.params.spotId;
+
+      // console.log('PUT /:spotId triggered');
+      // console.log('Request Body:', req.body);
 
       // spotId not found
       const updatedSpot = await Spot.findOne({
@@ -401,9 +496,22 @@ router.put(
           price: price?price:updatedSpot.price,
       });
 
+    //   await updatedSpot.update({
+    //     address,
+    //     city,
+    //     state,
+    //     country,
+    //     lat,
+    //     lng,
+    //     name,
+    //     description,
+    //     price,
+    // });
+
       return res.status(200).json(updatedSpot)
     }
 )
+
 
 // Delete a Spot
 router.delete(
