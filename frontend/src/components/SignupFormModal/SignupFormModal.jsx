@@ -16,12 +16,17 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  // if (sessionUser) return <Navigate to="/" replace={true} />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
+    setErrors({});
+
+    const validationErrors = {};
+
+    if (password !== confirmPassword) validationErrors.confirmPassword='Confirm Password field must be the same as the Password field'
+    else validationErrors.confirmPassword='';
+
+    if (password===confirmPassword) {
       return dispatch(
         sessionActions.signup({
           email,
@@ -34,7 +39,7 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
-          console.log(data);
+
           if (data?.errors) {
             setErrors(data.errors);
           }
@@ -43,7 +48,9 @@ function SignupFormModal() {
     return setErrors({
       confirmPassword: "Confirm Password field must be the same as the Password field"
     });
-  };
+    }
+    
+  
 
   // validation
   const isSubmitDisabled = !email.length || !username.length || !firstName.length 

@@ -31,13 +31,15 @@ const SpotDetails = () => {
   const handleReserveClick = () => {
     alert('Feature coming soon');
   };
+
   // if the spot has reviews already
   const hasReviews = spot.numReviews && spot.numReviews > 0;
   // if the current session user is the owner
   const isOwner = currentUser?.id === spot.Owner?.id
   // console.log(spot)
   // Sort reviews by newest
-  const sortedReviews = reviews_array.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const sortedReviews = [...reviews_array].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  
   // if the current user has reviewed this spot
   const alreadyReviewed = reviews_array?.length
   ? reviews_array.find((r) => r.userId === currentUser?.id) !== undefined
@@ -142,7 +144,7 @@ const SpotDetails = () => {
               {hasReviews ? (
                 <>
                   <span className="dot"> · </span> 
-                  {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
+                  {spot.numReviews} Review{spot.numReviews === 1 ? '' : 's'}
                 </>
               ): null}
             </p>

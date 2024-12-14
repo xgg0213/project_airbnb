@@ -130,31 +130,29 @@ useEffect(() => {
       address,
       city,
       state,
-      // lat,
-      // lng,
-      lat: parseFloat(lat), // Ensure lat/lng are numbers
-      lng: parseFloat(lng),
+      lat,
+      lng,
+      // lat: parseFloat(lat), // Ensure lat/lng are numbers
+      // lng: parseFloat(lng),
       country,
-      price: parseFloat(price), // Ensure price is a positive number
-      // price,
+      // price: parseFloat(price), // Ensure price is a positive number
+      price,
       description,
     };
 
     let updatedData = formData;
-    const newSpotData={
-      address:spot.address,
-      name:spot.name,
-      city:spot.city,
-      state:spot.state,
-      country:spot.country,
-      descrption:spot.description,
-      price:spot.price,
-      lat:spot.lat,
-      lng:spot.lng,
-    }
-    // console.log(updatedData);
-    // console.log(spot)
-    // console.log(isUpdateMode);
+    // const newSpotData={
+    //   address:spot.address,
+    //   name:spot.name,
+    //   city:spot.city,
+    //   state:spot.state,
+    //   country:spot.country,
+    //   descrption:spot.description,
+    //   price:spot.price,
+    //   lat:spot.lat,
+    //   lng:spot.lng,
+    // }
+
     // Only include changes in the update mode 
     if (isUpdateMode) {
       updatedData = {};
@@ -170,10 +168,10 @@ useEffect(() => {
     // Submit only if there are changes - code below needs to be enhanced to resolve the backend issue
     let result;
     if (isUpdateMode && Object.keys(updatedData).length > 0) {
-      console.log(updatedData)
-      const newInputData = {...newSpotData,...updatedData}
-      console.log(newInputData)
-      result = await dispatch(updateASpot(spotId, newInputData));
+
+      // const newInputData = {...newSpotData,...updatedData}
+
+      result = await dispatch(updateASpot(spotId, updatedData));
       console.log("test");
       navigate(`/spots/${spotId}`)
     } else if (isUpdateMode) {
