@@ -56,9 +56,9 @@ function ProfileButton({ user }) {
       <div className={ulClassName} ref={ulRef}>
         {user ? (
           <div className='profile-dropdown-details'>
-            <div id='hello-name'>Hello, {user.firstName}</div>
-            {/* <li>{user.firstName} {user.lastName}</li> */}
-            <div id='hello-email'>{user.email}</div>
+            <div id='hello-name' onClick={((e) => e.stopPropagation())}>Hello, {user.firstName}</div>
+
+            <div id='hello-email' onClick={((e) => e.stopPropagation())}>{user.email}</div>
             <div id='hello-manage-spots'>
               <NavLink to="/spots/current" onClick={closeMenu}>
                 Manage Spots

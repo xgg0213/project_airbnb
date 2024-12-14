@@ -91,6 +91,9 @@ useEffect(() => {
 }, [isUpdateMode, spot]); 
 
 
+  const validImageURL = (url) => {
+    return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))$/i.test(url);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true)
@@ -102,11 +105,20 @@ useEffect(() => {
     if (!city) validationErrors.city = 'City is required';
     if (!state) validationErrors.state = 'State is required';
     if (!lat) validationErrors.lat = 'Latitude is required';
+    if (lat && (lat < -90 || lat > 90) ) validationErrors.lat='Latitude must be between -90 and 90';
     if (!lng) validationErrors.lng = 'lng is required';
+    if (lng && (lng < -180 || lng > 180) ) validationErrors.lng='Longitude must be between -180 and 180';
     if (description.length < 30) validationErrors.description = 'Description needs 30 or more characters';
     if (!name) validationErrors.name = 'Title is required';
-    if (!price || price <= 0) validationErrors.price = 'Price per night is required';
+    if (!price) validationErrors.price = 'Price per night is required';
+    if (price && price < 0 ) validationErrors.price='Price cannot be negative';
     if (!previewImage) validationErrors.previewImage = 'Preview Image URL is required';
+    // Handle image errors
+    if (previewImage &&!validImageURL(previewImage)) validationErrors.previewImage = 'Preview Image URL must be a valid image link';
+    if (image1 && !validImageURL(image1)) validationErrors.image1 = 'Image 1 URL must be a valid image link';
+    if (image2 && !validImageURL(image2)) validationErrors.image2 = 'Image 2 URL must be a valid image link';
+    if (image3 && !validImageURL(image3)) validationErrors.image3 = 'Image 3 URL must be a valid image link';
+    if (image4 && !validImageURL(image4)) validationErrors.image4 = 'Image 4 URL must be a valid image link';
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -248,7 +260,10 @@ useEffect(() => {
               type="number"
               placeholder="lat"
               value={lat}
-              onChange={(e) => setLat(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value >= -90 && value <=90) setLat(value); // Prevent setting negative values
+              }}
               id='lat-input'
             />
             {formSubmitted && errors.lat && <p className="field-error">{errors.lat}</p>}
@@ -260,7 +275,10 @@ useEffect(() => {
               type="number"
               placeholder="lng"
               value={lng}
-              onChange={(e) => setLng(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value >= -180 && value <=180) setLng(value); // Prevent setting negative values
+              }}
               id='lng-input'
             />
             {formSubmitted && errors.lng && <p className="field-error">{errors.lng}</p>}
@@ -270,13 +288,13 @@ useEffect(() => {
         {/* Section 2 */}
         <h2>Describe your place to guests</h2>
         <p className="section-caption">
-        Mention the best features of your space, any special amentities like fast 
+        Mention the best features of your space, any special amenities like fast 
         wifi or parking, and what you love about the neighborhood.
         </p>
         <label>
           {/* Description */}
           <input
-            placeholder="Description"
+            placeholder="Please write at least 30 characters"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             id='description'
@@ -312,7 +330,10 @@ useEffect(() => {
             type="number"
             placeholder="Price per night (USD)"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value >= 0) setPrice(value); // Prevent setting negative values
+            }}
           />
           {formSubmitted && errors.price && <p className="field-error">{errors.price}</p>}
         </div>
@@ -340,6 +361,7 @@ useEffect(() => {
             value={image1}
             onChange={(e) => setImage1(e.target.value)}
           />
+          {formSubmitted && errors.image1 && <p className="field-error">{errors.image1}</p>}
         </label>
         <label>
           {/* Image 2 */}
@@ -350,6 +372,7 @@ useEffect(() => {
             onChange={(e) => setImage2(e.target.value)}
             id='image-url'
           />
+          {formSubmitted && errors.image2 && <p className="field-error">{errors.image2}</p>}
         </label>
         <label>
           {/* Image 3 */}
@@ -360,6 +383,7 @@ useEffect(() => {
             onChange={(e) => setImage3(e.target.value)}
             id='image-url'
           />
+          {formSubmitted && errors.image3 && <p className="field-error">{errors.image3}</p>}
         </label>
         <label>
           {/* Image 4 */}
@@ -370,6 +394,7 @@ useEffect(() => {
             onChange={(e) => setImage4(e.target.value)}
             id='image-url'
           />
+          {formSubmitted && errors.image4 && <p className="field-error">{errors.image4}</p>}
         </label>
         <hr className="divider" />
         <div className="new-spot-button-container">

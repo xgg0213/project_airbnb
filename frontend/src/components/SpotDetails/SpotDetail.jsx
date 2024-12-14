@@ -162,7 +162,7 @@ const SpotDetails = () => {
             {hasReviews && spot.numReviews > 0 ? (
               <>
                 <span className="dot">·</span> 
-                {spot.numReviews} Review{spot.numReviews !== 1 ? 's' : ''}
+                {spot.numReviews} Review{spot.numReviews === 1 ? '' : 's'}
               </>
             ) : null}
           </h2>
