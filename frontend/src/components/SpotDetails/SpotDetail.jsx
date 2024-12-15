@@ -144,7 +144,7 @@ const SpotDetails = () => {
               {hasReviews ? (
                 <>
                   <span className="dot"> · </span> 
-                  {spot.numReviews} Review{spot.numReviews === 1 ? '' : 's'}
+                  {spot.numReviews} Review{parseInt(spot.numReviews, 10) === 1 ? '' : 's'}
                 </>
               ): null}
             </p>
@@ -169,7 +169,7 @@ const SpotDetails = () => {
             {hasReviews && spot.numReviews > 0 ? (
               <>
                 <span className="dot">·</span> 
-                {spot.numReviews} Review{spot.numReviews === 1 ? '' : 's'}
+                {spot.numReviews} Review{parseInt(spot.numReviews, 10) === 1 ? '' : 's'}
               </>
             ) : null}
           </h2>

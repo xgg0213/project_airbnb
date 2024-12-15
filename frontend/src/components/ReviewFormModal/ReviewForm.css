@@ -56,13 +56,14 @@ textarea {
   display: flex;
   justify-content: space-around;
   gap: 0px;
+  padding: 0 30px 0 30px;
 }
 
 .star-rating h3 {
   font-size: 15px;
   font-weight: bold;
   color: #333;
-  margin: 18px 30px 0 0;
+  margin: 16px 10px 0 0;
 }
   
 /* Stars */
@@ -70,7 +71,7 @@ textarea {
   display: flex;
   justify-content: center;
   gap: 0px;
-  margin: 15px 0 0 30px;
+  margin: 12px 0 0 10px;
   padding: 0;
   font-size: 30px;
   color: #ccc;
