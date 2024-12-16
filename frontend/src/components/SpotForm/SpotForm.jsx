@@ -293,7 +293,8 @@ useEffect(() => {
               value={lat}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value >= -90 && value <=90) setLat(value); // Prevent setting negative values
+                // if (value >= -90 && value <=90) 
+                setLat(value); 
               }}
               id='lat-input'
             />
@@ -308,7 +309,8 @@ useEffect(() => {
               value={lng}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value >= -180 && value <=180) setLng(value); // Prevent setting negative values
+                // if (value >= -180 && value <=180) 
+                setLng(value); 
               }}
               id='lng-input'
             />
