@@ -71,7 +71,7 @@ function LoginFormModal() {
         
         <button type="submit" disabled={isSubmitDisabled} id='submit-button-log-in'>Log In</button>
         <button type="button" id="demo-user-button" onClick={handleDemoUserLogin}>
-          Demo User
+          Login as Demo User
         </button>
       </form>
     </div>

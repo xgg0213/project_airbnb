@@ -19,9 +19,9 @@ const ManageSpots = () => {
   const spotsArray = Object.values(currentSpots);
   if (!spotsArray.length) {
     return (
-      <div className="no-spots">
+      <div id="no-spots">
       <p>You have not created any spots yet.</p>
-      <Link to="/spots/new" className="create-spot-link">
+      <Link to="/spots/new" id="create-spot-link">
         Create a New Spot
       </Link>
     </div>
@@ -88,7 +88,6 @@ const ManageSpots = () => {
       <div className="spot-list">
         {spotsArray.map((spot) => (
           <div key={spot.id} className="spot-tile" onClick={() => handleNavigate(spot.id)}>
-
 
                 <img
                   src={spot.previewImage || '/default-thumbnail.jpg'}

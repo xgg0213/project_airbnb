@@ -90,6 +90,22 @@ useEffect(() => {
     }
 }, [isUpdateMode, spot]); 
 
+  // Check if any field is filled
+  const isSubmitDisabled = !(
+    name ||
+    address ||
+    city ||
+    state ||
+    country ||
+    description.length ||
+    price ||
+    lat ||
+    lat ||
+    lng ||
+    lng ||
+    previewImage
+  );
+
 
   const validImageURL = (url) => {
     return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))(?:\?.*)?$/i.test(url);
@@ -340,16 +356,18 @@ useEffect(() => {
         Competitive pricing can help your listing stand out and rank higher in search results.
         </p>
         <div id='price-section'>
-          <div id='dollor-sign'>$ </div> 
-          <input
-            type="number"
-            placeholder="Price per night (USD)"
-            value={price}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value >= 0) setPrice(value); // Prevent setting negative values
-            }}
-          />
+          <div className="price-input-container">
+            <div id='dollor-sign'>$ </div> 
+            <input
+              type="number"
+              placeholder="Price per night (USD)"
+              value={price}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value >= 0) setPrice(value); // Prevent setting negative values
+              }}
+            />
+          </div>
           {formSubmitted && errors.price && <p className="field-error">{errors.price}</p>}
         </div>
         <hr className="divider" />
@@ -413,7 +431,9 @@ useEffect(() => {
         </label>
         <hr className="divider" />
         <div className="new-spot-button-container">
-        <button type="submit" id='new-spot-button'>{isUpdateMode ? 'Update your Spot' : 'Create Spot'}</button>
+          <button type="submit" id='new-spot-button' disabled={isSubmitDisabled}>
+            {isUpdateMode ? 'Update your Spot' : 'Create Spot'}
+          </button>
         </div>
         
       </form>

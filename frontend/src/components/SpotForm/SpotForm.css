@@ -118,7 +118,10 @@ label input {
 
 /* Buttons */
 .new-spot-button-container {
-  text-align: left; /* Align the button to the left */
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  width: 40%; 
 }
 
 #new-spot-button {
@@ -133,12 +136,24 @@ label input {
   width: 120%;
 }
 
+/* Disabled button styling */
+#new-spot-button:disabled {
+  background-color: #ccc; 
+  color: #666; 
+  cursor: not-allowed; 
+  box-shadow: none; 
+}
+
 /* Price Section */
 #price-section {
-  display: flex; 
-  gap: 10px; 
-  margin-bottom: 20px;
-  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.price-input-container {
+  display: flex;
+  gap: 5px;
 }
 
 #dollar-sign {

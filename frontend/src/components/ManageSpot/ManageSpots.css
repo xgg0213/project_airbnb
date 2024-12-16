@@ -185,3 +185,24 @@
 .cancel-delete-button:hover {
     transform: scale(1.01)
 }
+
+
+/* Style for the no spots scenario */
+/* Styling for the paragraph */
+#no-spots p {
+  font-size: 18px;
+  color: #696969; /* Darker text color */
+  margin-bottom: 20px; /* Space below the text */
+}
+
+/* Styling for the link */
+#create-spot-link {
+  text-decoration: none; /* Remove underline */
+  color: #292929;
+  font-weight: bold;
+}
+
+#create-spot-link:hover {
+  cursor: pointer;
+}
+
