@@ -93,13 +93,13 @@
 }
 
 /* Star Rating */
-.star-rating {
+.star-rating-spot-page {
   font-size: 14px;
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
 }
 
-.star-icon {
+.star-icon-spot-page {
   margin-right: 5px;
 }

@@ -32,8 +32,8 @@ const SpotsPage = () => {
               <div id="spot-tile-description">
                 <h3>{spot.city}, {spot.state}</h3>
                 <div className="spot-name-rating">
-                  <p className="star-rating">
-                    <span className="star-icon">★</span>
+                  <p className="star-rating-spot-page">
+                    <span className="star-icon-spot-page">★</span>
                     {/* {spot.avgRating ? spot.avgRating.toFixed(1) : 'New'} */}
                     {spot.avgRating ? spot.avgRating : 'New'}
                   </p>
